@@ -81,7 +81,7 @@ func main() {
 	// http://localhost:8080
 	// http://localhost:8080/ping
 	// http://localhost:8080/hello
-	app.Run(iris.Addr(":8080"), iris.WithoutServerError(iris.ErrServerClosed))
+	app.Run(iris.Addr(":80"), iris.WithoutServerError(iris.ErrServerClosed))
 
 	//<-sigTERM
 	//log.Print("killed")
