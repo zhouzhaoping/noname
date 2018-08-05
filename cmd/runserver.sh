@@ -1,6 +1,24 @@
 #! /bin/bash
+mypwd="/root/pickme/backend/server"
+if [[ $GOPATH =~ .*$mypwd.* ]]
+then
+    echo "currnet project is already in GOPATH"
+else
+    export GOPATH=$GOPATH:$mypwd
+    echo "fininsh setting $mypwd in GOPATH"
+fi
+
+#mypwd="/root/go"
+#if [[ $GOPATH =~ .*$mypwd.* ]]
+#then
+#    echo "currnet project is already in GOPATH"
+#else
+#    export GOPATH=$GOPATH:$mypwd
+#    echo "fininsh setting $mypwd in GOPATH"
+#fi
+
 echo "build server..."
-go build ~/pickme/backend/server/src/server/server.go
+go build ../backend/server/src/server/server.go
 if [ $? -ne 0 ]
 then
 	echo "build fail"

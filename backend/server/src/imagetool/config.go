@@ -1,5 +1,11 @@
 package imagetool
 
+import (
+    "encoding/json"
+    "log"
+    "os"
+)
+
 type Config struct {
 	Storage string
 }
@@ -7,5 +13,13 @@ type Config struct {
 var conf Config
 
 func LoadConf(){
-	conf.Storage = "D:/下载"
+	r, err := os.Open("../backend/server/src/imagetool/config.json")
+    if err != nil {
+        log.Fatalln(err)
+    }
+    decoder := json.NewDecoder(r)
+    err = decoder.Decode(&conf)
+    if err != nil {
+        log.Fatalln(err)
+    }
 }

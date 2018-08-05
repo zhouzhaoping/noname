@@ -1,6 +1,7 @@
 package imagetool
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"io"
@@ -68,6 +69,7 @@ func DownloadHandler(w http.ResponseWriter, r *http.Request, imageid string) {
 		return
 	}
 	imgpath := ImageID2Path(imageid)
+	fmt.Println(imgpath)
 	if !FileExist(imgpath) {
 		w.Write([]byte("Error:Image Not Found."))
 		return
