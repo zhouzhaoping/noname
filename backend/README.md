@@ -48,6 +48,9 @@ https://swas.console.aliyun.com
 	- orm`go get github.com/go-xorm/xorm`
 	- 随机数生成器`go get github.com/seehuhn/mt19937`
 	- url路由接口`go get github.com/gorilla/mux`
+- 文件夹
+	- 项目位置`/pickme`
+	- 图片保存位置`/srv/www/storage/image/`，详见`imagetool/config.json`
 
 ### 3.翻墙代理
 ss代理:68.168.133.152:8385
