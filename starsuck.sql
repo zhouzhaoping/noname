@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2018-08-06 14:56:30
+Date: 2018-08-06 15:59:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -71,7 +71,7 @@ CREATE TABLE `news` (
   `img` varchar(255) DEFAULT '',
   `title` varchar(255) DEFAULT '',
   `news_url` varchar(255) DEFAULT '',
-  `source` tinyint(3) unsigned zerofill DEFAULT NULL,
+  `source` varchar(255) DEFAULT '',
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`news_id`),
   KEY `news_star_id` (`star_id`),
@@ -197,7 +197,7 @@ CREATE TABLE `state` (
   `content` varchar(255) DEFAULT '',
   `create_time` datetime DEFAULT NULL,
   `imgs` varchar(255) DEFAULT '',
-  `source` tinyint(4) unsigned zerofill NOT NULL,
+  `source` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`state_id`),
   KEY `account_id` (`account_id`),
   CONSTRAINT `state_account_id` FOREIGN KEY (`account_id`) REFERENCES `offical_account` (`account_id`) ON UPDATE CASCADE
@@ -220,4 +220,23 @@ CREATE TABLE `user_info` (
 
 -- ----------------------------
 -- Records of user_info
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `user_star_relation`
+-- ----------------------------
+DROP TABLE IF EXISTS `user_star_relation`;
+CREATE TABLE `user_star_relation` (
+  `user_id` int(11) NOT NULL,
+  `star_id` int(11) NOT NULL,
+  `follow_time` date DEFAULT NULL,
+  `support_num` int(10) unsigned zerofill DEFAULT NULL,
+  KEY `relation_user_id` (`user_id`),
+  KEY `relation_star_id` (`star_id`),
+  CONSTRAINT `relation_star_id` FOREIGN KEY (`star_id`) REFERENCES `star_info` (`star_id`),
+  CONSTRAINT `relation_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`user_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of user_star_relation
 -- ----------------------------
