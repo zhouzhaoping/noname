@@ -5,7 +5,7 @@ import "time"
 type user_info struct {
 	user_id		int		`xorm:"not null pk autoincr INT(11)"`
 	user_name	string	`xorm:"not null VARCHAR(32)"`
-	passport	string	`xorm:"not null VARCHAR(32)"`
+	password	string	`xorm:"not null VARCHAR(32)"`
 }
 
 type user_star_relation struct {

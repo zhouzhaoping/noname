@@ -20,6 +20,7 @@ import (
 
 	"sqltool"
 	"imagetool"
+	"handler"
 )
 
 func main() {
@@ -53,7 +54,8 @@ func main() {
 	// 创建图片存储参数
 	imagetool.LoadConf()
 	//创建orm引擎
-	sqltool.XormInit()
+	//sqltool.XormInit()
+	sqltool.StarsuckInit()
 
 	go func() {
 		sum := 0
@@ -74,6 +76,7 @@ func main() {
 	app.Use(logger.New())
 
 	ServerTestBinder(app)
+	Binder(app)
 
 	// 图片服务器
 	// Method:   GET
@@ -102,6 +105,11 @@ func main() {
 	//log.Print("killed")
 }
 
+func Binder(app *iris.Application){
+	// Method:   GET
+	// Resource: http://localhost:8080/hot?user_id=anonymous
+	app.Handle("GET", "/hot", handler.Hot)
+}
 func ServerTestBinder(app *iris.Application){
 	// Method:   GET
 	// Resource: http://localhost:8080
@@ -189,7 +197,8 @@ func ExitFunc() {
 
 	os.Remove("server.pid")
 	//销毁orm引擎
-	sqltool.XormEnd()
+	//sqltool.XormEnd()
+	sqltool.StarsuckEnd()
 
 	fmt.Println("结束退出...")
 	os.Exit(0)
