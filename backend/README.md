@@ -51,6 +51,9 @@ https://swas.console.aliyun.com
 - 文件夹
 	- 项目位置`/pickme`
 	- 图片保存位置`/srv/www/storage/image/`，详见`imagetool/config.json`
+- python
+	- `go get github.com/sbinet/go-python`
+	- 需要先`sudo yum install python2-dev`
 
 ### 3.翻墙代理
 ss代理:68.168.133.152:8385

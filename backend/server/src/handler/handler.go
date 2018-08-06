@@ -2,21 +2,19 @@ package handler
 
 import (
 	"github.com/kataras/iris"
-	"fmt"
 )
 
-// 首页hot推荐:所有已关注明星的资讯，按照时间排序，50条
-func Hot(ctx iris.Context) {
+func Stars(ctx iris.Context) {
 	user_id := ctx.URLParamDefault("user_id", "anonymous")
-	fmt.Println(user_id)
+	follow := ctx.URLParamDefault("follow",	 "all")
 
+	ctx.Writef("user_id: %s follow: %s", user_id, follow)
 	hehe := iris.Map{
-		"news_id":"newId",
 		"star_id":"starId",
-		"title":"title",
-		"url":"url",
-		"source":"source",
+		"name":"name",
+		"follow_time":"follow_time",
 	}
+
 	ctx.JSON(iris.Map{
 		"state" : 10000,
 		"msg" : "success",
@@ -24,10 +22,7 @@ func Hot(ctx iris.Context) {
 	})
 }
 
-// 明星资讯页
 
-
-// 饭圈首页
 
 // 明星个人动态页
 

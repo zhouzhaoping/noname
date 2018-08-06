@@ -58,11 +58,12 @@ func main() {
 	sqltool.StarsuckInit()
 
 	go func() {
-		sum := 0
+		//sum := 0
 		for {
-			sum++
-			//fmt.Println("sum:", sum)
-			time.Sleep(time.Second)
+			//sum++
+			// fmt.Println("sum:", sum)
+			handler.Refresh(0)
+			time.Sleep(time.Minute)
 		}
 	}()
 
@@ -75,8 +76,9 @@ func main() {
 	app.Use(recover.New())
 	app.Use(logger.New())
 
-	ServerTestBinder(app)
-	Binder(app)
+	//ServerTestBinder(app)
+	//Binder(app)
+	CoreBinder(app)
 
 	// 图片服务器
 	// Method:   GET
@@ -105,10 +107,62 @@ func main() {
 	//log.Print("killed")
 }
 
+func CoreBinder(app *iris.Application){
+	// Method:   GET
+	// Resource: http://localhost:8080/news?user_id=anonymous&star_id=follow
+	// 首页hot推荐:所有已关注明星的资讯，按照时间排序，50条
+	// http://localhost:8080/news?user_id=anonymous&star_id=follow
+	// 某个明星资讯页:回目标明星相关的50条资讯，按照时间排序
+	// http://localhost:8080/news?user_id=anonymous&star_id=0
+	app.Handle("GET", "/news", handler.News)
+
+	// Method:   GET
+	// Resource: http://localhost:8080/states?user_id=anonymous&star_id=0
+	// 明星个人动态页
+	// 1、显示该明星最近的行程信息
+	// 2、显示该明星相关的账号所发的状态
+	app.Handle("GET", "/states", handler.States)
+}
 func Binder(app *iris.Application){
 	// Method:   GET
-	// Resource: http://localhost:8080/hot?user_id=anonymous
-	app.Handle("GET", "/hot", handler.Hot)
+	// Resource: http://localhost:8080/user_id=anonymous&stars?follow=all
+	// 返回所有关注的明星的名字，头像
+	// follow = my 为已关注的，按照关注时间排序；follow = all 为所有的
+	app.Handle("GET", "/stars", handler.Stars)
+
+	// Method:   GET
+	// Resource: http://localhost:8080/news?user_id=anonymous&star_id=follow
+	// 首页hot推荐:所有已关注明星的资讯，按照时间排序，50条
+	// 某个明星资讯页:回目标明星相关的50条资讯，按照时间排序
+	// star_id = follow 则为已关注
+	app.Handle("GET", "/news", handler.News)
+
+	// Method:   GET
+	// Resource: http://localhost:8080/forum/getposts?user_id=anonymous
+	// 饭圈首页:返回当前最新的50条帖子，按照时间顺序排列
+	app.Handle("GET", "/forum/getposts", handler.GetPosts)
+
+	// Method:   GET
+	// Resource: http://localhost:8080/forum/getcomments?user_id=anonymous&post_id=post_id
+	// 饭圈首页:返回当前帖子的评论以及子评论，时间排序
+	app.Handle("GET", "/forum/getcomments", handler.GetComments)
+
+	// Method:   POST
+	// Resource: http://localhost:8080/forum/postpost
+	// user_id=anonymous
+	// title=title
+	// content=content
+	// 发表一个帖子
+	//app.Handle("GET", "/forum/postpost", handler.PostPost)
+
+
+	// Method:   POST
+	// Resource: http://localhost:8080/forum/postcomment
+	// user_id=anonymous
+	// title=title
+	// content=content
+	// 饭圈首页:返回当前帖子的评论以及子评论，时间排序
+	//app.Handle("GET", "/forum/postpost", handler.PostPost)
 }
 func ServerTestBinder(app *iris.Application){
 	// Method:   GET
