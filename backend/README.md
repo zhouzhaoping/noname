@@ -54,6 +54,7 @@ https://swas.console.aliyun.com
 - python
 	- `go get github.com/sbinet/go-python`
 	- 需要先`sudo yum install python2-dev`
+	- `sudo pip install beautifulsoup4`
 
 ### 3.翻墙代理
 ss代理:68.168.133.152:8385

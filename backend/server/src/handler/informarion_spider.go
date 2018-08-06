@@ -9,9 +9,9 @@ import (
 func Refresh(star_id int) {
 	lasttime := findLastTime(star_id)
 	if lasttime == nil{
-		cmd := exec.Command("ls")
-		buf, err := cmd.Output()
-		fmt.Printf("%s\n%s",buf,err)
+		cmd := exec.Command("cmd python", "starspider.py")
+		buf, err:= cmd.Output()
+		fmt.Printf("fuck%sfuck%s\n",buf,err)
 	}else{
 
 	}
