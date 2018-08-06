@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2018-08-06 15:59:12
+Date: 2018-08-06 20:50:38
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -163,7 +163,7 @@ CREATE TABLE `rank_list` (
 DROP TABLE IF EXISTS `star_info`;
 CREATE TABLE `star_info` (
   `star_id` int(11) NOT NULL AUTO_INCREMENT,
-  `satr_name` varchar(255) NOT NULL,
+  `star_name` varchar(255) NOT NULL,
   `img` varchar(255) DEFAULT NULL,
   `weibost_daily_rank` int(10) unsigned zerofill DEFAULT NULL,
   `asians_daily_rank` int(10) unsigned zerofill DEFAULT NULL,
@@ -179,12 +179,16 @@ CREATE TABLE `star_info` (
   `yesterday_insfans_num` int(10) unsigned zerofill DEFAULT NULL,
   `tvshow_num` int(10) unsigned zerofill DEFAULT NULL,
   `ads_num` int(10) unsigned zerofill DEFAULT NULL,
+  `banner` varchar(255) DEFAULT '',
   PRIMARY KEY (`star_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of star_info
 -- ----------------------------
+INSERT INTO `star_info` VALUES ('1', '吴亦凡', null, '0000000100', '0000000200', '0000000300', '0000000400', '0000000500', '0000000600', '0000000700', '0000000800', '0000000900', '0000001000', '0000000090', '0000000009', '0000000020', '0000000012', '');
+INSERT INTO `star_info` VALUES ('2', '易烊千玺', null, '0000000200', '0000000322', '0000000003', '0000000023', '0000000014', '0000000008', '0000000008', '0000009099', '0000010022', '0000023333', '0000032222', '0000009897', '0000000030', '0000000032', '');
+INSERT INTO `star_info` VALUES ('3', '蔡徐坤', null, '0000000200', '0000000333', '0000000005', '0000000022', '0000000003', '0000000008', '0000000009', '0000006756', '0000022133', '0000045333', '0000023456', '0000034523', '0000000021', '0000000010', '');
 
 -- ----------------------------
 -- Table structure for `state`
@@ -216,11 +220,15 @@ CREATE TABLE `user_info` (
   `uesr_name` varchar(255) DEFAULT '',
   `password` varchar(255) DEFAULT '',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_info
 -- ----------------------------
+INSERT INTO `user_info` VALUES ('1', 'copy', '12345');
+INSERT INTO `user_info` VALUES ('2', 'test', '12344');
+INSERT INTO `user_info` VALUES ('3', 'test01', '32232');
+INSERT INTO `user_info` VALUES ('4', 'test02', '34221');
 
 -- ----------------------------
 -- Table structure for `user_star_relation`
@@ -240,3 +248,8 @@ CREATE TABLE `user_star_relation` (
 -- ----------------------------
 -- Records of user_star_relation
 -- ----------------------------
+INSERT INTO `user_star_relation` VALUES ('1', '1', '2018-08-01', '0000000021');
+INSERT INTO `user_star_relation` VALUES ('1', '2', '2018-08-02', '0000000032');
+INSERT INTO `user_star_relation` VALUES ('2', '1', '2018-08-01', '0000000012');
+INSERT INTO `user_star_relation` VALUES ('3', '3', '2018-06-05', '0000000043');
+INSERT INTO `user_star_relation` VALUES ('4', '3', '2018-07-12', '0000000024');
