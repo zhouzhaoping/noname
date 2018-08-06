@@ -1,0 +1,116 @@
+用户表
+user_info
+用户id user_id
+用户名 user_name
+密码 password
+
+
+
+用户明星关系表
+user_star_relation
+用户id user_id
+用户 star_id
+关注时间 follow_time
+应援次数 support_num
+
+
+动态
+state
+state_id
+账号id account_id
+账户名称 account_name
+内容 content
+发表时间 create_time
+图片 imgs
+来源 source
+
+
+资讯
+news
+news_id
+明星id star_id
+图片 img
+标题 title
+链接 news_url
+来源 source
+发表时间 create_time
+
+
+官方账户
+offical_account
+账户id account_id
+账户名称 account_name
+明星id star_id
+链接 account_url
+
+榜单
+rank_list
+list_id
+榜单名 list_name
+明星id star_id
+日期 date
+排名 rank
+
+行程
+agenda
+agenda_id
+明星id star_id
+时间 detail_time
+地点 location
+内容 content
+类型 agenda_type
+
+帖子
+post
+帖子post_id
+用户id user_id
+创建时间 create_time
+标题 title
+内容 content
+点赞数 like_num
+
+
+评论
+comment
+评论id comment_id
+用户id user_id
+帖子id post_id
+父评论id parent_comment_id
+时间 create_time
+内容 content
+点赞数 like_num
+级别 level
+
+
+
+
+明星 
+star_info
+用户id star_id
+姓名 star_name
+头像 img
+banner图 banner
+微博超话日榜 weibost_daily_rank
+亚洲新歌日榜 asians_daily_rank
+微博明星势力日榜 weibostar_power_daily_rank
+微信明星权力日榜 weixinstar_right_daily_rank
+微信明星势力日榜 weixinstar_power_daily_rank
+今日平均排名 average_rank
+平均历史最高名次 average_highest_rank
+百度指数 baidu_index
+当日微博粉丝数  current_weibofans_num
+昨天粉丝数 yesterday_weibofans_num
+当日ins粉丝数  current_insfans_num
+ins粉丝数yesterday_current_insfans_num
+已参加综艺节目数  tvshow_num
+在接广告数 ads_num
+
+
+周边商品 
+production
+pro_id
+商品名 pro_name
+明星id star_id
+类型 pro_type(代言商品还是同款商品)
+
+
