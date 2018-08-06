@@ -44,9 +44,6 @@ class StarSpider(object):
 
     def __call__(self, count, update_time):
         page = 0
-        url = 'https://star.3g.163.com/star/article/list/{}-10.html?starId={}&callback='.format(page, self.netease_id)
-        res = requests.get(url).text
-        infos = json.loads(res)
         title_pattern = re.compile(self.star_name)
         news_list = []
         if len(update_time):
@@ -56,6 +53,9 @@ class StarSpider(object):
             update_time_stamp = 0
 
         while page < 400:
+            url = 'https://star.3g.163.com/star/article/list/{}-10.html?starId={}&callback='.format(page, self.netease_id)
+            res = requests.get(url).text
+            infos = json.loads(res)
             for info in infos['data']:
                 if re.search(title_pattern, info['title']):
                     if len(info['pic_info']) == 0:
