@@ -1,2 +1,3 @@
 # build and log:
 server*
+*.json
