@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2018-08-06 14:14:55
+Date: 2018-08-06 14:56:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -47,6 +47,7 @@ CREATE TABLE `comment` (
   `create_time` datetime DEFAULT NULL,
   `content` varchar(255) DEFAULT '',
   `like_num` int(10) unsigned zerofill DEFAULT NULL,
+  `level` int(11) DEFAULT NULL,
   PRIMARY KEY (`comment_id`),
   KEY `parent_comm_id` (`parent_comment_id`),
   KEY `comment_post_id` (`post_id`),
@@ -69,7 +70,7 @@ CREATE TABLE `news` (
   `star_id` int(11) NOT NULL,
   `img` varchar(255) DEFAULT '',
   `title` varchar(255) DEFAULT '',
-  `url` varchar(255) DEFAULT '',
+  `news_url` varchar(255) DEFAULT '',
   `source` tinyint(3) unsigned zerofill DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`news_id`),
@@ -138,10 +139,10 @@ CREATE TABLE `production` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `ranklist`
+-- Table structure for `rank_list`
 -- ----------------------------
-DROP TABLE IF EXISTS `ranklist`;
-CREATE TABLE `ranklist` (
+DROP TABLE IF EXISTS `rank_list`;
+CREATE TABLE `rank_list` (
   `list_id` int(11) NOT NULL AUTO_INCREMENT,
   `list_name` varchar(255) DEFAULT '',
   `star_id` int(11) NOT NULL,
@@ -153,7 +154,7 @@ CREATE TABLE `ranklist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of ranklist
+-- Records of rank_list
 -- ----------------------------
 
 -- ----------------------------
