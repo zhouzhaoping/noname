@@ -7,8 +7,8 @@ import requests
 import json
 import re
 from bs4 import BeautifulSoup
-import queue
 import argparse
+import time
 
 
 class StarSpider(object):
@@ -42,13 +42,18 @@ class StarSpider(object):
 
         return news_time, news_source
 
-    def __call__(self, count):
+    def __call__(self, count, update_time):
         page = 0
         url = 'https://star.3g.163.com/star/article/list/{}-10.html?starId={}&callback='.format(page, self.netease_id)
         res = requests.get(url).text
         infos = json.loads(res)
         title_pattern = re.compile(self.star_name)
         news_list = []
+        if len(update_time):
+            update_time_array = time.strptime(update_time, "%Y-%m-%d %H:%M:%S")
+            update_time_stamp = int(time.mktime(update_time_array))
+        else:
+            update_time_stamp = 0
 
         while page < 400:
             for info in infos['data']:
@@ -60,6 +65,10 @@ class StarSpider(object):
                     cur_url = info['link']
                     cur_img = info['pic_info'][0]['url']
                     cur_create_time, cur_source = self._get_news_info(cur_url)
+                    time_array = time.strptime(cur_create_time, "%Y-%m-%d %H:%M:%S")
+                    time_stamp = int(time.mktime(time_array))
+                    if time_stamp < update_time_stamp:
+                        return news_list
                     news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':cur_source})
 
                 if len(news_list) == count:
@@ -73,12 +82,14 @@ class StarSpider(object):
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(description='manual to this script')
     arg_parser.add_argument('--starid', type=int, default=0)
-    arg_parser.add_argument('--count', type=int, default=100)
+    arg_parser.add_argument('--count', type=int, default=50)
+    arg_parser.add_argument('--time', type=str, default='')
     arg_parser.add_argument('--filename', type=str, default='news_list.json')
     args = arg_parser.parse_args()
     file_name = args.filename
     spider = StarSpider(args.starid)
-    news_list = spider(args.count)
+    news_list = spider(args.count, args.time)
+
 
     with open(file_name, 'w') as f:
         json.dump(news_list, f)
