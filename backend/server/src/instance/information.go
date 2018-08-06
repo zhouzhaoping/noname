@@ -13,11 +13,11 @@ type state struct {
 }
 
 type news struct {
-	news_id		int		`资讯`
-	star_id		int		`明星id `
-	img			string	`图片id`
-	title		string	`标题 `
-	url			string	`链接`
-	source		string	`来源 `
-	create_time	string	`发表时间`
+	news_id		int			`资讯`
+	star_id		int			`明星id `
+	img			string		`图片id`
+	title		string		`标题 `
+	news_url	string		`链接`
+	source		string		`来源 `
+	create_time	time.Time	`发表时间`
 }
