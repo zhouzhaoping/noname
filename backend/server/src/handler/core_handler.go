@@ -1,25 +1,40 @@
 package handler
 
-import "github.com/kataras/iris"
+import (
+	"github.com/kataras/iris"
+	"io/ioutil"
+	"fmt"
+)
 
 func News(ctx iris.Context) {
-	user_id := ctx.URLParamDefault("user_id", "anonymous")
+	//user_id := ctx.URLParamDefault("user_id", "anonymous")
 	star_id := ctx.URLParamDefault("star_id",	 "follow")
 
-	ctx.Writef("user_id: %s star_id: %s", user_id, star_id)
-	starnew  := iris.Map{
-		"news_id":"newId",
-		"star_id":"starId",
+	//ctx.Writef("user_id: %s star_id: %s", user_id, star_id)
+	/*starnew  := iris.Map{
 		"title":"title",
 		"url":"url",
+		"img":"img",
+		"create_time":"create_time",
 		"source":"source",
-	}
+	}*/
 
-	ctx.JSON(iris.Map{
+	if star_id == "follow"{
+		star_id = "0"
+	}
+	filename := "D:\\pickme\\backend\\informarion_spider\\news_list" + star_id + ".json"
+
+	bytes, err := ioutil.ReadFile(filename)
+	if err != nil {
+		fmt.Println("ReadFile: ", err.Error())
+		ctx.Writef(err.Error())
+	}
+	ctx.Write(bytes)
+	/*ctx.JSON(iris.Map{
 		"state" : 10000,
 		"msg" : "success",
-		"data" : []iris.Map{starnew,starnew,starnew},
-	})
+		"data" : bytes,
+	})*/
 }
 
 func States(ctx iris.Context) {

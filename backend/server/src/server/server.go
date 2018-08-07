@@ -62,8 +62,9 @@ func main() {
 		for {
 			//sum++
 			// fmt.Println("sum:", sum)
-			handler.Refresh(0)
-			time.Sleep(time.Minute)
+			//handler.Refresh(0)
+			handler.UpdateNews()
+			time.Sleep(time.Second*10)
 		}
 	}()
 
@@ -76,7 +77,7 @@ func main() {
 	app.Use(recover.New())
 	app.Use(logger.New())
 
-	//ServerTestBinder(app)
+	ServerTestBinder(app)
 	//Binder(app)
 	CoreBinder(app)
 
