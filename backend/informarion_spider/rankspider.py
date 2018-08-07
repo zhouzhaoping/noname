@@ -41,10 +41,7 @@ class RankSpider(object):
             url = 'https://star.3g.163.com/star/rank/list/{}-10.html?callback='.format(page)
             res = requests.get(url).text
             infos = json.loads(res)
-            res = requests.get(url).text
-            infos = json.loads(res)
             for info in infos['data']:
-                print(info['name'])
                 if re.search(pattern, info['name']):
                     netease_daily_rank = info['currentRank']
                     star_rank = {'star_name':self.star_name, 'netease_daily_rank':netease_daily_rank}
