@@ -37,7 +37,7 @@ class RankSpider(object):
         page = 0
         pattern = re.compile(self.star_name)
 
-        while page < 300:
+        while page < 200:
             url = 'https://star.3g.163.com/star/rank/list/{}-10.html?callback='.format(page)
             res = requests.get(url).text
             infos = json.loads(res)
