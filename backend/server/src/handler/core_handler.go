@@ -2,8 +2,6 @@ package handler
 
 import (
 	"github.com/kataras/iris"
-	"io/ioutil"
-	"fmt"
 )
 
 func News(ctx iris.Context) {
@@ -19,21 +17,13 @@ func News(ctx iris.Context) {
 		"source":"source",
 	}*/
 
-	if star_id == "follow"{
-		star_id = "0"
-	}
-	filename := "D:\\pickme\\backend\\informarion_spider\\news_list" + star_id + ".json"
-
-	bytes, err := ioutil.ReadFile(filename)
-	if err != nil {
-		fmt.Println("ReadFile: ", err.Error())
-		ctx.Writef(err.Error())
-	}
-	ctx.Write(bytes)
+	ctx.ContentType("application/json; charset=UTF-8")
+	ctx.Write(UpdateNews(star_id))
+	//ctx.JSON(UpdateNews())
 	/*ctx.JSON(iris.Map{
 		"state" : 10000,
 		"msg" : "success",
-		"data" : bytes,
+		"data" : string(bytes),
 	})*/
 }
 

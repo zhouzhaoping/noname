@@ -63,7 +63,7 @@ func main() {
 			//sum++
 			// fmt.Println("sum:", sum)
 			//handler.Refresh(0)
-			handler.UpdateNews()
+			//handler.UpdateNews()
 			time.Sleep(time.Second*10)
 		}
 	}()
