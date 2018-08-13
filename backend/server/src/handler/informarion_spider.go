@@ -52,16 +52,16 @@ func findLastTime(star_id int) (lasttime *time.Time){
 func UpdateNews(starid string)[]byte{
 	var starnewsArray []Starnew
 	if starid == "follow" {
-		starnewsArray0, _ := readFile("D:\\pickme\\backend\\informarion_spider\\news_list0.json")
-		starnewsArray1, _ := readFile("D:\\pickme\\backend\\informarion_spider\\news_list1.json")
-		starnewsArray2, _ := readFile("D:\\pickme\\backend\\informarion_spider\\news_list2.json")
+		starnewsArray0, _ := readFile("/root/pickme/backend/informarion_spider/news_list0.json")
+		starnewsArray1, _ := readFile("/root/pickme/backend/informarion_spider/news_list1.json")
+		starnewsArray2, _ := readFile("/root/pickme/backend/informarion_spider/news_list2.json")
 
 		starnewsArray = MergeSlice(starnewsArray0[:2], starnewsArray1[0:2])
 		starnewsArray = MergeSlice(starnewsArray, starnewsArray2[0:2])
 		fmt.Println(len(starnewsArray))
 		sort.Sort(starnewlist(starnewsArray))
 	} else {//TODO 失败
-		starnewsArray, _ := readFile("D:\\pickme\\backend\\informarion_spider\\news_list" + starid + ".json")
+		starnewsArray, _ := readFile("/root/pickme/backend/informarion_spider/news_list" + starid + ".json")
 		starnewsArray = starnewsArray[:2]
 		fmt.Println(len(starnewsArray))
 		/*for _, starnews := range starnewsArray{
