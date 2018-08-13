@@ -74,7 +74,8 @@ CREATE TABLE `info_source` (
 DROP TABLE IF EXISTS `login_log`;
 CREATE TABLE `login_log` (
   `suv` varchar(255) NOT NULL COMMENT '用户的suv',
-  `login_time` datetime NOT NULL COMMENT '访问（登录）时间'
+  `login_time` datetime NOT NULL COMMENT '访问（登录）时间',
+  `ip` varchar(255) DEFAULT NULL COMMENT '用户登录ip地址'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户浏览（登录）记录';
 
 -- ----------------------------
