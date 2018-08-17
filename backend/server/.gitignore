@@ -1,3 +1,5 @@
 # build things
 bin
 pkg
+
+.idea/workspace.xml

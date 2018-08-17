@@ -10,7 +10,8 @@ user_info
 login_log
 
 用户suv varchar 不可空
-login_time datetime
+登录时间 login_time datetime
+登录IP地址 ip varchar 可空
 
 
 用户明星关系表
