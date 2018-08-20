@@ -22,7 +22,7 @@ func News(ctx iris.Context) {
 	if star_id == "follow"{
 		star_id = "0"
 	}
-	filename := "D:\\pickme\\backend\\informarion_spider\\news_list" + star_id + ".json"
+	filename := "news_list" + star_id + ".json"
 
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
