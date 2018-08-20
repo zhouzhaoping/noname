@@ -37,8 +37,11 @@ class StarSpider(object):
         html = r.text
         soup = BeautifulSoup(html, 'html.parser')
         news_infos = soup.select('div.info > span')
-        news_time = news_infos[0].get_text()
-        news_source = news_infos[1].get_text()
+        try:
+            news_time = news_infos[0].get_text()
+            news_source = news_infos[1].get_text()
+        except:
+            return None, None
 
         return news_time, news_source
 
@@ -65,6 +68,8 @@ class StarSpider(object):
                     cur_url = info['link']
                     cur_img = info['pic_info'][0]['url']
                     cur_create_time, cur_source = self._get_news_info(cur_url)
+                    if not cur_create_time:
+                        continue
                     time_array = time.strptime(cur_create_time, "%Y-%m-%d %H:%M:%S")
                     time_stamp = int(time.mktime(time_array))
                     if time_stamp < update_time_stamp:
