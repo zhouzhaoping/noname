@@ -16,5 +16,5 @@ func LoadConf(){
     if err != nil {
         log.Fatalln(err)
     }*/
-    conf.Storage = "D:"
+    conf.Storage = "/srv/www/storage/image/"
 }

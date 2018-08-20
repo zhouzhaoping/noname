@@ -46,7 +46,7 @@ https://swas.console.aliyun.com
 - go and mysql
 	- sql驱动`go get github.com/go-sql-driver/mysql`
 	- orm`go get github.com/go-xorm/xorm`
-	- 随机数生成器`go get github.com/seehuhn/mt19937`
+	- 随机数生成器go get github.com/seehuhn/mt19937
 	- url路由接口`go get github.com/gorilla/mux`
 - 文件夹
 	- 项目位置`/pickme`
@@ -60,6 +60,10 @@ https://swas.console.aliyun.com
 ss代理:68.168.133.152:8385
 密码:pickme
 可翻墙供爬虫使用
+
+### 4.其它服务
+- 短信服务
+	- 网易云信、阿里、网建（弃用）
 
 ## 二、接口格式
 json

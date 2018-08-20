@@ -1,0 +1,544 @@
+功能点：
+
+注册
+1、注册，将用户信息保存到数据库——用户名称，密码，suv，头像
+2、浏览——用户信息保存(suv信息)，关注的明星（可空）,返回user_id
+3、关注明星——user_id,star_id
+
+首页：
+4、首页获取所关注的明星头像和名字
+5、首页“更多”按钮，进入关注页，显示所有明星的名字和头像，star_id
+6、首页“HOT”标签，如果没有关注就显示所有明星的资讯，如果已经关注则显示已关注明星的资讯，按照时间排序，50条——要求显示资讯的来源，创建时间，标题，图片
+7、首页“某明星”标签页显示该明星相关的资讯，按照时间排序，50条——要求显示资讯的来源，创建时间，标题，图片
+
+饭圈页
+8、饭圈页头部：获取明星的姓名、身份、banner图
+9、饭圈页帖子，如果没有关注明星则跳到关注页，按照时间顺序排列，显示所有该明星相关的帖子——要求显示帖子的标题，创建时间，用户名，点赞数，评论数，是否被当前用户点赞
+10、饭圈页点击帖子链接，进入帖子详情页——详情页要获取的信息：
+	帖子标题，评论数，点赞数，发帖人用户名，发帖人头像，帖子详细内容，当前用户是否给该帖子以及各条评论点赞，所有评论者的昵称和头像，
+	评论的内容，时间，点赞数
+11、点击“发帖”按钮发帖——插入数据：帖子标题，内容，用户id，图片imgs（多个）——图片压缩
+12、回复帖子或者评论——评论的是哪个帖子——前端给(parent_comment_id，自己level，调不同的接口)，评论内容，评论用户，时间
+13、给评论或者帖子点赞
+
+动态页
+14、获取明星最近行程，最近的一条
+15、获取明星动态——账号名称，状态来源（微博还是ins），头像，创建时间，内容
+
+
+打榜页
+16、获取明星详细信息——已关注天数，微博粉丝数，应援次数，ins粉丝数，全网人气排名，历史最高排名
+17、当前用户是否给某个榜单打榜
+18、给明星打榜——授权登陆
+
+
+1、注册，将用户信息保存到数据库，同时要保存登录记录——用户名称，密码，suv，头像
+要求返回结果：保存成功或失败，如果成功则返回生成的用户id：user_id
+请求方式：POST
+入参：user_name,password,suv,img
+	{
+	 "username":user_name,
+	 "password":password,
+	 "suv":suv,
+	 "img":img
+	}
+返回结果：
+	成功：
+	{
+	 "state":0000
+	 "msg":"success",
+	 "data":{
+			 "user_id":10001
+			}
+	}
+	失败:
+	{
+	 "state":5000
+	 "msg":"save user information error",
+	}
+SQL:
+	insert into user_info(user_name,password,suv,img) values(username,password,suv,img);
+	insert into login_log(suv,login_time)values(suv,new Date());
+
+	
+2、浏览——用户信息保存(suv信息)，关注的明星（可空）,返回user_id，同时要保存登录记录
+要求返回结果：保存浏览用户信息是否成功，成功则返回user_id
+请求方式：POST
+入参：suv，star_ids
+	{
+	 "suv":suv,
+	 "star_id":""
+	}
+返回结果：
+	成功：
+	{
+	 "state":0000
+	 "msg":"success",
+	 "data":{
+			 "user_id":10001
+			}
+	}
+	失败:
+	{
+	 "state":5000
+	 "msg":"save user information error",
+	}
+SQL:
+	insert into user_info(user_name,password,suv,img) values(username,password,suv,img);
+	insert into login_log(suv,login_time)values(suv,new Date());
+	
+3、关注明星——user_id
+要求返回结果：关注成功或者失败
+请求方式：POST
+入参：user_id,star_id
+	{
+	 "user_id":10001,
+	 "star_id":20001,
+	}
+返回结果：
+	成功：
+	{
+	 "state":0000
+	 "msg":"success",
+	}
+	失败：
+	{
+	 "state":5000
+	 "msg":"success",
+	}
+SQL:
+	insert into user_star_relation(user_id,star_id,follow_time,support_time)values(10001,20001,new Date(),0);
+	
+4、首页获取所关注的明星头像和名字
+要求结果：获取用户所关注的明星的头像和姓名，按照关注时间倒序列出
+请求方式：GET
+入参：用户id
+{
+	"user_id":userId
+}
+返回结果：
+	成功：
+	{
+		"state":0000
+		"msg":"success",
+		"data":{[
+			{
+				"star_id":starId0,
+				"star_name":"杨洋"
+				"img":yangyang.jpg,
+			},
+			{
+				"star_id":starId1,
+				"star_name":"吴亦凡"
+				"img":wuyifan.jpg,
+			}
+			……
+		]}
+	}
+	失败：
+	{
+		"state":10001,
+		"msg":"get star information error"
+	}
+
+SQL: //已测试
+Select star.star_name,img from star_info star left join user_star_relation re on star.star_id = re.star_id where re.user_id = #{userId} 
+
+5、首页“更多”按钮，进入关注页，显示所有明星的名字和头像，star_id
+要求返回结果：所有姓名的名字和头像
+请求方式：GET
+入参：无
+返回结果：
+	成功：
+	{
+		"state":0000
+		"msg":"success",
+		"data":{[
+			{
+				"star_id":starId0,
+				"star_name":"杨洋"
+				"img":yangyang.jpg,
+			},
+			{
+				"star_id":starId1,
+				"star_name":"吴亦凡"
+				"img":wuyifan.jpg,
+			}
+			……
+		]}
+	}
+	失败：
+	{
+		"state":5000,
+		"msg":"get star information error"
+	}
+SQL:
+	Select star_id,star.star_name,img from star_info;
+	
+6、首页“HOT”标签，如果没有关注就显示所有明星的资讯，如果已经关注则显示已关注明星的资讯，按照时间排序，50条——要求显示资讯的来源，创建时间，标题，图片
+要求返回结果：关注明星或者所有明星相关的资讯
+请求方式：GET
+入参：用户id
+	{
+		"user_id":userId
+	}
+response:
+	成功：
+	{
+		"state":0000
+		"msg":"success",
+		"data":{[
+			{"news_id":newId,
+			 "star_id":starId,
+			"title":title,
+			"news_url":url,
+			"source":source,
+			"create_time":caeateTime,
+			"img":img
+			},
+			……
+		]}
+	}
+	失败：
+	{
+		"state":5000,
+		"msg":"get star news error"
+	}
+SQL:
+	//先判断用户是否已经有关注的明星
+	select *from user_star_relation where user_id = 10001;
+	
+	//如果用户有关注的明星则使用这条sql查询资讯
+	Select *from news where star_id in(
+		   select distinct (star_id) from user_star_relation where user_id = #{userId} 
+		   ) 
+		order by create_time desc limit 50 ;
+		
+	//如果用户没有关注明星则使用该条sql查询资讯
+	select *from news order by create_time desc limit 50; 
+	
+7、首页“某明星”标签页显示该明星相关的资讯，按照时间排序，50条——要求显示资讯的来源，创建时间，标题，图片
+要求返回结果：该明星相关的所有资讯50条
+请求方式：GET
+入参：明星id
+	{
+		"star_id":20001
+	}
+response:
+	成功：
+	{
+		"state":0000
+		"msg":"success",
+		"data":{[
+			{"news_id":newId,
+			 "star_id":starId,
+			"title":title,
+			"news_url":url,
+			"source":source,
+			"create_time":caeateTime,
+			"img":img
+			},
+			……
+		]}
+	}
+	失败：
+	{
+		"state":5000,
+		"msg":"get star news error"
+	}
+SQL:
+	select *from news where star_id = 20001;
+	
+8、饭圈页头部：获取明星的姓名、身份、banner图
+要求返回结果：明星的姓名，身份，banner图
+请求方式：GET
+入参:明星id
+	{
+		"star_id":starId
+	}
+response：
+	成功：
+	{
+		"state":0000
+		"msg":"success",
+		"data":{
+			{
+				"star_id":starId0,
+				"banner":yangyang.jpg,
+				"identify":"演员,歌手"
+			},
+		}
+	}
+	失败：
+	{
+		"state":5000,
+		"msg":"get star information error"
+	}
+
+SQL: //已测试
+Select star.star_name,banner,identify from star_info where star_id = #{starId}
+
+9、饭圈页帖子，如果没有关注明星则跳到关注页，按照时间顺序排列，显示所有该明星相关的帖子——要求显示帖子的标题，创建时间，发帖人用户名，点赞数，评论数，是否被当前用户点赞
+要求返回结果：默认显示所关注的第一个明星的相关帖子
+请求方式：GET
+入参：明星id,用户id
+	{
+		"star_id":20001,
+		"user_id":10001
+	}
+response
+	成功：
+	{
+		"state":"0000",
+		"msg":"success",
+		"data":{[
+				 {
+					 "post_id":30000,
+					 "star_id":20001,
+					 "title":"这是一个吴亦凡相关的帖子",
+					 "create_time":"2018-03-20 23:11:23",
+					 "user_name":"小明",
+					 "like_num":2000,
+					 "comment_num":45,
+					 "is_like":true //是否被当前用户点赞
+				 },
+				 ……
+			  ]}
+	}
+	失败：
+	{
+		"state":5000,
+		"msg":"get star post error"
+	}
+SQL:
+	//查询该明星相关的所有帖子
+	select *from post where star_id = 20001;
+	//判断当前用户是否对某个帖子点赞，需要对以上所有查出来的帖子进行检查判断
+	select is_like from post_user_like where user_id = 10001 and post_id = 30000;
+
+
+10、饭圈页点击帖子链接，进入帖子详情页——详情页要获取的信息：
+	帖子标题，图片，评论数，点赞数，发帖人用户名，发帖人头像，帖子详细内容，当前用户是否给该帖子点赞
+	帖子评论：所有评论者的昵称和头像，评论的内容，时间，点赞数，是否被当前用户点赞
+
+要求返回结果：如上所述详情
+请求方式：GET
+入参：帖子id，用户id
+	{
+		"post_id":3000;
+		"user_id":10001
+	}
+response:
+	成功：
+	{
+		"state":"0000",
+		"msg":"success",
+		"data":{
+				"post_detail":
+					{
+					 "post_id":30000,
+					 "star_id":20001,
+					 "title":"这是一个吴亦凡相关的帖子",
+					 "imgs":imgs,
+					 "content":"帖子详细内容",
+					 "create_time":"2018-03-20 23:11:23",
+					 "user_name":"小明",
+					 "user_img":img,//发帖人头像
+					 "like_num":2000,
+					 "comment_num":45,
+					 "is_like":true //是否被当前用户点赞
+				    },
+				"comment_detail":
+					{[
+					   {
+						 "post_id":40000, //评论1 id
+						 "star_id":20001,
+						 "content":"这是第一条评论",
+						 "create_time":"2018-03-20 23:11:23",
+						 "user_name":"小明",
+						 "user_img":img,//评论人头像
+						 "like_num":2000,
+						 "comment_num":45,
+						 "is_like":true //是否被当前用户点赞
+					   }, 
+					    {
+						 "post_id":400001, //评论2 id
+						 "star_id":20001,
+						 "content":"第二条评论",
+						 "create_time":"2018-03-20 23:15:23",
+						 "user_name":"小黑",
+						 "user_img":img,//评论人头像
+						 "like_num":200,
+						 "is_like":true //是否被当前用户点赞
+					   }, 
+					  ……
+					]}
+	}
+	失败：
+	{
+		"state":5000,
+		"msg":"get post detail error"
+	}
+SQL:
+	//先查询帖子的详情
+	Select *from post where post_id = 3000;
+	//查询该帖子的所有评论
+	select *from post where parent_comment_id in(select *from post where parent_comment_id = 3000)
+		or parent_comment_id = 3000 order by create_time desc;
+	//查找当前用户是否给某个帖子点赞
+	select * from post_user_like where user_id = 10001 and post_id in ... //in的范围为以上找到的评论以及帖子的post_id
+
+
+11、点击“发帖”按钮发帖——插入数据：帖子标题，内容，用户id，图片imgs（多个）——图片压缩
+要求返回结果：发帖完成后展示帖子页面，包括帖子title，内容content，时间，点赞数，评论数
+请求方式：POST
+入参：用户id userId，帖子标题title，帖子内容 content，帖子图片imgs
+	{
+		"userId":10001,
+		"title":"我的第一个帖子"，
+		"contnet":"hello world",
+		"imgs":imgs
+	}
+response:
+	成功：
+	{
+		"state":0000
+		"msg":"success"
+		"data":{
+			"userId":10001,
+			"postId"40000,
+			"title":"我的第一个帖子"，
+			"contnet":"hello world",
+			"createTime":2018-09-12 12:32,
+			"likeNum":0,
+			"commentNum":0
+		}
+	}
+	失败：
+	{
+		"state":5000,
+		"msg":"publish post error"
+	}
+	
+SQL：
+//插入这条帖子
+Insert into post(user_id,create_time,parent_comment_id,title,content,like_num,imgs,level)  
+                  values(userId,createTime,0,title,content,likeNum,imgs,0) //post_id自动生成
+
+
+12、回复帖子或者评论——评论的是哪个帖子——前端给
+要求返回结果：显示评论内容，用户昵称，头像、点赞数、创建时间（1级评论有这三项，2级评论不显示这三项内容）
+请求方式：POST
+入参：帖子/评论id,所评论的帖子级别level，评论内容content，用户id,明星id
+	{
+		"post_id":40001,
+		"level":1,
+		"content":"这是我的评论内容",
+		"user_id":10001,
+		"star_id":20001
+	}
+response:
+	成功：
+	{
+		"state":0000
+		"msg":"success"
+		"data":{
+			"userId":10001,
+			"user_img":user_img //用户头像
+			"comment_id"40002, //生成的评论id
+			"contnet":"这是我的评论内容",
+			"comment_level":2, //生成评论的level，因为所评论的是一级评论，因此生成的是2级评论
+			"likeNum":0,  //2级评论不显示点赞数和评论数以及创建时间三个变量
+			"commentNum":0,
+			"createTime":"2018-09-12 12:32",
+		}
+	}
+	失败：
+	{
+		"state":5000,
+		"msg":"publish post error"
+	}
+SQL：
+	//添加评论记录
+	insert into post(star_id,user_id,parent_comment_id,create_time,content,level) 
+	values(20001,10001,40001,'2018-09-12 12:32',"这是我的评论内容",comment_level); //comment_level通过前端传过来的level计算得出
+	//更新帖子评论数
+	update post set comment_num = comment_num+1 where post_id = 40001;
+
+
+13、给评论或者帖子点赞
+请求方式：POST
+入参：用户id，帖子/评论id
+	{
+		"user_id":10001,
+		"post_id":40000
+	}
+response:
+	成功：
+	{
+		"state":0000
+		"msg":"success"
+	}
+	失败：
+	{
+		"state":5000,
+		"msg":"like post error"
+	}
+SQL:
+	//更新帖子点赞数
+	update post set like_num = like_num+1 where post_id = 40000;
+	//添加用户和帖子点赞关系记录
+	insert into post_user_like(user_id,post_id,is_like) values(10001,40000,true);
+
+
+14、获取明星最近行程，最近的一条：详细时间，地点，内容
+15、获取明星动态——账号名称，状态来源（微博还是ins），头像，创建时间，内容
+请求方式：GET
+入参：明星的id号
+	{"star_id"：starId}
+response:
+	成功：
+	{
+		"state":"0000",
+		"msg":"success",
+		 "data":{
+			agenda:{
+				"agenda_id":"002",
+				"star_id":"20002",
+				"detailtime":"2018-08-29 12:30:33",
+				"location":"北京南苑机场",
+				"content":"XXX",
+			},
+			states:[{
+				"state_id":9100,
+				"account_id":"504"
+				"account_name":"吴亦凡官方微博"
+				 "create_time":"2018-03-20 23:11:23",
+				"content":"XXX粉丝XXXX",
+				"img":img,
+				"source":"微博"
+				},
+				……
+			]}
+	}
+	失败：
+	{
+		"state":40001,
+		"msg":"get star information or agenda error"
+	}
+
+SQL：
+	1、select *from agenda where star_id = #{starId} order by 
+	     detailt_time limit 1;
+	2、select * from state where account_name in(
+	     select account_name from info_source where star_id=#{starId}
+	    ) order by create_time;
+
+
+
+
+
+
+
+
+

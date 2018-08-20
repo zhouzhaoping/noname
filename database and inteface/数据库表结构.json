@@ -1,0 +1,138 @@
+用户表
+user_info
+用户id user_id  int 自增
+用户名 user_name  varchar 可空
+密码 password varchar 可空
+头像 img varchar 可空
+用户 suv  varchar 唯一，保留最新
+
+登录记录表
+login_log
+
+用户suv varchar 不可空
+登录时间 login_time datetime
+登录IP地址 ip varchar 可空
+
+
+用户明星关系表
+user_star_relation
+用户id user_id int 不可空
+用户 star_id   int 不可空
+关注时间 follow_time  datetime 不可空
+应援次数 support_num  int 可空
+
+
+动态
+state
+state_id int 不可空
+账户名称 account_name varchar 不可空
+内容 content 可空
+发表时间 create_time datetime 不可空
+图片 imgs 可空
+来源 source 可空
+
+
+信息来源（给爬虫同学看的）
+info_source
+信息id info_id int 本系统生成
+明星id star_id int 关联star_id
+爬取链接 source  varchar 网易/ins/百度
+账户标识符 account_name varchar 各来源的账号唯一标识符
+用途类型 usage_type int 1:state 2:news
+
+
+资讯
+news
+news_id int 唯一自增
+明星id star_id 关联star_id
+图片 img varchar 不可空
+标题 title varchar 不可空
+链接 news_url varchar 可空
+来源 source 可空
+发表时间 create_time 不可空
+
+
+
+榜单历史数据
+rank_list_history 
+榜单 list_id  int 唯一自增
+榜单名 list_name varchar 不可空
+明星id star_id 关联star_id
+日期 date date 不可空
+排名 rank int 不可空
+
+
+行程
+agenda
+agenda_id int 唯一自增
+明星id star_id 关联star_id
+时间 detail_time datetime
+地点 location varchar 不可空
+内容 content varchar 不可空
+
+
+帖子和评论post
+
+帖子post_id int 唯一自增
+明星id star_id 只有level0有 可空
+用户id user_id 关联user_id
+父评论id parent_comment_id 0表示是帖子
+创建时间 create_time datetime 不可空
+标题 title varchar 可空
+内容 content varchar 不可空
+图片 imgs varchar 可空 level 0 才可以有图片
+点赞数 like_num int 不可空
+评论数 comment_num int 默认0
+级别 level 0：帖子  1：一级评论  2：2级评论
+
+
+帖子和点赞用户关系表
+帖子id  post_id 关联post_id
+用户id user_id 关联user_id
+是否点赞 is_like boolean 
+
+
+
+明星 
+star_info
+用户id star_id int 唯一自增
+姓名 star_name varchar 不可空
+头像 img varchar 可空
+banner图 banner varchar 不可空
+身份 identify varchar 不可空
+今日平均排名 average_rank int 默认0
+平均历史最高名次 average_highest_rank int 默认0
+百度指数 baidu_index int 
+当日微博粉丝数  current_weibofans_num int
+昨天粉丝数 yesterday_weibofans_num int
+当日ins粉丝数  current_insfans_num int
+ins粉丝数yesterday_current_insfans_num int
+已参加综艺节目数  tvshow_num int
+在接广告数 ads_num int
+已拍摄mv
+
+
+是否给榜单打榜
+user_id 
+list_id
+date
+is_like 
+star_id 
+
+
+授权账户
+user_id
+user_name
+password
+account_type 0：百度 1：微博 2：ins
+
+
+
+
+
+
+
+
+
+
+

@@ -30,7 +30,7 @@ func main() {
 	//创建监听退出chan
 	c := make(chan os.Signal)
 	//监听指定信号 ctrl+c kill
-	signal.Notify(c, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT) //, syscall.SIGUSR1, syscall.SIGUSR2)
+	signal.Notify(c, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGUSR1, syscall.SIGUSR2)
 	go func() {
 		for s := range c {
 			switch s {
@@ -39,10 +39,10 @@ func main() {
 				ExitFunc()
 			case syscall.SIGHUP:
 				fmt.Println("sighup", s)
-				//case syscall.SIGUSR1:
-				//    fmt.Println("usr1", s)
-				//case syscall.SIGUSR2:
-				//    fmt.Println("usr2", s)
+				case syscall.SIGUSR1:
+				    fmt.Println("usr1", s)
+				case syscall.SIGUSR2:
+				    fmt.Println("usr2", s)
 			default:
 				fmt.Println("other", s)
 			}
@@ -63,7 +63,7 @@ func main() {
 			//sum++
 			// fmt.Println("sum:", sum)
 			//handler.Refresh(0)
-			handler.UpdateNews()
+			//handler.UpdateNews()
 			time.Sleep(time.Second*10)
 		}
 	}()

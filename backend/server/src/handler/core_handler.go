@@ -2,8 +2,6 @@ package handler
 
 import (
 	"github.com/kataras/iris"
-	"io/ioutil"
-	"fmt"
 )
 
 func News(ctx iris.Context) {
@@ -19,6 +17,7 @@ func News(ctx iris.Context) {
 		"source":"source",
 	}*/
 
+<<<<<<< HEAD
 	if star_id == "follow"{
 		star_id = "0"
 	}
@@ -30,10 +29,15 @@ func News(ctx iris.Context) {
 		ctx.Writef(err.Error())
 	}
 	ctx.Write(bytes)
+=======
+	ctx.ContentType("application/json; charset=UTF-8")
+	ctx.Write(UpdateNews(star_id))
+	//ctx.JSON(UpdateNews())
+>>>>>>> 589ebbaaca8e3150979193c5c8735ab1408d5200
 	/*ctx.JSON(iris.Map{
 		"state" : 10000,
 		"msg" : "success",
-		"data" : bytes,
+		"data" : string(bytes),
 	})*/
 }
 
