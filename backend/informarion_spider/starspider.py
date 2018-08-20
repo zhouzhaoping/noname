@@ -9,6 +9,7 @@ import re
 from bs4 import BeautifulSoup
 import argparse
 import time
+import datetime
 
 
 class StarSpider(object):
@@ -23,37 +24,33 @@ class StarSpider(object):
             self.star_name = '蔡徐坤'
             self.netease_id = 82
 
-    def _get_content(url):
-        r = requests.get(url)
-        r.encoding = 'utf-8'
-        html = r.text
-        soup = BeautifulSoup(html, 'html.parser')
-        news_title = soup.select('article > div.head > h1')[0]
-        news_content = soup.select('div.content > div.page')
-        return news_title, news_content
 
-    def _get_news_info(self, url):
-        r = requests.get(url)
-        html = r.text
-        soup = BeautifulSoup(html, 'html.parser')
-        news_infos = soup.select('div.info > span')
-        try:
-            news_time = news_infos[0].get_text()
-            news_source = news_infos[1].get_text()
-        except:
-            return None, None
+    def get_netease_news(self, count, update_time_stamp):
 
-        return news_time, news_source
+        def get_content(url):
+            r = requests.get(url)
+            r.encoding = 'utf-8'
+            html = r.text
+            soup = BeautifulSoup(html, 'html.parser')
+            news_title = soup.select('article > div.head > h1')[0]
+            news_content = soup.select('div.content > div.page')
+            return news_title, news_content
 
-    def __call__(self, count, update_time):
+        def get_news_info(url):
+            r = requests.get(url)
+            html = r.text
+            soup = BeautifulSoup(html, 'html.parser')
+            news_infos = soup.select('div.info > span')
+            try:
+                news_time = news_infos[0].get_text()
+                news_source = news_infos[1].get_text()
+            except:
+                return None, None
+
+            return news_time, news_source
         page = 0
         title_pattern = re.compile(self.star_name)
-        news_list = []
-        if len(update_time):
-            update_time_array = time.strptime(update_time, "%Y-%m-%d %H:%M:%S")
-            update_time_stamp = int(time.mktime(update_time_array))
-        else:
-            update_time_stamp = 0
+        netease_news_list = []
 
         while page < 400:
             url = 'https://star.3g.163.com/star/article/list/{}-10.html?starId={}&callback='.format(page, self.netease_id)
@@ -67,26 +64,97 @@ class StarSpider(object):
                     cur_title = info['title']
                     cur_url = info['link']
                     cur_img = info['pic_info'][0]['url']
-                    cur_create_time, cur_source = self._get_news_info(cur_url)
+                    cur_create_time, cur_source = get_news_info(cur_url)
                     if not cur_create_time:
                         continue
                     time_array = time.strptime(cur_create_time, "%Y-%m-%d %H:%M:%S")
                     time_stamp = int(time.mktime(time_array))
                     if time_stamp < update_time_stamp:
-                        return news_list
-                    news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':cur_source})
+                        return netease_news_list
+                    netease_news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':cur_source})
 
-                if len(news_list) == count:
-                    return news_list
+                if len(netease_news_list) == count:
+                    return netease_news_list
 
             page += 10
+
+        return netease_news_list
+
+    def get_tencent_news(self, count, update_time_stamp):
+        title_pattern = re.compile(self.star_name)
+        tencent_news_list = []
+
+        for page in range(15):
+            url = 'https://pacaio.match.qq.com/irs/rcd?cid=58&token=c232b098ee7611faeffc46409e836360&ext=ent&page={}&expIds=&callback='.format(page)
+            res = requests.get(url).text
+            infos = json.loads(res)
+            for info in infos['data']:
+                if re.search(title_pattern, info['title']):
+                    if info['img'] == '':
+                        continue
+
+                    cur_title = info['title']
+                    cur_url = info['vurl']
+                    cur_img = info['img']
+                    cur_create_time = info['publish_time']
+                    time_array = time.strptime(cur_create_time, "%Y-%m-%d %H:%M:%S")
+                    time_stamp = int(time.mktime(time_array))
+                    if time_stamp < update_time_stamp:
+                        return netease_news_list
+
+                    tencent_news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':'腾讯娱乐'})
+
+                if len(tencent_news_list) == count:
+                    return tencent_news_list
+
+        return tencent_news_list
+
+    def get_sina_news(self, count, update_time_stamp):
+        sina_news_list = []
+        title_pattern = re.compile(self.star_name)
+        time_stamp = int(time.time())
+        for i in range(20):
+            url = 'http://feed.mix.sina.com.cn/api/roll/get?pageid=107&lid=1244&num={}&versionNumber=1.2.8&ctime={}&encode=utf-8&callback='.format(30, time_stamp)
+            res = requests.get(url).text
+            infos = json.loads(res)
+            for info in infos['result']['data']:
+                time_stamp = int(info['ctime'])
+                d = datetime.datetime.fromtimestamp(time_stamp)
+                cur_create_time = d.strftime("%Y-%m-%d %H:%M:%S.%f")
+                if re.search(title_pattern, info['title']):
+                    cur_title = info['title']
+                    if int(info['ctime']) < update_time_stamp:
+                        return sina_news_list
+                    if 'u' not in info['img']:
+                        continue
+                    cur_img = info['img']['u']
+                    cur_url = info['url']
+                    sina_news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':'新浪娱乐'})
+
+                if len(sina_news_list) == count:
+                    return sina_news_list
+
+        return sina_news_list
+
+    def __call__(self, count, update_time):
+
+        if len(update_time):
+            update_time_array = time.strptime(update_time, "%Y-%m-%d %H:%M:%S")
+            update_time_stamp = int(time.mktime(update_time_array))
+        else:
+            update_time_stamp = 0
+
+        news_list = []
+        news_list.extend(self.get_netease_news(count, update_time_stamp))
+        news_list.extend(self.get_tencent_news(count, update_time_stamp))
+        news_list.extend(self.get_sina_news(count, update_time_stamp))
 
         return news_list
 
 
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(description='manual to this script')
-    arg_parser.add_argument('--starid', type=int, default=0)
+    arg_parser.add_argument('--starid', type=int, default=1)
     arg_parser.add_argument('--count', type=int, default=50)
     arg_parser.add_argument('--time', type=str, default='')
     arg_parser.add_argument('--filename', type=str, default='news_list.json')
@@ -94,7 +162,6 @@ if __name__ == '__main__':
     file_name = args.filename
     spider = StarSpider(args.starid)
     news_list = spider(args.count, args.time)
-
 
     with open(file_name, 'w') as f:
         json.dump(news_list, f)
