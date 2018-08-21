@@ -9,9 +9,10 @@ import json
 import argparse
 import time
 import sys
+import click
+import codecs
 reload(sys)
-sys.setdefaultencoding('utf-8')
-#reload(sys)
+sys.setdefaultencoding('gbk')
 from datetime import datetime
 from datetime import timedelta
 from lxml import etree
@@ -41,7 +42,7 @@ class Weibo:
     # 获取用户昵称
     def get_username(self):
         try:
-            url = "https://weibo.cn/%d/info" % (self.user_id)
+            url = "https://weibo.cn/%s/info" % (self.user_id)
             html = requests.get(url, cookies=self.cookie).content
             selector = etree.HTML(html)
             username = selector.xpath("//title/text()")[0]
@@ -54,7 +55,7 @@ class Weibo:
     # 获取用户微博数、关注数、粉丝数
     def get_user_info(self):
         try:
-            url = "https://weibo.cn/u/%d?filter=%d&page=1" % (
+            url = "https://weibo.cn/u/%s?filter=%d&page=1" % (
                 self.user_id, self.filter)
             html = requests.get(url, cookies=self.cookie).content
             selector = etree.HTML(html)
@@ -105,7 +106,7 @@ class Weibo:
     # 获取用户微博内容及对应的发布时间、点赞数、转发数、评论数
     def get_weibo_info(self):
         try:
-            url = "https://weibo.cn/u/%d?filter=%d&page=1" % (
+            url = "https://weibo.cn/u/%s?filter=%d&page=1" % (
                 self.user_id, self.filter)
             html = requests.get(url, cookies=self.cookie).content
             selector = etree.HTML(html)
@@ -116,7 +117,7 @@ class Weibo:
                     "//input[@name='mp']")[0].attrib["value"])
             pattern = r"\d+\.?\d*"
             for page in range(1, page_num + 1):
-                url2 = "https://weibo.cn/u/%d?filter=%d&page=%d" % (
+                url2 = "https://weibo.cn/u/%s?filter=%d&page=%d" % (
                     self.user_id, self.filter, page)
                 html2 = requests.get(url2, cookies=self.cookie).content
                 selector2 = etree.HTML(html2)
@@ -273,7 +274,7 @@ class Weibo:
                 time_stamp = int(time.mktime(time_array))
                 if time_stamp < update_time_stamp:
                     break
-                result.append({"account_id": str(self.user_id),
+                result.append({"account_id": self.user_id,
                         "account_name": self.username,
                         "content": self.weibo_content[i - 1],
                         "create_time": self.publish_time[i - 1],
@@ -287,13 +288,15 @@ class Weibo:
                # result = result + text
             file_dir = os.path.split(os.path.realpath(__file__))[
                 0] + os.sep + "weibo"
+            print file_dir
             if not os.path.isdir(file_dir):
                 os.mkdir(file_dir)
-            file_path = file_dir + os.sep + "%d" % self.user_id + "_" + "%s" % self.username + ".json"
+            print file_dir
+            file_path = file_dir + os.sep + "%s" % self.user_id + "_" + "%s" % self.username + ".json"
             # f = open(file_path, "wb")
             # f.write(text.encode(sys.stdout.encoding))
             # f.close()
-
+            print file_path
             with open(file_path, 'w') as f:
                 json.dump(result, f)
             print u"微博写入文件完毕，保存路径:"
@@ -314,6 +317,121 @@ class Weibo:
         except Exception, e:
             print "Error: ", e
 
+class Instagram:
+    def __init__(self, user_id):
+        self.user_id = user_id
+        print user_id
+        self.BASE_URL = "https://www.instagram.com/" + self.user_id + "/"
+        print self.BASE_URL
+        self.headers = {
+            "Origin": "https://www.instagram.com/",
+            "Referer": self.BASE_URL,
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                          "Chrome/58.0.3029.110 Safari/537.36",
+            "Host": "www.instagram.com",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+            "accept-encoding": "gzip, deflate, sdch, br",
+            "accept-language": "zh-CN,zh;q=0.8",
+            "X-Instragram-AJAX": "1",
+            "X-Requested-With": "XMLHttpRequest",
+            "Upgrade-Insecure-Requests": "1",
+        }
+
+        self.top_url = ''
+        self.account_id = ''
+        self.account_name = self.user_id
+        self.contents = []
+        self.ins_num = 0  # 爬取到的ins数
+        self.new_imgs_url = []
+        self.create_time = []
+
+    def crawl(self, update_time):
+        click.echo('start')
+        try:
+            #print "here"
+            #res = requests.get(self.BASE_URL, headers=self.headers, proxies=self.proxy)
+            res = requests.get(self.BASE_URL, headers=self.headers)
+            #print "here"
+            html = etree.HTML(res.content.decode('utf-8'))
+            #print html
+            all_a_tags = html.xpath('//script[@type="text/javascript"]/text()')
+
+            for a_tag in all_a_tags:
+                #print "a_tag:" + a_tag
+                if a_tag.strip().startswith('window._sharedData'):
+                    data = a_tag.split('= {')[1][:-1]  # 获取json数据块
+                    print "data:" + data
+                    js_data = json.loads('{' + data, encoding='utf-8')
+                    user = js_data["entry_data"]["ProfilePage"][0]["graphql"]["user"]
+                    self.account_id = user["id"]
+                    edges = user["edge_owner_to_timeline_media"]["edges"]
+                    print len(edges)
+                    for edge in edges:
+                        print edge
+                        if self.top_url and self.top_url == edge["node"]["display_url"]:
+                            in_top_url_flag = True
+                            break
+                        click.echo(edge["node"]["display_url"])
+                        self.new_imgs_url.append(edge["node"]["display_url"])
+                        print "images:" + edge["node"]["display_url"]
+                        content_candidate = edge["node"]["edge_media_to_caption"]["edges"]
+                        if len(content_candidate) > 0:
+                            self.contents.append(content_candidate[0]["node"]["text"])
+                            print "content:" + content_candidate[0]["node"]["text"]
+                        else:
+                            self.contents.append("")
+                            print "content:"
+                        self.create_time.append(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(edge["node"]["taken_at_timestamp"])))
+                        print "create_time:" + self.create_time[-1]
+                    click.echo('ok')
+
+            self.write_txt(update_time)
+        except Exception as e:
+            raise e
+
+    def write_txt(self, update_time):
+        try:
+            if len(update_time):
+                update_time_array = time.strptime(update_time, "%Y-%m-%d %H:%M")
+                update_time_stamp = int(time.mktime(update_time_array))
+            else:
+                update_time_stamp = 0
+
+            result = []
+            for i in range(1, len(self.new_imgs_url) + 1):
+                time_array = time.strptime(self.create_time[i - 1], "%Y-%m-%d %H:%M:%S")
+                time_stamp = int(time.mktime(time_array))
+                if time_stamp < update_time_stamp:
+                    break
+                result.append({"account_id": self.account_id,
+                        "account_name": self.account_name,
+                        "content": self.contents[i - 1],
+                        "create_time": self.create_time[i - 1],
+                        # u"点赞数: " + str(self.up_num[i - 1]) +
+                        # u"	 转发数: " + str(self.retweet_num[i - 1]) +
+                        # u"	 评论数: " + str(self.comment_num[i - 1]) + "\n"
+                        "imgs": self.new_imgs_url[i - 1],
+                        "source": u"Instagram"
+                        #u"发布工具: " + self.publish_tool[i - 1] + "\n\n"
+                        })
+            file_dir = os.path.split(os.path.realpath(__file__))[
+                0] + os.sep + "ins"
+            print file_dir
+            if not os.path.isdir(file_dir):
+                os.mkdir(file_dir)
+            print file_dir
+            file_path = file_dir + os.sep + "%s" % self.account_id + "_" + "%s" % self.account_name + ".json"
+            # f = open(file_path, "wb")
+            # f.write(text.encode(sys.stdout.encoding))
+            # f.close()
+            print file_path
+            with open(file_path, 'w') as f:
+                json.dump(result, f)
+            print u"ins写入文件完毕，保存路径:"
+            print file_path
+        except Exception, e:
+            print "Error: ", e
+            traceback.print_exc()
 
 #def main():
  #   try:
@@ -341,11 +459,19 @@ class Weibo:
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser(description='manual to this script')
-    arg_parser.add_argument('--user_id', type=int, default=3623353053) #默认是易烊千玺的微博id
+    arg_parser.add_argument('--user_id', type=str, default='3623353053') #默认是易烊千玺的微博id
     arg_parser.add_argument('--time', type=str, default='')
+    arg_parser.add_argument('--source', type=str, default='')
     args = arg_parser.parse_args()
     filter = 0  # 值为0表示爬取全部微博（原创微博+转发微博），值为1表示只爬取原创微博
-    wb = Weibo(args.user_id, filter)  # 调用Weibo类，创建微博实例wb
-    wb.start(args.time)  # 爬取微博信息
+    if args.source == "weibo":
+        wb = Weibo(args.user_id, filter)  # 调用Weibo类，创建微博实例wb
+        wb.start(args.time)  # 爬取微博信息
+    else:
+        if args.source == "instagram":
+            ins = Instagram(args.user_id)
+            ins.crawl(args.time)
+        else:
+            print "missing parameters"
 
 
