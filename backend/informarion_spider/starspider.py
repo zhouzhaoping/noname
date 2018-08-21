@@ -24,7 +24,6 @@ class StarSpider(object):
             self.star_name = '蔡徐坤'
             self.netease_id = 82
 
-
     def get_netease_news(self, count, update_time_stamp):
 
         def get_content(url):
@@ -56,21 +55,23 @@ class StarSpider(object):
             url = 'https://star.3g.163.com/star/article/list/{}-10.html?starId={}&callback='.format(page, self.netease_id)
             res = requests.get(url).text
             infos = json.loads(res)
+            if not infos:
+                continue
             for info in infos['data']:
+                cur_url = info['link']
+                cur_create_time, cur_source = get_news_info(cur_url)
+                time_array = time.strptime(cur_create_time, "%Y-%m-%d %H:%M:%S")
+                time_stamp = int(time.mktime(time_array))
+                if time_stamp < update_time_stamp:
+                    return netease_news_list
                 if re.search(title_pattern, info['title']):
                     if len(info['pic_info']) == 0:
                         continue
 
                     cur_title = info['title']
-                    cur_url = info['link']
                     cur_img = info['pic_info'][0]['url']
-                    cur_create_time, cur_source = get_news_info(cur_url)
                     if not cur_create_time:
                         continue
-                    time_array = time.strptime(cur_create_time, "%Y-%m-%d %H:%M:%S")
-                    time_stamp = int(time.mktime(time_array))
-                    if time_stamp < update_time_stamp:
-                        return netease_news_list
                     netease_news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':cur_source})
 
                 if len(netease_news_list) == count:
@@ -88,20 +89,20 @@ class StarSpider(object):
             url = 'https://pacaio.match.qq.com/irs/rcd?cid=58&token=c232b098ee7611faeffc46409e836360&ext=ent&page={}&expIds=&callback='.format(page)
             res = requests.get(url).text
             infos = json.loads(res)
+            if not infos:
+                continue
             for info in infos['data']:
+                cur_create_time = info['publish_time']
+                time_array = time.strptime(cur_create_time, "%Y-%m-%d %H:%M:%S")
+                time_stamp = int(time.mktime(time_array))
+                if time_stamp < update_time_stamp:
+                    return netease_news_list
                 if re.search(title_pattern, info['title']):
                     if info['img'] == '':
                         continue
-
                     cur_title = info['title']
                     cur_url = info['vurl']
                     cur_img = info['img']
-                    cur_create_time = info['publish_time']
-                    time_array = time.strptime(cur_create_time, "%Y-%m-%d %H:%M:%S")
-                    time_stamp = int(time.mktime(time_array))
-                    if time_stamp < update_time_stamp:
-                        return netease_news_list
-
                     tencent_news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':'腾讯娱乐'})
 
                 if len(tencent_news_list) == count:
@@ -117,10 +118,14 @@ class StarSpider(object):
             url = 'http://feed.mix.sina.com.cn/api/roll/get?pageid=107&lid=1244&num={}&versionNumber=1.2.8&ctime={}&encode=utf-8&callback='.format(30, time_stamp)
             res = requests.get(url).text
             infos = json.loads(res)
+            if not infos:
+                continue
             for info in infos['result']['data']:
                 time_stamp = int(info['ctime'])
+                if time_stamp < update_time_stamp:
+                    return sina_news_list
                 d = datetime.datetime.fromtimestamp(time_stamp)
-                cur_create_time = d.strftime("%Y-%m-%d %H:%M:%S.%f")
+                cur_create_time = d.strftime("%Y-%m-%d %H:%M:%S")
                 if re.search(title_pattern, info['title']):
                     cur_title = info['title']
                     if int(info['ctime']) < update_time_stamp:
@@ -136,6 +141,36 @@ class StarSpider(object):
 
         return sina_news_list
 
+    def get_cnnewsent_news(self, count, update_time_stamp):
+        cn_news_list = []
+        title_pattern = re.compile(self.star_name)
+
+        for i in range(5):
+            url = 'http://channel.chinanews.com/cns/s/channel:yl.shtml?pager={}&pagenum={}'.format(i, 100)
+            res = requests.get(url).text.replace('var specialcnsdata = ', '')
+            text_pattern = re.compile(';.$')
+            res = re.sub(text_pattern, '', res)
+            infos = json.loads(res)
+            if not infos:
+                continue
+            for info in infos['docs']:
+                cur_create_time = info['pubtime'] + ':00'
+                time_array = time.strptime(cur_create_time, "%Y-%m-%d %H:%M:%S")
+                time_stamp = int(time.mktime(time_array))
+                if time_stamp < update_time_stamp:
+                    return cn_news_list
+                if re.search(title_pattern, info['title']):
+                    cur_title = info['title']
+                    cur_img = info['img_cns']
+                    if not cur_img:
+                        continue
+                    cur_url = info['url']
+                    cn_news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':'中国新闻网'})
+
+                    if len(cn_news_list) == count:
+                        return cn_news_list
+        return cn_news_list
+
     def __call__(self, count, update_time):
 
         if len(update_time):
@@ -148,6 +183,12 @@ class StarSpider(object):
         news_list.extend(self.get_netease_news(count, update_time_stamp))
         news_list.extend(self.get_tencent_news(count, update_time_stamp))
         news_list.extend(self.get_sina_news(count, update_time_stamp))
+        news_list.extend(self.get_cnnewsent_news(count, update_time_stamp))
+
+        def take_ctime(elem):
+            return int(time.mktime(time.strptime(elem['create_time'], "%Y-%m-%d %H:%M:%S")))
+        news_list.sort(key=take_ctime, reverse=True)
+        news_list = news_list[:50]
 
         return news_list
 
