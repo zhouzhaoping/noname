@@ -35,7 +35,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	filetype := http.DetectContentType(buff)
-	if filetype!="image/jpeg"{
+	if filetype!="image/jpeg" {
 		w.Write([]byte("Error:Not JPEG."))
 		return
 	}
