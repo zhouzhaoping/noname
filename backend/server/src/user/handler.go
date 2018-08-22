@@ -14,6 +14,13 @@ func PostUser(ctx iris.Context) {
 	fmt.Println("in postuser",user)
 	user_find := new(user_info)
 
+	if user.User_name == "" {
+		ctx.JSON(iris.Map{
+			"state":  "缺少名字",
+		})
+		return
+	}
+
 	yes, err := sqltool.StarsuckEngine.Where("user_name=?",user.User_name).Get(user_find)
 	fmt.Println(user_find)
 	if yes {
@@ -58,7 +65,7 @@ func PostLogin(ctx iris.Context){
 		// update suv
 		if user.Suv != "" && user.Suv != user_find.Suv {
 			user_find.Suv = user.Suv
-			sqltool.StarsuckEngine.Update(user_find)
+			sqltool.StarsuckEngine.ID(user_find.User_id).Update(user_find)
 		}
 		// log
 		if user.Suv != ""{
@@ -81,27 +88,32 @@ func PostLogin(ctx iris.Context){
 }
 
 func GetUser(ctx iris.Context) {
-	id := ctx.Params().Get("user_id")
+	id,_ := ctx.Params().GetInt("user_id")
 	user_find := new(user_info)
 
-	sqltool.StarsuckEngine.ID(id).Get(user_find)
+	yes, err := sqltool.StarsuckEngine.ID(id).Get(user_find)
 	//fmt.Println(user_find)
+	if yes && err == nil {
+		bytes, err := json.Marshal(user_find)
+		fmt.Println(err, string(bytes))
 
-	bytes, err := json.Marshal(user_find)
-	fmt.Println(err, string(bytes))
-
-	if err == nil {
-		ctx.ContentType("application/json; charset=UTF-8")
-		ctx.Write(bytes)
-	} else {
-		ctx.JSON(iris.Map{
-			"state":  "查无此人",
-		})
+		if err == nil {
+			ctx.ContentType("application/json; charset=UTF-8")
+			ctx.Write(bytes)
+			return
+		}
 	}
+
+
+	ctx.JSON(iris.Map{
+		"state": "查无此人",
+	})
 }
 
 func PutUser(ctx iris.Context) {
 	user := NewUser_info(ctx)
+	user.User_id, _ = ctx.Params().GetInt("user_id")
+	fmt.Println(user)
 
 	user_find := new(user_info)
 	sqltool.StarsuckEngine.ID(user.User_id).Get(user_find)
@@ -114,6 +126,9 @@ func PutUser(ctx iris.Context) {
 	}
 	if user.Img != "" && user.Img != user_find.Img {
 		user_find.Img = user.Img
+	}
+	if user.Suv != "" && user.Suv != user_find.Suv {
+		user_find.Suv = user.Suv
 	}
 	sqltool.StarsuckEngine.ID(user.User_id).Update(user_find)
 

@@ -114,8 +114,8 @@ func CoreBinder(app *iris.Application){
 
 	app.Handle("POST","/user",user.PostUser)
 	app.Handle("POST","/login",user.PostLogin)
-	app.Handle("GET","/user/{user_id}",user.GetUser)
-	app.Handle("PUT","/user/{user_id}",user.PutUser)
+	app.Handle("GET","/user/{user_id:int}",user.GetUser)
+	app.Handle("PUT","/user/{user_id:int}",user.PutUser)
 
 	// Method:   GET
 	// Resource: http://localhost:8080/news?user_id=anonymous&star_id=follow
