@@ -4,7 +4,6 @@ import (
 	"time"
 	"sqltool"
 	"github.com/kataras/iris"
-	"fmt"
 )
 
 type user_info struct {
@@ -53,11 +52,8 @@ func (user *user_info) checkPassword() (bool, *user_info) {
 		} else {
 			// new anonymous user signup
 			user_find.Suv = user.Suv
-			affected, err = sqltool.StarsuckEngine.Insert(user_find)
-			fmt.Println(affected, err)
-			if affected && err == nil {
-				return true, user_find
-			}
+			sqltool.StarsuckEngine.Insert(user_find)
+			return true, user_find
 		}
 	}
 	return false, user_find
