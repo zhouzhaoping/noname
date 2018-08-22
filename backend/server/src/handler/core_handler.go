@@ -17,9 +17,23 @@ func News(ctx iris.Context) {
 		"source":"source",
 	}*/
 
+<<<<<<< HEAD
+	if star_id == "follow"{
+		star_id = "0"
+	}
+	filename := "news_list" + star_id + ".json"
+
+	bytes, err := ioutil.ReadFile(filename)
+	if err != nil {
+		fmt.Println("ReadFile: ", err.Error())
+		ctx.Writef(err.Error())
+	}
+	ctx.Write(bytes)
+=======
 	ctx.ContentType("application/json; charset=UTF-8")
 	ctx.Write(UpdateNews(star_id))
 	//ctx.JSON(UpdateNews())
+>>>>>>> 589ebbaaca8e3150979193c5c8735ab1408d5200
 	/*ctx.JSON(iris.Map{
 		"state" : 10000,
 		"msg" : "success",
