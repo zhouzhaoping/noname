@@ -117,6 +117,8 @@ class StarSpider(object):
         for i in range(20):
             url = 'http://feed.mix.sina.com.cn/api/roll/get?pageid=107&lid=1244&num={}&versionNumber=1.2.8&ctime={}&encode=utf-8&callback='.format(30, time_stamp)
             res = requests.get(url).text
+            if not res:
+                continue
             infos = json.loads(res)
             if not infos:
                 continue
