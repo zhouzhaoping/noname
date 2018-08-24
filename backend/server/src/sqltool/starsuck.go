@@ -13,7 +13,7 @@ func StarsuckInit() (debugOutput string){
 	var err error
 
 	//创建orm引擎
-	StarsuckEngine, err = xorm.NewEngine("mysql", "test:Starsuck8!@tcp(47.95.7.10:3306)/pickme_test?charset=utf8")
+	StarsuckEngine, err = xorm.NewEngine("mysql", "test:Starsuck8!@tcp(47.95.7.10:3306)/startsuck?charset=utf8")
 
 	//fmt.Println("engine:", engine)
 
