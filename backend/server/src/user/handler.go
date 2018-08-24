@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"sqltool"
 	"time"
-	"encoding/json"
+	"star"
+	"strconv"
 )
 
 
@@ -21,6 +22,7 @@ func PostUser(ctx iris.Context) {
 		return
 	}
 
+	// 检查名字
 	yes, err := sqltool.StarsuckEngine.Where("user_name=?",user.User_name).Get(user_find)
 	fmt.Println(user_find)
 	if yes {
@@ -40,7 +42,10 @@ func PostUser(ctx iris.Context) {
 		sqltool.StarsuckEngine.ID(user_find.User_id).Update(user_find)
 
 		ctx.JSON(iris.Map{
-			"user_id": user_find.User_id,
+			"state":  "success",
+			"data": iris.Map{
+				"user_id": user_find.User_id,
+			},
 		})
 		return
 	}
@@ -51,7 +56,10 @@ func PostUser(ctx iris.Context) {
 	fmt.Println(affected, err)
 
 	ctx.JSON(iris.Map{
-		"user_id":  user.User_id,
+		"state":  "success",
+		"data": iris.Map{
+			"user_id": user.User_id,
+		},
 	})
 }
 
@@ -78,7 +86,10 @@ func PostLogin(ctx iris.Context){
 		}
 
 		ctx.JSON(iris.Map{
-			"user_id":  user_find.User_id,
+			"state":  "success",
+			"data": iris.Map{
+				"user_id": user_find.User_id,
+			},
 		})
 	} else {
 		ctx.JSON(iris.Map{
@@ -94,12 +105,17 @@ func GetUser(ctx iris.Context) {
 	yes, err := sqltool.StarsuckEngine.ID(id).Get(user_find)
 	//fmt.Println(user_find)
 	if yes && err == nil {
-		bytes, err := json.Marshal(user_find)
-		fmt.Println(err, string(bytes))
+		//bytes, err := json.Marshal(user_find)
+		//fmt.Println(err, string(bytes))
 
 		if err == nil {
-			ctx.ContentType("application/json; charset=UTF-8")
-			ctx.Write(bytes)
+			//ctx.ContentType("application/json; charset=UTF-8")
+			//ctx.Write(bytes)
+
+			ctx.JSON(iris.Map{
+				"state":  "success",
+				"data": user_find,
+			})
 			return
 		}
 	}
@@ -132,6 +148,79 @@ func PutUser(ctx iris.Context) {
 	}
 	sqltool.StarsuckEngine.ID(user.User_id).Update(user_find)
 
+	ctx.JSON(iris.Map{
+		"state":  "success",
+	})
+}
+
+func GetFollowing(ctx iris.Context) {
+	id,_ := ctx.Params().GetInt("user_id")
+
+	stars := make([]star.Star_info_simple,0)
+	err := sqltool.StarsuckEngine.Table("star_info").
+									Join("LEFT OUTER", "user_star_relation","star_info.star_id = user_star_relation.star_id").
+									Where("user_star_relation.user_id=?",id).Asc("follow_time").
+									Cols("star_info.star_id","star_name","img").Find(&stars)
+
+	//ministars := make([]star.Star_info_simple,0)
+	//ministars = stars
+
+	if err == nil {
+		fmt.Println(stars)
+		ctx.JSON(iris.Map{
+			"state": "success",
+			"data":  stars,
+		})
+	} else {
+		fmt.Println(err)
+		ctx.JSON(iris.Map{
+			"state": "数据库错误",
+		})
+	}
+}
+
+func PutFollowing(ctx iris.Context) {
+	user_id,_ := ctx.Params().GetInt("user_id")
+	star_id,_ := strconv.Atoi(ctx.FormValue("star_id"))
+
+
+	u_s := new(user_star_relation)
+	yes, err := sqltool.StarsuckEngine.Where("user_id=? and star_id=?",user_id,star_id).Get(u_s)
+	fmt.Println(yes,err)
+	if yes {
+		ctx.JSON(iris.Map{
+			"state":  "不可重复关注",
+		})
+		return
+	}
+
+	u_s = &user_star_relation{
+		user_id,
+		star_id,
+		time.Now(),
+		0,
+	}
+	sqltool.StarsuckEngine.Insert(u_s)
+	ctx.JSON(iris.Map{
+		"state":  "success",
+	})
+}
+
+func PutUnFollowing(ctx iris.Context) {
+	user_id,_ := ctx.Params().GetInt("user_id")
+	star_id,_ := strconv.Atoi(ctx.FormValue("star_id"))
+
+
+	u_s := new(user_star_relation)
+	yes, _ := sqltool.StarsuckEngine.Where("user_id=? and star_id=?",user_id,star_id).Get(u_s)
+	if !yes {
+		ctx.JSON(iris.Map{
+			"state":  "您还未关注",
+		})
+		return
+	}
+
+	sqltool.StarsuckEngine.Delete(u_s)
 	ctx.JSON(iris.Map{
 		"state":  "success",
 	})

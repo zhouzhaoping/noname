@@ -7,17 +7,17 @@ import (
 )
 
 type user_info struct {
-	User_id		int		`xorm:"not null pk autoincr INT(11)"`
-	User_name	string	`xorm:"not null VARCHAR(255)"`
-	Password	string	`xorm:"not null VARCHAR(255)"`
-	Img			string	`xorm:"not null VARCHAR(255)"`
-	Suv			string	`xorm:"not null VARCHAR(255)"`
+	User_id		int		`xorm:"not null pk autoincr INT(11)" json:"user_id"`
+	User_name	string	`xorm:"default null VARCHAR(255)" json:"user_name"`
+	Password	string	`xorm:"default null VARCHAR(255)" json:"password"`
+	Img			string	`xorm:"default null VARCHAR(255)" json:"img"`
+	Suv			string	`xorm:"default null VARCHAR(255)" json:"suv"`
 }
 
 type login_log struct {
-	Suv			string
-	Login_time	time.Time
-	Ip 			string
+	Suv			string		`xorm:"not null VARCHAR(255)" json:"suv"`
+	Login_time	time.Time	`xorm:"not null DATETIME" json:"login_time"`
+	Ip 			string		`xorm:"default null VARCHAR(255)" json:"ip"`
 }
 
 func NewUser_info(ctx iris.Context) *user_info {
@@ -50,7 +50,7 @@ func (user *user_info) checkPassword() (bool, *user_info) {
 		if affected && err == nil && user_find.Password == user.Password {
 			return true, user_find
 		} else {
-			// new anonymous user signup
+			// 新增匿名用户
 			user_find.Suv = user.Suv
 			sqltool.StarsuckEngine.Insert(user_find)
 			return true, user_find
@@ -60,8 +60,9 @@ func (user *user_info) checkPassword() (bool, *user_info) {
 }
 
 type user_star_relation struct {
-	user_id		int			`用户id`
-	star_id		int			`明星id`
-	follow_time	time.Time	`关注时间`
-	support_num int			`应援次数`
+	User_id		int			`xorm:"not null INT(11)" json:"user_id"`
+	Star_id		int			`xorm:"not null INT(11)" json:"star_id"`
+	Follow_time	time.Time	`xorm:"default null DATE" json:"follow_time"`
+	Support_num int			`xorm:"default null INT(11)" json:"support_num"`
 }
+

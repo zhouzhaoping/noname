@@ -9,14 +9,7 @@ import (
 )
 
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
-	//随机生成一个不存在的fileid
-	var imgid string
-	for{
-		imgid=MakeImageID()
-		if !FileExist(ImageID2Path(imgid)){
-			break
-		}
-	}
+
 	//上传参数为uploadfile
 	r.ParseMultipartForm(32 << 20)
 	file, _, err := r.FormFile("uploadfile")
@@ -26,6 +19,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
+
 	//检测文件类型
 	buff := make([]byte, 512)
 	_, err = file.Read(buff)
@@ -35,10 +29,26 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	filetype := http.DetectContentType(buff)
-	if filetype!="image/jpeg" {
-		w.Write([]byte("Error:Not JPEG."))
+	fmt.Println(filetype)
+	var suffix string
+	if filetype =="image/jpeg"{
+		suffix = "jpg"
+	} else if filetype=="image/png" {
+		suffix = "png"
+	} else {
+		w.Write([]byte("Error:Not JPEG OR PNG"))
 		return
 	}
+
+	//随机生成一个不存在的fileid
+	var imgid string
+	for{
+		imgid=MakeImageID()
+		if !FileExist(ImageID2Path(imgid,suffix)){
+			break
+		}
+	}
+
 	//回绕文件指针
 	log.Println(filetype)
 	if  _, err = file.Seek(0, 0); err!=nil{
@@ -49,7 +59,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	//log.Println(ImageID2Path(imgid))
-	f, err := os.OpenFile(ImageID2Path(imgid), os.O_WRONLY|os.O_CREATE, 0666)
+	f, err := os.OpenFile(ImageID2Path(imgid,suffix), os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Println(err)
 		w.Write([]byte("Error:Save Error."))
@@ -57,18 +67,19 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer f.Close()
 	io.Copy(f, file)
-	w.Write([]byte(imgid))
+	w.Write([]byte(imgid+"."+suffix))
 }
 
-func DownloadHandler(w http.ResponseWriter, r *http.Request, imageid string) {
+func DownloadHandler(w http.ResponseWriter, r *http.Request, imageid string,suffix string) {
 	//vars := mux.Vars(r)
 	//imageid := vars["imgid"]
-	//fmt.Println(imageid)
+	fmt.Println(imageid)
+	fmt.Println(suffix)
 	if len([]rune(imageid)) != 16 {
 		w.Write([]byte("Error:ImageID incorrect."))
 		return
 	}
-	imgpath := ImageID2Path(imageid)
+	imgpath := ImageID2Path(imageid,suffix)
 	fmt.Println(imgpath)
 	if !FileExist(imgpath) {
 		w.Write([]byte("Error:Image Not Found."))
