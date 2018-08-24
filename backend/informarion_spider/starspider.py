@@ -185,10 +185,10 @@ class StarSpider(object):
             update_time_stamp = 0
 
         news_list = []
-        # news_list.extend(self.get_netease_news(count, update_time_stamp))
-        # news_list.extend(self.get_tencent_news(count, update_time_stamp))
+        news_list.extend(self.get_netease_news(count, update_time_stamp))
+        news_list.extend(self.get_tencent_news(count, update_time_stamp))
         news_list.extend(self.get_sina_news(count, update_time_stamp))
-        # news_list.extend(self.get_cnnewsent_news(count, update_time_stamp))
+        news_list.extend(self.get_cnnewsent_news(count, update_time_stamp))
 
         def take_ctime(elem):
             return int(time.mktime(time.strptime(elem['create_time'], "%Y-%m-%d %H:%M:%S")))
