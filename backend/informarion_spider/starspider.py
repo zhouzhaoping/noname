@@ -117,9 +117,10 @@ class StarSpider(object):
         time_stamp = int(time.time())
         for i in range(20):
             url = 'http://feed.mix.sina.com.cn/api/roll/get?pageid=107&lid=1244&num={}&versionNumber=1.2.8&ctime={}&encode=utf-8&callback='.format(30, time_stamp)
-            req = urllib.request.Request(url)
-            req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36')
-            res = urllib.request.urlopen(req).read().decode('utf-8')
+            # req = urllib.request.Request(url)
+            # req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36')
+            # res = urllib.request.urlopen(req).read().decode('utf-8')
+            res = requests.get(url).text
             if not res:
                 continue
             infos = json.loads(res)
