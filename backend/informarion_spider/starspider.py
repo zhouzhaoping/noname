@@ -60,6 +60,8 @@ class StarSpider(object):
             for info in infos['data']:
                 cur_url = info['link']
                 cur_create_time, cur_source = get_news_info(cur_url)
+                if not cur_create_time:
+                    continue
                 time_array = time.strptime(cur_create_time, "%Y-%m-%d %H:%M:%S")
                 time_stamp = int(time.mktime(time_array))
                 if time_stamp < update_time_stamp:
@@ -70,8 +72,6 @@ class StarSpider(object):
 
                     cur_title = info['title']
                     cur_img = info['pic_info'][0]['url']
-                    if not cur_create_time:
-                        continue
                     netease_news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':cur_source})
 
                 if len(netease_news_list) == count:
