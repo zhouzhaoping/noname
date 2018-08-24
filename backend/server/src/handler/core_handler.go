@@ -20,6 +20,7 @@ func News(ctx iris.Context) {
 	ctx.ContentType("application/json; charset=UTF-8")
 	ctx.Write(UpdateNews(star_id))
 	//ctx.JSON(UpdateNews())
+
 	/*ctx.JSON(iris.Map{
 		"state" : 10000,
 		"msg" : "success",

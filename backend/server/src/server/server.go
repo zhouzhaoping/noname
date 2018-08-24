@@ -21,6 +21,10 @@ import (
 	"sqltool"
 	"imagetool"
 	"handler"
+	"user"
+	"star"
+	"path"
+
 )
 
 func main() {
@@ -77,26 +81,27 @@ func main() {
 	app.Use(recover.New())
 	app.Use(logger.New())
 
-	ServerTestBinder(app)
+	//ServerTestBinder(app)
 	//Binder(app)
 	CoreBinder(app)
 
 	// 图片服务器
 	// Method:   GET
-	// Resource: http://localhost:8080/testimage
-	app.Get("/testimage", func(ctx iris.Context) {
-		imagetool.HomeHandler(ctx.ResponseWriter(), ctx.Request())
-	})
+	// Resource: http://localhost:8080/image
+	//app.Get("/image", func(ctx iris.Context) {
+	//	imagetool.HomeHandler(ctx.ResponseWriter(), ctx.Request())
+	//})
 	// Method:   POST
-	// Resource: http://localhost:8080/testimage
-	app.Post("/testimage", func(ctx iris.Context) {
+	// Resource: http://localhost:8080/image
+	app.Post("/image", func(ctx iris.Context) {
 		imagetool.UploadHandler(ctx.ResponseWriter(), ctx.Request())
 	})
 	// Method:   GET
-	// Resource: http://localhost:8080/testimage/{imgid}
-	app.Get("/testimage/{imgid:string}", func(ctx iris.Context) {
+	// Resource: http://localhost:8080/image/{imgid}
+	app.Get("/image/{imgid:string}", func(ctx iris.Context) {
 		imgid := ctx.Params().Get("imgid")
-		imagetool.DownloadHandler(ctx.ResponseWriter(), ctx.Request(), imgid)
+		suffix := path.Ext(imgid)[1:]
+		imagetool.DownloadHandler(ctx.ResponseWriter(), ctx.Request(), imgid[:len(imgid)-len(suffix)-1],suffix)
 	})
 
 	// http://localhost:8080
@@ -109,6 +114,19 @@ func main() {
 }
 
 func CoreBinder(app *iris.Application){
+
+
+	app.Handle("POST","/user",user.PostUser)
+	app.Handle("POST","/login",user.PostLogin)
+	app.Handle("GET","/user/{user_id:int}",user.GetUser)
+	app.Handle("PUT","/user/{user_id:int}",user.PutUser)
+
+	app.Handle("GET","/user/{user_id:int}/following",user.GetFollowing)
+	app.Handle("PUT","/user/{user_id:int}/following",user.PutFollowing)
+	app.Handle("PUT","/user/{user_id:int}/unfollowing",user.PutUnFollowing)
+
+	app.Handle("GET","/star",star.GetStars)
+	app.Handle("GET","/star/{star_id:int}",star.GetStar)
 	// Method:   GET
 	// Resource: http://localhost:8080/news?user_id=anonymous&star_id=follow
 	// 首页hot推荐:所有已关注明星的资讯，按照时间排序，50条
