@@ -37,7 +37,8 @@ info_source
 信息id info_id int 本系统生成
 明星id star_id int 关联star_id
 爬取链接 source  varchar 网易/ins/百度
-账户标识符 account_name varchar 各来源的账号唯一标识符
+账户名称 account_name varchar 
+账户id，唯一标识符 account_id varchar 各来源的账号唯一标识符,不可空
 用途类型 usage_type int 1:state 2:news
 
 

@@ -8,7 +8,7 @@ import (
 
 func GetStars(ctx iris.Context) {
 	stars := make([]Star_info_simple,0)
-	err := sqltool.StarsuckEngine.Table("star_info").Cols("star_id", "star_name","img").Find(&stars)
+	err := sqltool.StarsuckEngine.Table("star_info").Cols("star_id", "star_name","img").Asc("star_name").Find(&stars)
 	if err == nil{
 		fmt.Println(stars)
 		ctx.JSON(iris.Map{
