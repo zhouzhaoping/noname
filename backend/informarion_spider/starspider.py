@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 import argparse
 import time
 import datetime
+import urllib
 
 
 class StarSpider(object):
@@ -60,6 +61,8 @@ class StarSpider(object):
             for info in infos['data']:
                 cur_url = info['link']
                 cur_create_time, cur_source = get_news_info(cur_url)
+                if not cur_create_time:
+                    continue
                 time_array = time.strptime(cur_create_time, "%Y-%m-%d %H:%M:%S")
                 time_stamp = int(time.mktime(time_array))
                 if time_stamp < update_time_stamp:
@@ -70,8 +73,6 @@ class StarSpider(object):
 
                     cur_title = info['title']
                     cur_img = info['pic_info'][0]['url']
-                    if not cur_create_time:
-                        continue
                     netease_news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':cur_source})
 
                 if len(netease_news_list) == count:
@@ -116,7 +117,12 @@ class StarSpider(object):
         time_stamp = int(time.time())
         for i in range(20):
             url = 'http://feed.mix.sina.com.cn/api/roll/get?pageid=107&lid=1244&num={}&versionNumber=1.2.8&ctime={}&encode=utf-8&callback='.format(30, time_stamp)
+            # req = urllib.request.Request(url)
+            # req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36')
+            # res = urllib.request.urlopen(req).read().decode('utf-8')
             res = requests.get(url).text
+            if not res:
+                continue
             infos = json.loads(res)
             if not infos:
                 continue
