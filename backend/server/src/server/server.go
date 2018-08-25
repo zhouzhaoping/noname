@@ -24,6 +24,8 @@ import (
 	"user"
 	"star"
 	"path"
+	"news_states"
+	"forum"
 
 )
 
@@ -116,17 +118,37 @@ func main() {
 func CoreBinder(app *iris.Application){
 
 
+	// user system
 	app.Handle("POST","/user",user.PostUser)
 	app.Handle("POST","/login",user.PostLogin)
 	app.Handle("GET","/user/{user_id:int}",user.GetUser)
 	app.Handle("PUT","/user/{user_id:int}",user.PutUser)
 
+	// user_star
 	app.Handle("GET","/user/{user_id:int}/following",user.GetFollowing)
 	app.Handle("PUT","/user/{user_id:int}/following",user.PutFollowing)
 	app.Handle("PUT","/user/{user_id:int}/unfollowing",user.PutUnFollowing)
 
+	// star system
 	app.Handle("GET","/star",star.GetStars)
 	app.Handle("GET","/star/{star_id:int}",star.GetStar)
+
+	// news and states
+	app.Handle("GET","/user/{user_id:int}/news",news_states.GetUserNews)
+	app.Handle("GET","/star/{star_id:int}/news",news_states.GetStarNews)
+	app.Handle("GET","/star/{star_id:int}/states",news_states.GetStarStates)
+
+	// TODO
+
+	// forum
+	app.Handle("GET","/star/{star_id:int}/head",forum.GetStarHead)
+	app.Handle("GET","/star/{star_id:int}/posts",forum.GetStarPost)
+	app.Handle("GET","/post/{post_id:int}",forum.GetPost)
+	app.Handle("POST","/post",forum.PostNewPost)
+	app.Handle("POST","/post/{post_id:int}",forum.PostReplyPost)
+	app.Handle("PUT","/post/{post_id:int}/like",forum.PutPostLike)
+	app.Handle("PUT","/post/{post_id:int}/unlike",forum.PutPostUnLike)
+
 	// Method:   GET
 	// Resource: http://localhost:8080/news?user_id=anonymous&star_id=follow
 	// 首页hot推荐:所有已关注明星的资讯，按照时间排序，50条

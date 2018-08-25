@@ -66,3 +66,17 @@ type user_star_relation struct {
 	Support_num int			`xorm:"default null INT(11)" json:"support_num"`
 }
 
+type auth_accounts struct {
+	User_id      int    	`xorm:"not null INT(11)" json:"user_id"`
+	User_name    string 	`json:"user_name"`
+	Password     string 	`json:"password"`
+	Account_type int    	`json:"account_type"` //0：百度，1：微博，2：ins'
+}
+
+type user_list_relation struct {
+	User_id int       `xorm:"not null INT(11)" json:"user_id"`
+	List_id int       `json:"list_id"`
+	Date    time.Time `json:"date"`
+	Is_like int       `json:"is_like"` //0：打榜，1：未打榜',
+	Star_id int       `json:"star_id"`
+}

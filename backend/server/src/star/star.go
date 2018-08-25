@@ -1,5 +1,7 @@
 package star
 
+import "time"
+
 type Star_info struct {
 	Star_id 					int 	`xorm:"not null pk autoincr INT(11)" json:"star_id"`
 	Star_name					string	`json:"star_name"`
@@ -23,4 +25,12 @@ type Star_info_simple struct{
 	Star_id		int		`json:"star_id"`
 	Star_name	string	`json:"star_name"`
 	Img 		string	`json:"img"`
+}
+
+type rank_list_history struct{
+	List_id 	int 		`xorm:"not null pk autoincr INT(11)" json:"list_id"`
+	List_name 	string 		`json:"list_name"`
+	Star_id		int 		`json:"star_id"`
+	Date 		time.Time 	`json:"date"`
+	Rank 		int  		`json:"rank"`
 }
