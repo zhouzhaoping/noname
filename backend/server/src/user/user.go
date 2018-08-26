@@ -25,7 +25,7 @@ func NewUser_info(ctx iris.Context) *user_info {
 		User_name:ctx.FormValue("user_name"),
 		Password:ctx.FormValue("password"),
 		Img:ctx.FormValue("password"),
-		Suv:ctx.GetCookie("SUV"),
+		Suv:ctx.FormValue("SUV"),
 	}
 	id := ctx.PostValueIntDefault("user_id",-1)
 	if id != -1{

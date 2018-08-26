@@ -7,12 +7,10 @@ import (
 	"time"
 	"star"
 	"strconv"
-	"webtool"
 )
 
 
 func PostUser(ctx iris.Context) {
-	webtool.SetCros(ctx)
 
 	user := NewUser_info(ctx)
 	fmt.Println("in postuser",user)
@@ -67,7 +65,6 @@ func PostUser(ctx iris.Context) {
 }
 
 func PostLogin(ctx iris.Context){
-	webtool.SetCros(ctx)
 
 	user := NewUser_info(ctx)
 	fmt.Println(user)
@@ -103,7 +100,6 @@ func PostLogin(ctx iris.Context){
 }
 
 func GetUser(ctx iris.Context) {
-	webtool.SetCros(ctx)
 
 	id,_ := ctx.Params().GetInt("user_id")
 	user_find := new(user_info)
@@ -133,7 +129,6 @@ func GetUser(ctx iris.Context) {
 }
 
 func PutUser(ctx iris.Context) {
-	webtool.SetCros(ctx)
 
 	user := NewUser_info(ctx)
 	user.User_id, _ = ctx.Params().GetInt("user_id")
@@ -162,13 +157,12 @@ func PutUser(ctx iris.Context) {
 }
 
 func GetFollowing(ctx iris.Context) {
-	webtool.SetCros(ctx)
 
 	id,_ := ctx.Params().GetInt("user_id")
 
 	stars := make([]star.Star_info_simple,0)
 	err := sqltool.StarsuckEngine.Table("star_info").
-									Join("LEFT OUTER", "user_star_relation","star_info.star_id = user_star_relation.star_id").
+									Join("INNER", "user_star_relation","star_info.star_id = user_star_relation.star_id").
 									Where("user_star_relation.user_id=?",id).Asc("follow_time").
 									Cols("star_info.star_id","star_name","img").Find(&stars)
 
@@ -190,10 +184,11 @@ func GetFollowing(ctx iris.Context) {
 }
 
 func PutFollowing(ctx iris.Context) {
-	webtool.SetCros(ctx)
 
 	user_id,_ := ctx.Params().GetInt("user_id")
-	star_id,_ := strconv.Atoi(ctx.FormValue("star_id"))
+	star_id,err := strconv.Atoi(ctx.FormValue("star_id"))
+
+	fmt.Println(err, star_id)
 
 
 	u_s := new(user_star_relation)
@@ -219,7 +214,6 @@ func PutFollowing(ctx iris.Context) {
 }
 
 func PutUnFollowing(ctx iris.Context) {
-	webtool.SetCros(ctx)
 
 	user_id,_ := ctx.Params().GetInt("user_id")
 	star_id,_ := strconv.Atoi(ctx.FormValue("star_id"))
