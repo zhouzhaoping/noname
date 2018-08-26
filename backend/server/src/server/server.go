@@ -130,7 +130,7 @@ func CoreBinder(app *iris.Application){
 	app.Handle("PUT","/user/{user_id:int}/unfollowing",user.PutUnFollowing)
 
 	// star system
-	app.Handle("GET","/star",star.GetStars)
+	app.Handle("GET","/star/user/{user_id:int}",star.GetStars)
 	app.Handle("GET","/star/{star_id:int}",star.GetStar)
 
 	// news and states

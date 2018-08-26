@@ -25,6 +25,7 @@ type Star_info_simple struct{
 	Star_id		int		`json:"star_id"`
 	Star_name	string	`json:"star_name"`
 	Img 		string	`json:"img"`
+	Is_Following	bool	`json:"is_following"`
 }
 
 type Star_info_head struct {
