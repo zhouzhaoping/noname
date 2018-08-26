@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/kataras/iris"
-
 	"github.com/kataras/iris/middleware/logger"
 	"github.com/kataras/iris/middleware/recover"
 
@@ -109,6 +108,7 @@ func main() {
 	// http://localhost:8080
 	// http://localhost:8080/ping
 	// http://localhost:8080/hello
+
 	app.Run(iris.Addr(":8080"), iris.WithoutServerError(iris.ErrServerClosed))
 
 	//<-sigTERM
@@ -142,8 +142,8 @@ func CoreBinder(app *iris.Application){
 
 	// forum
 	app.Handle("GET","/star/{star_id:int}/head",forum.GetStarHead)
-	app.Handle("GET","/star/{star_id:int}/posts",forum.GetStarPost)
-	app.Handle("GET","/post/{post_id:int}",forum.GetPost)
+	app.Handle("GET","/star/{star_id:int}/posts/user/{user_id:int}",forum.GetStarPost)
+	app.Handle("GET","/post/{post_id:int}/user/{user_id:int}",forum.GetPost)
 	app.Handle("POST","/post",forum.PostNewPost)
 	app.Handle("POST","/post/{post_id:int}",forum.PostReplyPost)
 	app.Handle("PUT","/post/{post_id:int}/like",forum.PutPostLike)

@@ -27,6 +27,12 @@ type Star_info_simple struct{
 	Img 		string	`json:"img"`
 }
 
+type Star_info_head struct {
+	Star_id 					int `json:"star_id"`
+	Banner						string	`json:"banner"`
+	Identify					string	`json:"identify"`
+}
+
 type rank_list_history struct{
 	List_id 	int 		`xorm:"not null pk autoincr INT(11)" json:"list_id"`
 	List_name 	string 		`json:"list_name"`
