@@ -8,6 +8,7 @@ import (
 )
 
 func GetStarHead(ctx iris.Context) {
+
 	id,_ := ctx.Params().GetInt("star_id")
 	star_info_find := new(star.Star_info)
 

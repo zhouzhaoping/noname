@@ -7,10 +7,13 @@ import (
 	"time"
 	"star"
 	"strconv"
+	"webtool"
 )
 
 
 func PostUser(ctx iris.Context) {
+	webtool.SetCros(ctx)
+
 	user := NewUser_info(ctx)
 	fmt.Println("in postuser",user)
 	user_find := new(user_info)
@@ -64,6 +67,7 @@ func PostUser(ctx iris.Context) {
 }
 
 func PostLogin(ctx iris.Context){
+	webtool.SetCros(ctx)
 
 	user := NewUser_info(ctx)
 	fmt.Println(user)
@@ -91,8 +95,6 @@ func PostLogin(ctx iris.Context){
 				"user_id": user_find.User_id,
 			},
 		})
-
-		ctx.ResponseWriter().Header().Add("Access-Control-Allow-Origin", "*")
 	} else {
 		ctx.JSON(iris.Map{
 			"state":  "用户名或密码错误",
@@ -101,6 +103,8 @@ func PostLogin(ctx iris.Context){
 }
 
 func GetUser(ctx iris.Context) {
+	webtool.SetCros(ctx)
+
 	id,_ := ctx.Params().GetInt("user_id")
 	user_find := new(user_info)
 
@@ -129,6 +133,8 @@ func GetUser(ctx iris.Context) {
 }
 
 func PutUser(ctx iris.Context) {
+	webtool.SetCros(ctx)
+
 	user := NewUser_info(ctx)
 	user.User_id, _ = ctx.Params().GetInt("user_id")
 	fmt.Println(user)
@@ -156,6 +162,8 @@ func PutUser(ctx iris.Context) {
 }
 
 func GetFollowing(ctx iris.Context) {
+	webtool.SetCros(ctx)
+
 	id,_ := ctx.Params().GetInt("user_id")
 
 	stars := make([]star.Star_info_simple,0)
@@ -182,6 +190,8 @@ func GetFollowing(ctx iris.Context) {
 }
 
 func PutFollowing(ctx iris.Context) {
+	webtool.SetCros(ctx)
+
 	user_id,_ := ctx.Params().GetInt("user_id")
 	star_id,_ := strconv.Atoi(ctx.FormValue("star_id"))
 
@@ -209,6 +219,8 @@ func PutFollowing(ctx iris.Context) {
 }
 
 func PutUnFollowing(ctx iris.Context) {
+	webtool.SetCros(ctx)
+
 	user_id,_ := ctx.Params().GetInt("user_id")
 	star_id,_ := strconv.Atoi(ctx.FormValue("star_id"))
 

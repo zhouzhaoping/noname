@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/kataras/iris"
-
 	"github.com/kataras/iris/middleware/logger"
 	"github.com/kataras/iris/middleware/recover"
 
@@ -109,6 +108,7 @@ func main() {
 	// http://localhost:8080
 	// http://localhost:8080/ping
 	// http://localhost:8080/hello
+
 	app.Run(iris.Addr(":8080"), iris.WithoutServerError(iris.ErrServerClosed))
 
 	//<-sigTERM

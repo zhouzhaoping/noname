@@ -6,12 +6,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="331320ae-edd2-4283-aa63-4ba797421b83" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/src/webtool/cors.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.pid" beforeDir="false" afterPath="$PROJECT_DIR$/server.pid" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/forum/forum.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/forum/forum.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/forum/handle.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/forum/handle.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/star/star.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/star/star.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/user/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/user/handler.go" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -36,24 +34,24 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="go" value="61" />
+          <entry key="go" value="64" />
           <entry key="py" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Go" value="61" />
+          <entry key="Go" value="64" />
           <entry key="PLAIN_TEXT" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="12816" />
+          <entry key="go" value="12973" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="12816" />
+          <entry key="Go" value="12973" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.go.postfix.template.usages.trigger">
@@ -65,14 +63,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/server.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-39">
-              <caret line="133" column="36" selection-start-line="133" selection-start-column="36" selection-end-line="133" selection-end-column="36" />
-              <folding>
-                <element signature="e#14#360#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="57">
+              <caret line="3" column="29" selection-start-line="3" selection-start-column="29" selection-end-line="3" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -80,8 +75,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/user/handler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="399">
-              <caret line="88" column="32" lean-forward="true" selection-start-line="88" selection-start-column="32" selection-end-line="88" selection-end-column="32" />
+            <state relative-caret-position="69">
+              <caret line="222" selection-start-line="222" selection-end-line="222" />
+              <folding>
+                <element signature="e#14#96#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -146,14 +144,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/forum/handle.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-72">
-              <caret line="98" column="6" selection-start-line="98" selection-start-column="6" selection-end-line="98" selection-end-column="6" />
-              <folding>
-                <element signature="e#15#86#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="114">
+              <caret line="6" column="9" selection-start-line="6" selection-start-column="9" selection-end-line="6" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -245,10 +240,11 @@
         <option value="$PROJECT_DIR$/src/star/handle.go" />
         <option value="$PROJECT_DIR$/src/news_states/handle.go" />
         <option value="$PROJECT_DIR$/src/star/star.go" />
-        <option value="$PROJECT_DIR$/src/server/server.go" />
         <option value="$PROJECT_DIR$/src/forum/forum.go" />
-        <option value="$PROJECT_DIR$/src/user/handler.go" />
+        <option value="$PROJECT_DIR$/src/server/cors.go" />
         <option value="$PROJECT_DIR$/src/forum/handle.go" />
+        <option value="$PROJECT_DIR$/src/user/handler.go" />
+        <option value="$PROJECT_DIR$/src/server/server.go" />
       </list>
     </option>
   </component>
@@ -314,6 +310,12 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="user" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="server" type="b2602c69:ProjectViewProjectNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="webtool" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -324,7 +326,7 @@
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535269064262" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535272086383" />
     <property name="configurable.Global.GOPATH.is.expanded" value="true" />
     <property name="configurable.Module.GOPATH.is.expanded" value="false" />
     <property name="configurable.Project.GOPATH.is.expanded" value="true" />
@@ -336,6 +338,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/webtool" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/src/user" />
       <recent name="D:\pickme\backend\server\src\server" />
@@ -443,12 +446,12 @@
       <workItem from="1534145305704" duration="674000" />
       <workItem from="1534146645750" duration="525000" />
       <workItem from="1535011768540" duration="10998000" />
-      <workItem from="1535094817062" duration="39516000" />
+      <workItem from="1535094817062" duration="42535000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="223919000" />
+    <option name="totallyTimeSpent" value="226938000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -473,7 +476,7 @@
       <window_info active="true" anchor="bottom" id="Thumbnails" order="0" visible="true" weight="0.32982087" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.69551283" visible="true" weight="0.2648402" />
+      <window_info active="true" anchor="bottom" id="Run" order="3" sideWeight="0.69551283" visible="true" weight="0.2648402" />
       <window_info anchor="bottom" id="Debug" order="4" weight="0.39936775" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
@@ -715,16 +718,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/user/user.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="22" selection-start-line="22" selection-end-line="34" selection-end-column="1" />
-          <folding>
-            <element signature="e#14#70#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/star/handle.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
@@ -756,30 +749,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/server.go">
+    <entry file="file://$PROJECT_DIR$/src/user/user.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-39">
-          <caret line="133" column="36" selection-start-line="133" selection-start-column="36" selection-end-line="133" selection-end-column="36" />
+        <state relative-caret-position="418">
+          <caret line="22" selection-start-line="22" selection-end-line="34" selection-end-column="1" />
           <folding>
-            <element signature="e#14#360#0" expanded="true" />
+            <element signature="e#14#70#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/user/handler.go">
+    <entry file="file://$USER_HOME$/go/src/github.com/kataras/iris/iris.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="88" column="32" lean-forward="true" selection-start-line="88" selection-start-column="32" selection-end-line="88" selection-end-column="32" />
+        <state relative-caret-position="205">
+          <caret line="802" column="24" selection-start-line="802" selection-start-column="24" selection-end-line="802" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/webtool/cors.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="7" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/forum/handle.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-72">
-          <caret line="98" column="6" selection-start-line="98" selection-start-column="6" selection-end-line="98" selection-end-column="6" />
+        <state relative-caret-position="114">
+          <caret line="6" column="9" selection-start-line="6" selection-start-column="9" selection-end-line="6" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/user/handler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="222" selection-start-line="222" selection-end-line="222" />
           <folding>
-            <element signature="e#15#86#0" expanded="true" />
+            <element signature="e#14#96#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/server.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="3" column="29" selection-start-line="3" selection-start-column="29" selection-end-line="3" selection-end-column="29" />
         </state>
       </provider>
     </entry>
