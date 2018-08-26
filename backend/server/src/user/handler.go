@@ -91,6 +91,8 @@ func PostLogin(ctx iris.Context){
 				"user_id": user_find.User_id,
 			},
 		})
+
+		ctx.ResponseWriter().Header().Add("Access-Control-Allow-Origin", "*")
 	} else {
 		ctx.JSON(iris.Map{
 			"state":  "用户名或密码错误",
