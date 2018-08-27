@@ -250,6 +250,7 @@ if __name__ == '__main__':
     file_name = args.filename
     spider = StarSpider(args.name, args.neteasyid)
     news_list = spider(args.count, args.time)
+    print(news_list)
 
     with open(file_name, 'w') as f:
         json.dump(news_list, f)
