@@ -7,34 +7,71 @@ import (
 	"log"
 	"encoding/json"
 	"news_states"
+	"sqltool"
 )
+
+type star_id_neteasyid struct {
+	Star_id int		`json:"star_id"`
+	Account_id string	`json:"account_id"`
+	Star_name string 	`json:"star_name"`
+}
 
 func NewsUpdater() {
 
-	//cmd := exec.Command("python", "/root/pickme/backend/informarion_spider/test.py", "--starid=123", "--filename=fuck.json")
-	cmd := exec.Command("ls")
-	fmt.Println(cmd)
-	var out bytes.Buffer
+	u_n_list := make([]star_id_neteasyid, 0)
 
-	cmd.Stdout = &out
-	err := cmd.Run()
-
+	err := sqltool.StarsuckEngine.Table("info_source").Cols("info_source.star_id","account_id","star_name").
+		Join("INNER", "star_info","star_info.star_id = info_source.star_id").
+		Where("source=?","netease").Find(&u_n_list)
 	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("%s", out.String())
-
-	jsonStr := `[{"title": "\u6768\u8d85\u8d8a\u7684\u7537\u7c89\u4e1d\uff0c\u5e94\u8be5\u5bf9\u5434\u4ea6\u51e1\u6709\u4e86\u5168\u65b0\u8ba4\u8bc6\u4e86", "url": "http://3g.163.com/idol/article/DQ6287OA0517O137.html", "img": "http://dingyue.nosdn.127.net/LOpSrtcNgfOCnDI3ZxoT=D4=C5ZJmz40mAdAo55jbiCgz1535297568434compressflag.jpg", "create_time": "2018-08-26 23:33:02", "source": "\u6f47\u6d12\u5c0f\u751f\u5a31\u4e50"}, {"title": "\u5a31\u4e500826 \u5434\u4ea6\u51e1MMVAs\u5f69\u6392\u540e\u8bb0\uff1a\u8d8a\u52aa\u529b\u8d8a\u5e78\u8fd0", "url": "http://3g.163.com/idol/article/DQ60521505371GQR.html", "img": "http://dingyue.nosdn.127.net/usdDi9yCR6DVf7d173BXyf2rJjSXg40gYyb5g3DoiHZb=1535295369643compressflag.jpg", "create_time": "2018-08-26 22:56:26", "source": "\u8fea\u4e3d\u70ed\u62cd"}]`
-
-	fmt.Println(jsonStr)
-
-	news := make([]news_states.News,0)
-	if err := json.Unmarshal([]byte(jsonStr), &news); err == nil {
-		fmt.Println("================json str 转struct==")
-		fmt.Println(news)
+		fmt.Println(err, "数据库错误")
+		return
 	} else {
-		fmt.Println(err)
+		fmt.Println(len(u_n_list),u_n_list)
 	}
+
+	for _,args:=range(u_n_list){
+		// python36 starspider.py --neteasyid=31 --name="王俊凯"
+		cmd := exec.Command("python36", "/root/pickme/backend/informarion_spider/starspider.py", "--neteasyid=", args.Account_id,"--name=",args.Star_name)
+		//cmd := exec.Command("ls")
+		fmt.Println(cmd)
+		var out bytes.Buffer
+
+		cmd.Stdout = &out
+		err = cmd.Run()
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		//fmt.Printf("%s", out.String())
+		jsonStr := out.String()
+		//jsonStr = `[{"title": "\u6768\u8d85\u8d8a\u7684\u7537\u7c89\u4e1d\uff0c\u5e94\u8be5\u5bf9\u5434\u4ea6\u51e1\u6709\u4e86\u5168\u65b0\u8ba4\u8bc6\u4e86", "url": "http://3g.163.com/idol/article/DQ6287OA0517O137.html", "img": "http://dingyue.nosdn.127.net/LOpSrtcNgfOCnDI3ZxoT=D4=C5ZJmz40mAdAo55jbiCgz1535297568434compressflag.jpg", "create_time": "2018-08-26 23:33:02", "source": "\u6f47\u6d12\u5c0f\u751f\u5a31\u4e50"}, {"title": "\u5a31\u4e500826 \u5434\u4ea6\u51e1MMVAs\u5f69\u6392\u540e\u8bb0\uff1a\u8d8a\u52aa\u529b\u8d8a\u5e78\u8fd0", "url": "http://3g.163.com/idol/article/DQ60521505371GQR.html", "img": "http://dingyue.nosdn.127.net/usdDi9yCR6DVf7d173BXyf2rJjSXg40gYyb5g3DoiHZb=1535295369643compressflag.jpg", "create_time": "2018-08-26 22:56:26", "source": "\u8fea\u4e3d\u70ed\u62cd"}]`
+
+		fmt.Println(jsonStr)
+		news := make([]news_states.News,0)
+		if err := json.Unmarshal([]byte(jsonStr), &news); err == nil {
+			fmt.Println(len(news),news)
+		} else {
+			fmt.Println(err)
+			continue
+		}
+
+		for _,v:=range(news){
+			v.Star_id = args.Star_id
+			yes, err := sqltool.StarsuckEngine.Table("news").Get(v)
+			if err != nil {
+				fmt.Println(err)
+				break
+			}
+			if!yes {
+				sqltool.StarsuckEngine.Insert(v)
+
+			}else{
+				break
+			}
+		}
+	}
+
 }
 
 func StatesUpdater(){
