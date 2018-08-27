@@ -12,7 +12,7 @@ import (
 func NewsUpdater() {
 
 	//cmd := exec.Command("python", "/root/pickme/backend/informarion_spider/test.py", "--starid=123", "--filename=fuck.json")
-	cmd := exec.Command("list", "/root/pickme/backend/informarion_spider/test.py", "--starid=123", "--filename=fuck.json")
+	cmd := exec.Command("ls")
 	fmt.Println(cmd)
 	var out bytes.Buffer
 
@@ -32,6 +32,8 @@ func NewsUpdater() {
 	if err := json.Unmarshal([]byte(jsonStr), &news); err == nil {
 		fmt.Println("================json str 转struct==")
 		fmt.Println(news)
+	} else {
+		fmt.Println(err)
 	}
 }
 

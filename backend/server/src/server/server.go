@@ -26,6 +26,7 @@ import (
 	"news_states"
 	"forum"
 	"webtool"
+	"updater"
 )
 
 func main() {
@@ -69,7 +70,7 @@ func main() {
 			// fmt.Println("sum:", sum)
 			//handler.Refresh(0)
 			//handler.UpdateNews()
-			//updater.NewsUpdater()
+			updater.NewsUpdater()
 			//updater.StatesUpdater()
 			time.Sleep(time.Minute * 1)
 			fmt.Println("update...")
@@ -123,7 +124,7 @@ func CoreBinder(app *iris.Application){
 
 	// page
 	app.Handle("GET","/",webtool.GetPage)
-	app.StaticWeb("/root/pickme/frontend/build/static", "/root/pickme/frontend/build/asset-manifest.json")
+	app.StaticWeb("/static", "/root/pickme/frontend/build/static")
 
 	// user system
 	app.Handle("POST","/user",user.PostUser)
