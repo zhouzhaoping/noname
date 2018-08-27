@@ -25,6 +25,8 @@ import (
 	"path"
 	"news_states"
 	"forum"
+	"webtool"
+	"updater"
 )
 
 func main() {
@@ -68,7 +70,7 @@ func main() {
 			// fmt.Println("sum:", sum)
 			//handler.Refresh(0)
 			//handler.UpdateNews()
-			//updater.NewsUpdater()
+			updater.NewsUpdater()
 			//updater.StatesUpdater()
 			time.Sleep(time.Minute * 1)
 			fmt.Println("update...")
@@ -96,12 +98,12 @@ func main() {
 	//})
 	// Method:   POST
 	// Resource: http://localhost:8080/image
-	app.Post("/image", func(ctx iris.Context) {
+	app.Post("/api/image", func(ctx iris.Context) {
 		imagetool.UploadHandler(ctx.ResponseWriter(), ctx.Request())
 	})
 	// Method:   GET
 	// Resource: http://localhost:8080/image/{imgid}
-	app.Get("/image/{imgid:string}", func(ctx iris.Context) {
+	app.Get("/api/image/{imgid:string}", func(ctx iris.Context) {
 		imgid := ctx.Params().Get("imgid")
 		suffix := path.Ext(imgid)[1:]
 		imagetool.DownloadHandler(ctx.ResponseWriter(), ctx.Request(), imgid[:len(imgid)-len(suffix)-1],suffix)
@@ -120,36 +122,40 @@ func main() {
 func CoreBinder(app *iris.Application){
 
 
+	// page
+	app.Handle("GET","/*",webtool.GetPage)
+	app.StaticWeb("/static", "/root/pickme/frontend/build/static")
+
 	// user system
-	app.Handle("POST","/user",user.PostUser)
-	app.Handle("POST","/login",user.PostLogin)
-	app.Handle("GET","/user/{user_id:int}",user.GetUser)
-	app.Handle("PUT","/user/{user_id:int}",user.PutUser)
+	app.Handle("POST","/api/user",user.PostUser)
+	app.Handle("POST","/api/login",user.PostLogin)
+	app.Handle("GET","/api/user/{user_id:int}",user.GetUser)
+	app.Handle("PUT","/api/user/{user_id:int}",user.PutUser)
 
 	// user_star
-	app.Handle("GET","/user/{user_id:int}/following",user.GetFollowing)
-	app.Handle("PUT","/user/{user_id:int}/following",user.PutFollowing)
-	app.Handle("PUT","/user/{user_id:int}/unfollowing",user.PutUnFollowing)
+	app.Handle("GET","/api/user/{user_id:int}/following",user.GetFollowing)
+	app.Handle("PUT","/api/user/{user_id:int}/following",user.PutFollowing)
+	app.Handle("PUT","/api/user/{user_id:int}/unfollowing",user.PutUnFollowing)
 
 	// star system
-	app.Handle("GET","/star/user/{user_id:int}",star.GetStars)
-	app.Handle("GET","/star/{star_id:int}",star.GetStar)
+	app.Handle("GET","/api/star/user/{user_id:int}",star.GetStars)
+	app.Handle("GET","/api/star/{star_id:int}",star.GetStar)
 
 	// news and states
-	app.Handle("GET","/user/{user_id:int}/news",news_states.GetUserNews)
-	app.Handle("GET","/star/{star_id:int}/news",news_states.GetStarNews)
-	app.Handle("GET","/star/{star_id:int}/states",news_states.GetStarStates)
+	app.Handle("GET","/api/user/{user_id:int}/news",news_states.GetUserNews)
+	app.Handle("GET","/api/star/{star_id:int}/news",news_states.GetStarNews)
+	app.Handle("GET","/api/star/{star_id:int}/states",news_states.GetStarStates)
 
 	// TODO
 
 	// forum
-	app.Handle("GET","/star/{star_id:int}/head",forum.GetStarHead)
-	app.Handle("GET","/star/{star_id:int}/posts/user/{user_id:int}",forum.GetStarPost)
-	app.Handle("GET","/post/{post_id:int}/user/{user_id:int}",forum.GetPost)
-	app.Handle("POST","/post",forum.PostNewPost)
-	app.Handle("POST","/post/{post_id:int}",forum.PostReplyPost)
-	app.Handle("PUT","/post/{post_id:int}/like",forum.PutPostLike)
-	app.Handle("PUT","/post/{post_id:int}/unlike",forum.PutPostUnLike)
+	app.Handle("GET","/api/star/{star_id:int}/head",forum.GetStarHead)
+	app.Handle("GET","/api/star/{star_id:int}/posts/user/{user_id:int}",forum.GetStarPost)
+	app.Handle("GET","/api/post/{post_id:int}/user/{user_id:int}",forum.GetPost)
+	app.Handle("POST","/api/post",forum.PostNewPost)
+	app.Handle("POST","/api/post/{post_id:int}",forum.PostReplyPost)
+	app.Handle("PUT","/api/post/{post_id:int}/like",forum.PutPostLike)
+	app.Handle("PUT","/api/post/{post_id:int}/unlike",forum.PutPostUnLike)
 
 	// Method:   GET
 	// Resource: http://localhost:8080/news?user_id=anonymous&star_id=follow
@@ -157,14 +163,14 @@ func CoreBinder(app *iris.Application){
 	// http://localhost:8080/news?user_id=anonymous&star_id=follow
 	// 某个明星资讯页:回目标明星相关的50条资讯，按照时间排序
 	// http://localhost:8080/news?user_id=anonymous&star_id=0
-	app.Handle("GET", "/news", handler.News)
+	//app.Handle("GET", "/news", handler.News)
 
 	// Method:   GET
 	// Resource: http://localhost:8080/states?user_id=anonymous&star_id=0
 	// 明星个人动态页
 	// 1、显示该明星最近的行程信息
 	// 2、显示该明星相关的账号所发的状态
-	app.Handle("GET", "/states", handler.States)
+	//app.Handle("GET", "/states", handler.States)
 }
 func Binder(app *iris.Application){
 	// Method:   GET
