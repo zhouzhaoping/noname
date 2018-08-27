@@ -32,8 +32,8 @@ func NewsUpdater() {
 
 	for _,args:=range(u_n_list){
 		// python36 starspider.py --neteasyid=31 --name="王俊凯"
-		//cmd := exec.Command("python36", "/root/pickme/backend/informarion_spider/starspider.py", "--neteasyid="+args.Account_id,"--name="+args.Star_name)
-		cmd := exec.Command("ls")
+		cmd := exec.Command("python36", "/root/pickme/backend/informarion_spider/starspider.py", "--neteasyid="+args.Account_id,"--name="+args.Star_name)
+		//cmd := exec.Command("ls")
 		fmt.Println(cmd)
 		var out bytes.Buffer
 
