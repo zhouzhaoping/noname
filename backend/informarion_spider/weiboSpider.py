@@ -9,7 +9,7 @@ import json
 import argparse
 import time
 import sys
-import click
+#import click
 import codecs
 reload(sys)
 sys.setdefaultencoding('gbk')
@@ -344,13 +344,16 @@ class Instagram:
         self.ins_num = 0  # 爬取到的ins数
         self.new_imgs_url = []
         self.create_time = []
-
+        self.proxy = {
+            'http': 'http://user:pickme@68.168.133.152:8385',
+                'https': 'http://user:pickme@68.168.133.152:8385'
+                }
     def crawl(self, update_time):
-        click.echo('start')
+        #click.echo('start')
         try:
             #print "here"
-            #res = requests.get(self.BASE_URL, headers=self.headers, proxies=self.proxy)
-            res = requests.get(self.BASE_URL, headers=self.headers)
+            res = requests.get(self.BASE_URL, headers=self.headers, proxies=self.proxy)
+            #res = requests.get(self.BASE_URL, headers=self.headers)
             #print "here"
             html = etree.HTML(res.content.decode('utf-8'))
             #print html
@@ -371,7 +374,7 @@ class Instagram:
                         if self.top_url and self.top_url == edge["node"]["display_url"]:
                             in_top_url_flag = True
                             break
-                        click.echo(edge["node"]["display_url"])
+                        #click.echo(edge["node"]["display_url"])
                         self.new_imgs_url.append(edge["node"]["display_url"])
                         print "images:" + edge["node"]["display_url"]
                         content_candidate = edge["node"]["edge_media_to_caption"]["edges"]
@@ -383,7 +386,7 @@ class Instagram:
                             print "content:"
                         self.create_time.append(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(edge["node"]["taken_at_timestamp"])))
                         print "create_time:" + self.create_time[-1]
-                    click.echo('ok')
+                    #click.echo('ok')
 
             self.write_txt(update_time)
         except Exception as e:
