@@ -6,9 +6,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="331320ae-edd2-4283-aa63-4ba797421b83" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/server.pid" beforeDir="false" afterPath="$PROJECT_DIR$/server.pid" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/updater/updater.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/updater/updater.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/user/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/user/handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/user/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/user/user.go" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -32,24 +31,24 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="go" value="83" />
+          <entry key="go" value="84" />
           <entry key="py" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Go" value="83" />
+          <entry key="Go" value="84" />
           <entry key="PLAIN_TEXT" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="15580" />
+          <entry key="go" value="15593" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="15580" />
+          <entry key="Go" value="15593" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.go.postfix.template.usages.trigger">
@@ -76,8 +75,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/user/handler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="59" column="41" selection-start-line="59" selection-start-column="41" selection-end-line="59" selection-end-column="41" />
+            <state relative-caret-position="551">
+              <caret line="59" column="26" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
               <folding>
                 <element signature="e#14#96#0" expanded="true" />
               </folding>
@@ -98,6 +97,18 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/user/user.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="480">
+              <caret line="26" column="30" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
+              <folding>
+                <element signature="e#14#70#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/news_states/news_states.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="608">
@@ -109,22 +120,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/webtool/handler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+            <state>
+              <caret column="14" selection-start-column="14" selection-end-column="14" />
               <folding>
                 <element signature="e#17#67#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/user/user.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="47" column="30" lean-forward="true" selection-start-line="47" selection-start-column="30" selection-end-line="47" selection-end-column="30" />
-              <folding>
-                <element signature="e#14#70#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -240,7 +239,6 @@
         <option value="$PROJECT_DIR$/src/server/cors.go" />
         <option value="$PROJECT_DIR$/src/forum/handle.go" />
         <option value="$PROJECT_DIR$/src/webtool/cors.go" />
-        <option value="$PROJECT_DIR$/src/user/user.go" />
         <option value="$PROJECT_DIR$/src/star/star.go" />
         <option value="$PROJECT_DIR$/src/star/handle.go" />
         <option value="$PROJECT_DIR$/src/server/updater.go" />
@@ -250,6 +248,7 @@
         <option value="$PROJECT_DIR$/src/forum/forum.go" />
         <option value="$PROJECT_DIR$/src/news_states/news_states.go" />
         <option value="$PROJECT_DIR$/src/updater/updater.go" />
+        <option value="$PROJECT_DIR$/src/user/user.go" />
         <option value="$PROJECT_DIR$/src/user/handler.go" />
       </list>
     </option>
@@ -356,7 +355,7 @@
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535382014722" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535382881923" />
     <property name="configurable.Global.GOPATH.is.expanded" value="true" />
     <property name="configurable.Module.GOPATH.is.expanded" value="false" />
     <property name="configurable.Project.GOPATH.is.expanded" value="true" />
@@ -477,12 +476,12 @@
       <workItem from="1534145305704" duration="674000" />
       <workItem from="1534146645750" duration="525000" />
       <workItem from="1535011768540" duration="10998000" />
-      <workItem from="1535094817062" duration="85230000" />
+      <workItem from="1535094817062" duration="86096000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="269633000" />
+    <option name="totallyTimeSpent" value="270499000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -793,16 +792,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/webtool/handler.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
-          <folding>
-            <element signature="e#17#67#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/star/star.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="228">
@@ -858,10 +847,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/webtool/handler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="14" selection-start-column="14" selection-end-column="14" />
+          <folding>
+            <element signature="e#17#67#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/user/user.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="47" column="30" lean-forward="true" selection-start-line="47" selection-start-column="30" selection-end-line="47" selection-end-column="30" />
+        <state relative-caret-position="480">
+          <caret line="26" column="30" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
           <folding>
             <element signature="e#14#70#0" expanded="true" />
           </folding>
@@ -870,8 +869,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/user/handler.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="59" column="41" selection-start-line="59" selection-start-column="41" selection-end-line="59" selection-end-column="41" />
+        <state relative-caret-position="551">
+          <caret line="59" column="26" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
           <folding>
             <element signature="e#14#96#0" expanded="true" />
           </folding>

@@ -43,7 +43,7 @@ func PostUser(ctx iris.Context) {
 		sqltool.StarsuckEngine.ID(user_find.User_id).Update(user_find)
 
 		ctx.JSON(iris.Map{
-			"state":  "success nimingyonghugengxin",
+			"state":  "success",
 			"data": iris.Map{
 				"user_id": user_find.User_id,
 			},
@@ -57,7 +57,7 @@ func PostUser(ctx iris.Context) {
 	fmt.Println(affected, err)
 
 	ctx.JSON(iris.Map{
-		"state":  "success xinyonghuzhuce",
+		"state":  "success",
 		"data": iris.Map{
 			"user_id": user.User_id,
 		},
