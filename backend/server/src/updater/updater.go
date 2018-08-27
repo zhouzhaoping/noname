@@ -95,7 +95,7 @@ func StatesUpdater(){
 	}
 
 	for _,args:=range(s_w_list){
-		cmd := exec.Command("python", "/root/pickme/backend/informarion_spider/weiboSpider.py", "--user_id "+args.Account_id, "--source "+args.Source)
+		cmd := exec.Command("python", "/root/pickme/backend/informarion_spider/weiboSpider.py", "--user_id \""+args.Account_id+"\"", "--source \""+args.Source+"\"")
 		//cmd := exec.Command("python", "/root/pickme/backend/informarion_spider/weiboSpider.py","--id=XXX","--filename='/root/pickme/backend/informarion_spider/fuck.json'")
 		//cmd := exec.Command("ls")
 		fmt.Println(cmd)
@@ -109,7 +109,7 @@ func StatesUpdater(){
 		}
 		//fmt.Printf("%s", out.String())
 		jsonStr := out.String()
-		jsonStr = `[{"title": "《快乐大本营》王俊凯情商逆天, 一句话得罪全场, 一句话挽回场面", "url": "http://3g.163.com/idol/article/DQ8CUP3505370U9R.html", "img": "http://dingyue.nosdn.127.net/TNGvyEFN=hpZnbr1CWvfI0UJLEyoV35TzcJjEhSU23YCI1535375890631.jpg", "create_time": "2018-08-27 21:18:42", "source": "神马大娱乐"}]`
+		//jsonStr = `\[{"title": "《快乐大本营》王俊凯情商逆天, 一句话得罪全场, 一句话挽回场面", "url": "http://3g.163.com/idol/article/DQ8CUP3505370U9R.html", "img": "http://dingyue.nosdn.127.net/TNGvyEFN=hpZnbr1CWvfI0UJLEyoV35TzcJjEhSU23YCI1535375890631.jpg", "create_time": "2018-08-27 21:18:42", "source": "神马大娱乐"}]`
 		fmt.Println(jsonStr)
 		states := make([]news_states.News,0)
 		if err := json.Unmarshal([]byte(jsonStr), &states); err == nil {
@@ -121,7 +121,7 @@ func StatesUpdater(){
 
 		for _,v:=range(states){
 			v.Star_id = args.Star_id
-			yes, err := sqltool.StarsuckEngine.Table("states").Get(&v)
+			yes, err := sqltool.StarsuckEngine.Table("state").Get(&v)
 			if err != nil {
 				fmt.Println(err)
 				break
