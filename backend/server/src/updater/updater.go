@@ -64,9 +64,11 @@ func NewsUpdater() {
 				break
 			}
 			if!yes {
+				fmt.Println("insert",v)
 				sqltool.StarsuckEngine.Insert(v)
 
 			}else{
+				fmt.Println("has",v)
 				break
 			}
 		}
