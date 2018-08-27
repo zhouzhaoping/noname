@@ -25,7 +25,6 @@ import (
 	"path"
 	"news_states"
 	"forum"
-
 )
 
 func main() {
@@ -69,7 +68,10 @@ func main() {
 			// fmt.Println("sum:", sum)
 			//handler.Refresh(0)
 			//handler.UpdateNews()
-			time.Sleep(time.Second*10)
+			//updater.NewsUpdater()
+			//updater.StatesUpdater()
+			time.Sleep(time.Minute * 1)
+			fmt.Println("update...")
 		}
 	}()
 
