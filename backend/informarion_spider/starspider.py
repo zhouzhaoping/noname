@@ -14,18 +14,11 @@ import urllib
 
 
 class StarSpider(object):
-    def __init__(self, star_id):
-        if star_id == 0:
-            self.star_name = '易烊千玺'
-            self.netease_id = 32
-        if star_id == 1:
-            self.star_name = '吴亦凡'
-            self.netease_id = 21
-        if star_id == 2:
-            self.star_name = '蔡徐坤'
-            self.netease_id = 82
+    def __init__(self, name, neteasyid):
+        self.star_name = name
+        self.netease_id = neteasyid
 
-    def get_netease_news(self, count, update_time_stamp):
+    def get_netease_starnews(self, count, update_time_stamp):
 
         def get_content(url):
             r = requests.get(url)
@@ -82,6 +75,47 @@ class StarSpider(object):
 
         return netease_news_list
 
+    def get_netease_entnews(self, count, update_time_stamp):
+        title_pattern = re.compile((self.star_name))
+        netease_news_list = []
+
+        for page in range(10):
+            if page == 0:
+                url = 'http://ent.163.com/special/000380VU/newsdata_index.js?callback='
+            else:
+                url = 'http://ent.163.com/special/000380VU/newsdata_index_{}.js?callback='.format(str(page+1).zfill(2))
+            res = requests.get(url).text
+            if not res:
+                continue
+            pattern = re.compile('^data_callback\(')
+            res = re.sub(pattern, '', res)
+            pattern = re.compile('\)$')
+            res = re.sub(pattern, '', res)
+            infos = json.loads(res)
+            if not infos:
+                continue
+            for info in infos:
+                cur_create_time = info['time'] #08/25/2018 14:02:54
+                time_array = time.strptime(cur_create_time, '%m/%d/%Y %H:%M:%S')
+                time_stamp = int(time.mktime(time_array))
+                d = datetime.datetime.fromtimestamp(time_stamp)
+                cur_create_time = d.strftime("%Y-%m-%d %H:%M:%S")
+                if time_stamp < update_time_stamp:
+                    return netease_news_list
+                if re.search(title_pattern, info['title']):
+                    if not info['imgurl']:
+                        continue
+                    cur_title = info['title']
+                    cur_url = info['docurl']
+                    cur_img = info['imgurl']
+                    netease_news_list.append(
+                        {'title': cur_title, 'url': cur_url, 'img': cur_img, 'create_time': cur_create_time,
+                         'source': '网易娱乐'})
+                if len(netease_news_list) == count:
+                    return netease_news_list
+
+        return netease_news_list
+
     def get_tencent_news(self, count, update_time_stamp):
         title_pattern = re.compile(self.star_name)
         tencent_news_list = []
@@ -97,7 +131,7 @@ class StarSpider(object):
                 time_array = time.strptime(cur_create_time, "%Y-%m-%d %H:%M:%S")
                 time_stamp = int(time.mktime(time_array))
                 if time_stamp < update_time_stamp:
-                    return netease_news_list
+                    return tencent_news_list
                 if re.search(title_pattern, info['title']):
                     if info['img'] == '':
                         continue
@@ -179,6 +213,8 @@ class StarSpider(object):
 
     def __call__(self, count, update_time):
 
+        assert self.star_name, 'Star name is necessary'
+
         if len(update_time):
             update_time_array = time.strptime(update_time, "%Y-%m-%d %H:%M:%S")
             update_time_stamp = int(time.mktime(update_time_array))
@@ -186,7 +222,11 @@ class StarSpider(object):
             update_time_stamp = 0
 
         news_list = []
-        news_list.extend(self.get_netease_news(count, update_time_stamp))
+
+        if self.netease_id:
+            news_list.extend(self.get_netease_starnews(count, update_time_stamp))
+        else:
+            news_list.extend(self.get_netease_entnews(count, update_time_stamp))
         news_list.extend(self.get_tencent_news(count, update_time_stamp))
         news_list.extend(self.get_sina_news(count, update_time_stamp))
         news_list.extend(self.get_cnnewsent_news(count, update_time_stamp))
@@ -194,20 +234,21 @@ class StarSpider(object):
         def take_ctime(elem):
             return int(time.mktime(time.strptime(elem['create_time'], "%Y-%m-%d %H:%M:%S")))
         news_list.sort(key=take_ctime, reverse=True)
-        news_list = news_list[:50]
+        news_list = news_list[:count]
 
         return news_list
 
 
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(description='manual to this script')
-    arg_parser.add_argument('--starid', type=int, default=1)
+    arg_parser.add_argument('--neteasyid', type=str, default='')
+    arg_parser.add_argument('--name', type=str, default='')
     arg_parser.add_argument('--count', type=int, default=50)
     arg_parser.add_argument('--time', type=str, default='')
     arg_parser.add_argument('--filename', type=str, default='news_list.json')
     args = arg_parser.parse_args()
     file_name = args.filename
-    spider = StarSpider(args.starid)
+    spider = StarSpider(args.name, args.neteasyid)
     news_list = spider(args.count, args.time)
 
     with open(file_name, 'w') as f:
