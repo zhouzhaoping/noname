@@ -25,7 +25,6 @@ import (
 	"path"
 	"news_states"
 	"forum"
-
 )
 
 func main() {
@@ -69,7 +68,10 @@ func main() {
 			// fmt.Println("sum:", sum)
 			//handler.Refresh(0)
 			//handler.UpdateNews()
-			time.Sleep(time.Second*10)
+			//updater.NewsUpdater()
+			//updater.StatesUpdater()
+			time.Sleep(time.Minute * 1)
+			fmt.Println("update...")
 		}
 	}()
 
@@ -130,7 +132,7 @@ func CoreBinder(app *iris.Application){
 	app.Handle("PUT","/user/{user_id:int}/unfollowing",user.PutUnFollowing)
 
 	// star system
-	app.Handle("GET","/star",star.GetStars)
+	app.Handle("GET","/star/user/{user_id:int}",star.GetStars)
 	app.Handle("GET","/star/{star_id:int}",star.GetStar)
 
 	// news and states

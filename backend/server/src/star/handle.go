@@ -7,8 +7,15 @@ import (
 )
 
 func GetStars(ctx iris.Context) {
+	id,_ := ctx.Params().GetInt("user_id")
 	stars := make([]Star_info_simple,0)
-	err := sqltool.StarsuckEngine.Table("star_info").Cols("star_id", "star_name","img").Asc("star_name").Find(&stars)
+	err := sqltool.StarsuckEngine.Table("star_info").
+		Cols("star_id", "star_name","img").Asc("star_name").Find(&stars)
+
+	for i,v := range(stars){
+		stars[i].Is_Following, err = sqltool.StarsuckEngine.Table("user_star_relation").Where("user_id = ? and star_id=?",id,v.Star_id).Exist()
+	}
+
 	if err == nil{
 		fmt.Println(stars)
 		ctx.JSON(iris.Map{
