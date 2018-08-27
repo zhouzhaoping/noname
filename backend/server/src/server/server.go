@@ -25,6 +25,7 @@ import (
 	"path"
 	"news_states"
 	"forum"
+	"webtool"
 )
 
 func main() {
@@ -119,6 +120,10 @@ func main() {
 
 func CoreBinder(app *iris.Application){
 
+
+	// page
+	app.Handle("GET","/",webtool.GetPage)
+	app.StaticWeb("/root/pickme/frontend/build/static", "/root/pickme/frontend/build/asset-manifest.json")
 
 	// user system
 	app.Handle("POST","/user",user.PostUser)
