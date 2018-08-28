@@ -208,8 +208,9 @@ func PutPostLike(ctx iris.Context) {
 			})
 			return
 		} else {
-			p_u.Is_like = 0
-			_, err = sqltool.StarsuckEngine.Where("post_id=? and user_id=?",p_u.Post_id,p_u.User_id).Update(p_u)
+			p_u.Is_like = -1
+			fmt.Println("nimamam",p_u)
+			_, err = sqltool.StarsuckEngine.Where("post_id=? and user_id=? and is_like=?",p_u.Post_id,p_u.User_id,1).Update(p_u)
 			if err!= nil {
 				ctx.JSON(iris.Map{
 					"state": "数据库错误",

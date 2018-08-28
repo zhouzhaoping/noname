@@ -25,6 +25,7 @@ import (
 	"news_states"
 	"forum"
 	"webtool"
+	"updater"
 )
 
 func main() {
@@ -69,7 +70,7 @@ func main() {
 			//handler.Refresh(0)
 			//handler.UpdateNews()
 			//updater.NewsUpdater()
-			//updater.StatesUpdater()
+			updater.StatesUpdater()
 			time.Sleep(time.Hour * 1)
 			fmt.Println("update...")
 		}
