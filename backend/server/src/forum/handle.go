@@ -39,7 +39,7 @@ func GetStarPost(ctx iris.Context) {
 	post_find := make([]Post,0)
 
 
-	err := sqltool.StarsuckEngine.Where("star_id=?",star_id).Desc("create_time").Find(&post_find)
+	err := sqltool.StarsuckEngine.Where("star_id=? and level=?",star_id,0).Desc("create_time").Find(&post_find)
 	if err != nil {
 		ctx.JSON(iris.Map{
 			"state": "数据库错误",
@@ -76,15 +76,15 @@ func GetPost(ctx iris.Context) {
 	post_id,_ := ctx.Params().GetInt("post_id")
 	user_id,_ := ctx.Params().GetInt("user_id")
 
-	post_find := new(Post)
+	//post_find := new(Post)
 	post_like_find := new(post_like)
 	comment_find := make([]Post,0)
 
 	fmt.Println(post_id,user_id)
-	yes, err := sqltool.StarsuckEngine.Table("post").ID(post_id).Get(post_find)//TODO
-	fmt.Println(yes,err)
-	if yes && err != nil {
-		fmt.Println(post_find)
+	yes, err := sqltool.StarsuckEngine.Table("post").ID(post_id).Get(&post_like_find.Post_save)
+
+	if yes && err== nil {
+		fmt.Println(post_like_find)
 	}else {
 		fmt.Println(err)
 		ctx.JSON(iris.Map{
@@ -127,6 +127,7 @@ func PostNewPost(ctx iris.Context) {
 		ctx.JSON(iris.Map{
 			"state": "数据库错误",
 		})
+		return
 	}else{
 		ctx.JSON(iris.Map{
 			"state": "success",
@@ -139,6 +140,51 @@ func PostNewPost(ctx iris.Context) {
 }
 func PostReplyPost(ctx iris.Context) {
 
+	// find father
+	father_post := new(Post)
+	father_post_id,_ := ctx.Params().GetInt("post_id")
+	yes, err := sqltool.StarsuckEngine.Table("post").ID(father_post_id).Get(father_post)
+	if yes && err== nil {
+		fmt.Println(father_post)
+	}else {
+		fmt.Println(err)
+		ctx.JSON(iris.Map{
+			"state": "找不到father_post",
+		})
+		return
+	}
+
+	// insert son
+	post := NewPost(ctx)
+	post.Create_time = time.Now()
+	post.Parent_comment_id = father_post_id
+	post.Level = father_post.Level + 1
+	_,err = sqltool.StarsuckEngine.Insert(post)
+	if err != nil{
+		ctx.JSON(iris.Map{
+			"state": "数据库错误",
+		})
+		return
+	}else{
+		ctx.JSON(iris.Map{
+			"state": "success",
+			"data":iris.Map{
+				"post_id":post.Post_id,
+			},
+		})
+	}
+
+	// update father
+	father_post.Comment_num += 1
+	_, err = sqltool.StarsuckEngine.ID(father_post_id).Update(father_post)
+
+	if err!= nil {
+		fmt.Println(err)
+		ctx.JSON(iris.Map{
+			"state": "数据库错误",
+		})
+		return
+	}
 }
 func PutPostLike(ctx iris.Context) {
 	post_id,_ := ctx.Params().GetInt("post_id")
@@ -160,14 +206,14 @@ func PutPostLike(ctx iris.Context) {
 			return
 		} else {
 			p_u.Is_like = 0
-			_, err = sqltool.StarsuckEngine.Update(p_u)
+			_, err = sqltool.StarsuckEngine.Where("post_id=? and user_id=?",p_u.Post_id,p_u.User_id).Update(p_u)
 			if err!= nil {
 				ctx.JSON(iris.Map{
 					"state": "数据库错误",
 				})
 				return
 			}
-			// father like sum +1
+			// father like sum +1?
 			ctx.JSON(iris.Map{
 				"state": "success" ,
 			})
@@ -178,7 +224,7 @@ func PutPostLike(ctx iris.Context) {
 		p_u.User_id = user_id
 		p_u.Is_like = 0
 		sqltool.StarsuckEngine.Insert(p_u)
-		// father like sum +1
+		// father like sum +1?
 		ctx.JSON(iris.Map{
 			"state": "success" ,
 		})
@@ -205,14 +251,14 @@ func PutPostUnLike(ctx iris.Context) {
 			return
 		} else {
 			p_u.Is_like = 1
-			_, err = sqltool.StarsuckEngine.Update(p_u)
+			sqltool.StarsuckEngine.Where("post_id=? and user_id=?",p_u.Post_id,p_u.User_id).Update(p_u)
 			if err!= nil {
 				ctx.JSON(iris.Map{
 					"state": "数据库错误",
 				})
 				return
 			}
-			// father like sum -1
+			// this like sum -1?
 			ctx.JSON(iris.Map{
 				"state": "success" ,
 			})
@@ -223,7 +269,7 @@ func PutPostUnLike(ctx iris.Context) {
 		p_u.User_id = user_id
 		p_u.Is_like = 1
 		sqltool.StarsuckEngine.Insert(p_u)
-		// father like sum -1
+		// this like sum -1?
 		ctx.JSON(iris.Map{
 			"state": "success" ,
 		})
