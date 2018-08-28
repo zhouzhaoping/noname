@@ -98,7 +98,8 @@ func StatesUpdater(){
 	}
 
 	for _,args:=range(s_w_list){
-		cmd := exec.Command("python", "/root/pickme/backend/informarion_spider/weiboSpider.py", "--user_id \""+args.Account_id+"\"", "--source \""+args.Source+"\"")
+		cmd := exec.Command("python", "/root/pickme/backend/informarion_spider/weiboSpider.py", "--user_id","\""+args.Account_id+"\"", "--source","\""+args.Source+"\"")
+		//cmd := exec.Command("python", "/root/test2.py", "--user_id","\""+args.Account_id+"\"", "--source","\""+args.Source+"\"")
 		//cmd := exec.Command("python", "/root/pickme/backend/informarion_spider/weiboSpider.py","--id=XXX","--filename='/root/pickme/backend/informarion_spider/fuck.json'")
 		//cmd := exec.Command("ls")
 		fmt.Println(cmd)
@@ -107,11 +108,12 @@ func StatesUpdater(){
 		cmd.Stdout = &out
 		err = cmd.Run()
 
-		//if err != nil {
-		//	fmt.Println(err)
-		//	continue
+		if err != nil {
+			fmt.Println("wtf",err)
+			fmt.Println(out.String())
+			continue
 			//log.Fatal(err)
-		//}
+		}
 		fmt.Println("fuck right")
 		//fmt.Printf("%s", out.String())
 		jsonStr := out.String()
