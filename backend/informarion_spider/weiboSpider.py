@@ -83,16 +83,22 @@ class Weibo:
             print "Error: ", e
             traceback.print_exc()
 
-    # 获取"长微博"全部文字内容
+  # 获取"长微博"全部文字内容
     def get_long_weibo(self, weibo_link):
         try:
             html = requests.get(weibo_link, cookies=self.cookie).content
             selector = etree.HTML(html)
-            info = selector.xpath("//div[@class='c']")[1]
-            wb_content = info.xpath("div/span[@class='ctt']")[0].xpath(
-                "string(.)").encode(sys.stdout.encoding, "ignore").decode(
-                sys.stdout.encoding)
-            wb_content = wb_content[1:]
+            c = selector.xpath("//div[@class='c']")
+            if len(c) > 1 :
+                info = selector.xpath("//div[@class='c']")[1]
+            else:
+                print u"not exist c"
+            ctt = info.xpath("div/span[@class='ctt']")
+            if len(ctt) > 0 :
+                wb_content = ctt[0].xpath("string(.)").encode(sys.stdout.encoding, "ignore").decode(sys.stdout.encoding)
+            else:
+                print u"not exist ctt"
+            wb_content = wb_content[1:] 
             return wb_content
         except Exception, e:
             print "Error: ", e
@@ -273,7 +279,6 @@ class Weibo:
     def start(self, update_time):
         try:
             self.get_username()
-            #self.get_user_info()
             self.get_weibo_info()
             self.write_txt(update_time)
         except Exception, e:
