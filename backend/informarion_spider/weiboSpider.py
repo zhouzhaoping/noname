@@ -48,7 +48,11 @@ class Weibo:
             url = "https://weibo.cn/%s/info" % (self.user_id)
             html = requests.get(url, cookies=self.cookie).content
             selector = etree.HTML(html)
-            username = selector.xpath("//title/text()")[0]
+            text = selector.xpath("//title/text()")
+            if len(text) > 0:
+                username = text[0]
+            else:
+                print "username not exist"
             self.username = username[:-3]
             print u"用户名: " + self.username
         except Exception, e:
@@ -131,7 +135,10 @@ class Weibo:
                 html2 = requests.get(url2, cookies=self.cookie).content
                 selector2 = etree.HTML(html2)
                 info = selector2.xpath("//div[@class='c']")
-                is_empty = info[0].xpath("div/span[@class='ctt']")
+                if len(info) > 0:
+                    is_empty = info[0].xpath("div/span[@class='ctt']")
+                else:
+                    print "info size = 0,empty is not exist"
                 if is_empty:
                     for i in range(0, len(info) - 2):
                         # 微博内容
@@ -353,12 +360,16 @@ class Instagram:
         self.new_imgs_url = []
         self.create_time = []
 
+        self.proxy = {
+            'http': 'http://127.0.0.1:38251',
+            'https': 'http://127.0.0.1:38251'
+        }
     def crawl(self, update_time):
         click.echo('start')
         try:
             #print "here"
-            #res = requests.get(self.BASE_URL, headers=self.headers, proxies=self.proxy)
-            res = requests.get(self.BASE_URL, headers=self.headers)
+            res = requests.get(self.BASE_URL, headers=self.headers, proxies=self.proxy)
+            #res = requests.get(self.BASE_URL, headers=self.headers)
             #print "here"
             html = etree.HTML(res.content.decode('utf-8'))
             #print html
@@ -481,3 +492,5 @@ if __name__ == "__main__":
             ins.crawl(args.time)
         else:
             print "missing parameters"
+
+
