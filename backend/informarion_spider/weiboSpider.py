@@ -51,12 +51,12 @@ class Weibo:
             text = selector.xpath("//title/text()")
             if len(text) > 0:
                 username = text[0]
-            else:
-                print "username not exist"
+            #else:
+                #print "username not exist"
             self.username = username[:-3]
-            print u"用户名: " + self.username
+            #print u"用户名: " + self.username
         except Exception, e:
-            print "Error: ", e
+            #print "Error: ", e
             traceback.print_exc()
 
     # 获取用户微博数、关注数、粉丝数
@@ -76,23 +76,23 @@ class Weibo:
                 num_wb = int(value)
                 break
             self.weibo_num = num_wb
-            print u"微博数: " + str(self.weibo_num)
+            #print u"微博数: " + str(self.weibo_num)
 
             # 关注数
             str_gz = selector.xpath("//div[@class='tip2']/a/text()")[0]
             guid = re.findall(pattern, str_gz, re.M)
             self.following = int(guid[0])
-            print u"关注数: " + str(self.following)
+            #print u"关注数: " + str(self.following)
 
             # 粉丝数
             str_fs = selector.xpath("//div[@class='tip2']/a/text()")[1]
             guid = re.findall(pattern, str_fs, re.M)
             self.followers = int(guid[0])
-            print u"粉丝数: " + str(self.followers)
-            print "==========================================================================="
+            #print u"粉丝数: " + str(self.followers)
+            #print "==========================================================================="
 
         except Exception, e:
-            print "Error: ", e
+            #print "Error: ", e
             traceback.print_exc()
 
     # 获取"长微博"全部文字内容
@@ -103,17 +103,17 @@ class Weibo:
             c = selector.xpath("//div[@class='c']")
             if len(c) > 1:
                 info = selector.xpath("//div[@class='c']")[1]
-            else:
-                print u"not exist c"
+            #else:
+             #   print u"not exist c"
             ctt = info.xpath("div/span[@class='ctt']")
             if len(ctt) > 0:
                 wb_content = ctt[0].xpath("string(.)").encode(sys.stdout.encoding, "ignore").decode(sys.stdout.encoding)
-            else:
-                print u"not exist ctt"
+            #else:
+             #   print u"not exist ctt"
             wb_content = wb_content[1:]
             return wb_content
         except Exception, e:
-            print "Error: ", e
+            #print "Error: ", e
             traceback.print_exc()
 
     # 获取用户微博内容及对应的发布时间、点赞数、转发数、评论数
@@ -137,8 +137,8 @@ class Weibo:
                 info = selector2.xpath("//div[@class='c']")
                 if len(info) > 0:
                     is_empty = info[0].xpath("div/span[@class='ctt']")
-                else:
-                    print "info size = 0,empty is not exist"
+             #   else:
+              #      print "info size = 0,empty is not exist"
                 if is_empty:
                     for i in range(0, len(info) - 2):
                         # 微博内容
@@ -261,7 +261,7 @@ class Weibo:
             #            str(self.weibo_num2) + u"条为原创微博"
             #            )
         except Exception, e:
-            print "Error: ", e
+            #print "Error: ", e
             traceback.print_exc()
 
     # 将爬取的信息写入文件
@@ -312,12 +312,12 @@ class Weibo:
             # f.write(text.encode(sys.stdout.encoding))
             # f.close()
 
-            with open(file_path, 'w') as f:
-                json.dump(result, f)
-            print u"微博写入文件完毕，保存路径:"
-            print file_path
+            #with open(file_path, 'w') as f:
+             #   json.dump(result, f)
+            #print u"微博写入文件完毕，保存路径:"
+            #print file_path
         except Exception, e:
-            print "Error: ", e
+            #print "Error: ", e
             traceback.print_exc()
 
     # 运行爬虫
@@ -327,10 +327,10 @@ class Weibo:
             #self.get_user_info()
             self.get_weibo_info()
             self.write_txt(update_time)
-            print u"信息抓取完毕"
-            print "==========================================================================="
+            #print u"信息抓取完毕"
+            #print "==========================================================================="
         except Exception, e:
-            print "Error: ", e
+            #print "Error: ", e
 
 class Instagram:
     def __init__(self, user_id):
