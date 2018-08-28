@@ -441,6 +441,7 @@ if __name__ == "__main__":
     arg_parser.add_argument('--source', type=str, default='')
     args = arg_parser.parse_args()
     filter = 0  # 值为0表示爬取全部微博（原创微博+转发微博），值为1表示只爬取原创微博
+ 
     if args.source == "weibo":
         wb = Weibo(args.user_id, filter)  # 调用Weibo类，创建微博实例wb
         wb.start(args.time)  # 爬取微博信息
