@@ -5,6 +5,8 @@ import (
 	"star"
 	"sqltool"
 	"fmt"
+	"time"
+	"encoding/json"
 )
 
 func GetStarHead(ctx iris.Context) {
@@ -37,8 +39,8 @@ func GetStarPost(ctx iris.Context) {
 	post_find := make([]Post,0)
 
 
-	err := sqltool.StarsuckEngine.Where("star_id",star_id).Desc("create_time").Find(&post_find)
-	if err == nil {
+	err := sqltool.StarsuckEngine.Where("star_id=?",star_id).Desc("create_time").Find(&post_find)
+	if err != nil {
 		ctx.JSON(iris.Map{
 			"state": "数据库错误",
 		})
@@ -48,15 +50,20 @@ func GetStarPost(ctx iris.Context) {
 	post_like_find := make([]post_like,len(post_find))
 	for i,v := range(post_find){
 		post_like_find[i].post = v
-		post_like_find[i].is_like, err = sqltool.StarsuckEngine.Table("post_user_relation").Where("user_id = ? and post_id=? and is_like=?",user_id,v.Post_id,0).Exist()
+		post_like_find[i].is_like, err = sqltool.StarsuckEngine.Table("post_user_relation").
+			Where("user_id=? and post_id=? and is_like=?",user_id,v.Post_id,0).Exist()
 
-		if err == nil {
+		if err != nil {
 			ctx.JSON(iris.Map{
 				"state": "数据库错误",
 			})
 			return
 		}
 	}
+
+	fmt.Println(post_like_find)
+	bytes, err := json.Marshal(post_like_find)
+	fmt.Println(string(bytes))
 
 	fmt.Println(err)
 	ctx.JSON(iris.Map{
@@ -80,7 +87,7 @@ func GetPost(ctx iris.Context) {
 		var err error
 		comment_like_find[i].post = v
 		comment_like_find[i].is_like, err = sqltool.StarsuckEngine.Table("post_user_relation").Where("user_id = ? and post_id=? and is_like=?",user_id,v.Post_id,0).Exist()
-		if err == nil {
+		if err != nil {
 			ctx.JSON(iris.Map{
 				"state": "数据库错误",
 			})
@@ -97,7 +104,23 @@ func GetPost(ctx iris.Context) {
 	})
 }
 func PostNewPost(ctx iris.Context) {
-	//post := NewPost(ctx)
+	post := NewPost(ctx)
+	post.Create_time = time.Now()
+	post.Parent_comment_id = 0
+	post.Level = 0
+	_,err := sqltool.StarsuckEngine.Insert(post)
+	if err != nil{
+		ctx.JSON(iris.Map{
+			"state": "数据库错误",
+		})
+	}else{
+		ctx.JSON(iris.Map{
+			"state": "success",
+			"data":iris.Map{
+				"post_id":post.Post_id,
+			},
+		})
+	}
 
 }
 func PostReplyPost(ctx iris.Context) {
@@ -130,6 +153,7 @@ func PutPostLike(ctx iris.Context) {
 				})
 				return
 			}
+			// father like sum +1
 			ctx.JSON(iris.Map{
 				"state": "success" ,
 			})
@@ -140,6 +164,7 @@ func PutPostLike(ctx iris.Context) {
 		p_u.User_id = user_id
 		p_u.Is_like = 0
 		sqltool.StarsuckEngine.Insert(p_u)
+		// father like sum +1
 		ctx.JSON(iris.Map{
 			"state": "success" ,
 		})
@@ -173,6 +198,7 @@ func PutPostUnLike(ctx iris.Context) {
 				})
 				return
 			}
+			// father like sum -1
 			ctx.JSON(iris.Map{
 				"state": "success" ,
 			})
@@ -183,6 +209,7 @@ func PutPostUnLike(ctx iris.Context) {
 		p_u.User_id = user_id
 		p_u.Is_like = 1
 		sqltool.StarsuckEngine.Insert(p_u)
+		// father like sum -1
 		ctx.JSON(iris.Map{
 			"state": "success" ,
 		})

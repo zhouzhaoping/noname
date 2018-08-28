@@ -13,9 +13,9 @@ type Post struct {
 	Content				string 		`json:"content"`
 	Like_num			uint 		`json:"like_num"`
 	Star_id				int			`json:"star_id"`
-	Parent_comment_id	int			`json:"parent_comment_id"`
+	Parent_comment_id	int			`json:"parent_comment_id"`  //父评论id，当该值为0时表示是一条帖子而不是评论'
 	Comment_num			int 		`json:"comment_num"`
-	Level				int			`json:"level"`
+	Level				int			`json:"level"`  //级别：0：帖子，1：一级评论，2：二级评论'
 	Imgs				string		`json:"imgs"`
 }
 
@@ -23,7 +23,7 @@ func NewPost(ctx iris.Context) *Post {
 	post := &Post{
 		Title:ctx.FormValue("title"),
 		Content:ctx.FormValue("content"),
-		Imgs:ctx.GetCookie("imgs"),
+		Imgs:ctx.FormValue("imgs"),
 		Like_num:0,
 		Comment_num:0,
 	}
@@ -38,6 +38,7 @@ func NewPost(ctx iris.Context) *Post {
 	return post
 }
 
+// error
 type post_like struct {
 	post			Post		`json:"post"`
 	is_like			bool		`json:"is_like"`
