@@ -40,8 +40,8 @@ func NewPost(ctx iris.Context) *Post {
 
 // error
 type post_like struct {
-	post			Post		`json:"post"`
-	is_like			bool		`json:"is_like"`
+	Post_save		Post		`json:"post"`
+	Is_like			bool		`json:"is_like"`
 }
 
 type post_user_relation struct {

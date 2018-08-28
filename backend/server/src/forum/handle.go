@@ -49,8 +49,8 @@ func GetStarPost(ctx iris.Context) {
 
 	post_like_find := make([]post_like,len(post_find))
 	for i,v := range(post_find){
-		post_like_find[i].post = v
-		post_like_find[i].is_like, err = sqltool.StarsuckEngine.Table("post_user_relation").
+		post_like_find[i].Post_save = v
+		post_like_find[i].Is_like, err = sqltool.StarsuckEngine.Table("post_user_relation").
 			Where("user_id=? and post_id=? and is_like=?",user_id,v.Post_id,0).Exist()
 
 		if err != nil {
@@ -71,22 +71,36 @@ func GetStarPost(ctx iris.Context) {
 		"data":post_like_find,
 	})
 }
+
 func GetPost(ctx iris.Context) {
 	post_id,_ := ctx.Params().GetInt("post_id")
 	user_id,_ := ctx.Params().GetInt("user_id")
 
+	post_find := new(Post)
 	post_like_find := new(post_like)
 	comment_find := make([]Post,0)
 
-	sqltool.StarsuckEngine.ID(post_id).Get(post_like_find.post)
-	post_like_find.is_like, _ = sqltool.StarsuckEngine.Table("post_user_relation").Where("user_id = ? and post_id=? and is_like=?",user_id,post_id,0).Exist()
+	fmt.Println(post_id,user_id)
+	yes, err := sqltool.StarsuckEngine.Table("post").ID(post_id).Get(post_find)//TODO
+	fmt.Println(yes,err)
+	if yes && err != nil {
+		fmt.Println(post_find)
+	}else {
+		fmt.Println(err)
+		ctx.JSON(iris.Map{
+			"state": "找不到帖子",
+		})
+		return
+	}
+
+	post_like_find.Is_like, _ = sqltool.StarsuckEngine.Table("post_user_relation").Where("user_id = ? and post_id=? and is_like=?",user_id,post_id,0).Exist()
 	sqltool.StarsuckEngine.Where("parent_comment_id=?",post_id).Find(&comment_find)
 
 	comment_like_find := make([]post_like,len(comment_find))
 	for i,v := range(comment_find) {
 		var err error
-		comment_like_find[i].post = v
-		comment_like_find[i].is_like, err = sqltool.StarsuckEngine.Table("post_user_relation").Where("user_id = ? and post_id=? and is_like=?",user_id,v.Post_id,0).Exist()
+		comment_like_find[i].Post_save = v
+		comment_like_find[i].Is_like, err = sqltool.StarsuckEngine.Table("post_user_relation").Where("user_id = ? and post_id=? and is_like=?",user_id,v.Post_id,0).Exist()
 		if err != nil {
 			ctx.JSON(iris.Map{
 				"state": "数据库错误",
