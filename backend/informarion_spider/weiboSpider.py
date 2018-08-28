@@ -331,6 +331,8 @@ class Weibo:
             #print "==========================================================================="
         except Exception, e:
             #print "Error: ", e
+            traceback.print_exc()
+
 
 class Instagram:
     def __init__(self, user_id):
