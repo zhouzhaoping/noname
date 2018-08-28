@@ -52,7 +52,8 @@ func GetStarPost(ctx iris.Context) {
 		post_like_find[i].Post_save = v
 		post_like_find[i].Is_like, err = sqltool.StarsuckEngine.Table("post_user_relation").
 			Where("user_id=? and post_id=? and is_like=?",user_id,v.Post_id,0).Exist()
-
+		yes,err:=sqltool.StarsuckEngine.Table("user_info").ID(v.User_id).Cols("user_name").Get(&post_like_find[i].User_name)
+fmt.Println(yes,err)
 		if err != nil {
 			ctx.JSON(iris.Map{
 				"state": "数据库错误",
@@ -101,6 +102,8 @@ func GetPost(ctx iris.Context) {
 		var err error
 		comment_like_find[i].Post_save = v
 		comment_like_find[i].Is_like, err = sqltool.StarsuckEngine.Table("post_user_relation").Where("user_id = ? and post_id=? and is_like=?",user_id,v.Post_id,0).Exist()
+		yes,err:=sqltool.StarsuckEngine.Table("user_info").ID(v.User_id).Cols("user_name").Get(&comment_like_find[i].User_name)
+		fmt.Println(yes,err)
 		if err != nil {
 			ctx.JSON(iris.Map{
 				"state": "数据库错误",
