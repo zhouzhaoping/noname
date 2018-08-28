@@ -28,7 +28,8 @@ func UploadHandler(ctx iris.Context) {
 	buff := make([]byte, 512)
 	_, err = file.Read(buff)
 	if err != nil {
-		log.Println(err)
+		log.Println(err, "readfile")
+		fmt.Println("readfile")
 		ctx.JSON(iris.Map{
 			"state": "Error:Upload Error - readfile.",
 		})
