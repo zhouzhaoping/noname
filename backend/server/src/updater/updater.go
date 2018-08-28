@@ -107,11 +107,11 @@ func StatesUpdater(){
 		cmd.Stdout = &out
 		err = cmd.Run()
 
-		if err != nil {
-			fmt.Println(err)
-			continue
+		//if err != nil {
+		//	fmt.Println(err)
+		//	continue
 			//log.Fatal(err)
-		}
+		//}
 		fmt.Println("fuck right")
 		//fmt.Printf("%s", out.String())
 		jsonStr := out.String()
