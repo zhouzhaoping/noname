@@ -18,7 +18,7 @@ func UploadHandler(ctx iris.Context) {
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(iris.Map{
-			"state": "Error:Upload Error.",
+			"state": "Error:Upload Error. - request",
 		})
 		return
 	}
@@ -30,7 +30,7 @@ func UploadHandler(ctx iris.Context) {
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(iris.Map{
-			"state": "Error:Upload Error.",
+			"state": "Error:Upload Error - readfile.",
 		})
 		return
 	}
