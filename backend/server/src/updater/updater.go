@@ -4,7 +4,6 @@ import (
 	"os/exec"
 	"fmt"
 	"bytes"
-	"log"
 	"encoding/json"
 	"news_states"
 	"sqltool"
@@ -41,7 +40,9 @@ func NewsUpdater() {
 		err = cmd.Run()
 
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
+			break
+			//log.Fatal(err)
 		}
 		//fmt.Printf("%s", out.String())
 		jsonStr := out.String()
@@ -105,7 +106,9 @@ func StatesUpdater(){
 		err = cmd.Run()
 
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
+			break
+			//log.Fatal(err)
 		}
 		//fmt.Printf("%s", out.String())
 		jsonStr := out.String()
