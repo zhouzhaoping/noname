@@ -9,10 +9,7 @@ import json
 import argparse
 import time
 import sys
-import click
-import re
-from bs4 import BeautifulSoup
-from lxml.etree import tostring
+#import click
 import codecs
 reload(sys)
 sys.setdefaultencoding('gbk')
@@ -48,13 +45,8 @@ class Weibo:
             url = "https://weibo.cn/%s/info" % (self.user_id)
             html = requests.get(url, cookies=self.cookie).content
             selector = etree.HTML(html)
-            text = selector.xpath("//title/text()")
-            if len(text) > 0:
-                username = text[0]
-            else:
-                print "username not exist"
+            username = selector.xpath("//title/text()")[0]
             self.username = username[:-3]
-            print u"用户名: " + self.username
         except Exception, e:
             print "Error: ", e
             traceback.print_exc()
@@ -76,45 +68,21 @@ class Weibo:
                 num_wb = int(value)
                 break
             self.weibo_num = num_wb
-            print u"微博数: " + str(self.weibo_num)
 
             # 关注数
             str_gz = selector.xpath("//div[@class='tip2']/a/text()")[0]
             guid = re.findall(pattern, str_gz, re.M)
             self.following = int(guid[0])
-            print u"关注数: " + str(self.following)
 
             # 粉丝数
             str_fs = selector.xpath("//div[@class='tip2']/a/text()")[1]
             guid = re.findall(pattern, str_fs, re.M)
             self.followers = int(guid[0])
-            print u"粉丝数: " + str(self.followers)
-            print "==========================================================================="
 
         except Exception, e:
             print "Error: ", e
             traceback.print_exc()
 
-    # 获取"长微博"全部文字内容
-    def get_long_weibo(self, weibo_link):
-        try:
-            html = requests.get(weibo_link, cookies=self.cookie).content
-            selector = etree.HTML(html)
-            c = selector.xpath("//div[@class='c']")
-            if len(c) > 1:
-                info = selector.xpath("//div[@class='c']")[1]
-            else:
-                print u"not exist c"
-            ctt = info.xpath("div/span[@class='ctt']")
-            if len(ctt) > 0:
-                wb_content = ctt[0].xpath("string(.)").encode(sys.stdout.encoding, "ignore").decode(sys.stdout.encoding)
-            else:
-                print u"not exist ctt"
-            wb_content = wb_content[1:]
-            return wb_content
-        except Exception, e:
-            print "Error: ", e
-            traceback.print_exc()
 
     # 获取用户微博内容及对应的发布时间、点赞数、转发数、评论数
     def get_weibo_info(self):
@@ -135,10 +103,7 @@ class Weibo:
                 html2 = requests.get(url2, cookies=self.cookie).content
                 selector2 = etree.HTML(html2)
                 info = selector2.xpath("//div[@class='c']")
-                if len(info) > 0:
-                    is_empty = info[0].xpath("div/span[@class='ctt']")
-                else:
-                    print "info size = 0,empty is not exist"
+                is_empty = info[0].xpath("div/span[@class='ctt']")
                 if is_empty:
                     for i in range(0, len(info) - 2):
                         # 微博内容
@@ -158,7 +123,6 @@ class Weibo:
                                 if wb_content:
                                     weibo_content = wb_content
                         self.weibo_content.append(weibo_content)
-                        #print u"微博内容: " + weibo_content
 
                         #图片
                         weibo_img = u"无"
@@ -171,7 +135,6 @@ class Weibo:
                                         sys.stdout.encoding, "ignore").decode(sys.stdout.encoding)
                                     break
                         self.weibo_img.append(weibo_img)
-                        #print u"微博图片：" + weibo_img
 
                         # 微博位置
                         div_first = info[i].xpath("div")[0]
@@ -189,7 +152,6 @@ class Weibo:
                                     sys.stdout.encoding, "ignore").decode(sys.stdout.encoding)
                                 break
                         self.weibo_place.append(weibo_place)
-                        #print u"微博位置: " + weibo_place
 
                         # 微博发布时间
                         str_time = info[i].xpath("div/span[@class='ct']")
@@ -220,7 +182,6 @@ class Weibo:
                         else:
                             publish_time = publish_time[:16]
                         self.publish_time.append(publish_time)
-                        #print u"微博发布时间: " + publish_time
 
                         # 微博发布工具
                         if len(str_time.split(u'来自')) > 1:
@@ -228,7 +189,6 @@ class Weibo:
                         else:
                             publish_tool = u"无"
                         self.publish_tool.append(publish_tool)
-                        #print u"微博发布工具: " + publish_tool
 
                         str_footer = info[i].xpath("div")[-1]
                         str_footer = str_footer.xpath("string(.)").encode(
@@ -239,27 +199,17 @@ class Weibo:
                         # 点赞数
                         up_num = int(guid[0])
                         self.up_num.append(up_num)
-                        #print u"点赞数: " + str(up_num)
 
                         # 转发数
                         retweet_num = int(guid[1])
                         self.retweet_num.append(retweet_num)
-                        #print u"转发数: " + str(retweet_num)
 
                         # 评论数
                         comment_num = int(guid[2])
                         self.comment_num.append(comment_num)
-                        #print u"评论数: " + str(comment_num)
-                        #print "==========================================================================="
 
                         self.weibo_num2 += 1
 
-            # if not self.filter:
-            #     print u"共" + str(self.weibo_num2) + u"条微博"
-            # else:
-            #     print (u"共" + str(self.weibo_num) + u"条微博，其中" +
-            #            str(self.weibo_num2) + u"条为原创微博"
-            #            )
         except Exception, e:
             print "Error: ", e
             traceback.print_exc()
@@ -278,44 +228,29 @@ class Weibo:
                       u"\n粉丝数: " + str(self.followers) +
                       result_header
                       )
-            # if len(update_time):
-            #     update_time_array = time.strptime(update_time, "%Y-%m-%d %H:%M")
-            #     update_time_stamp = int(time.mktime(update_time_array))
-            # else:
-            #     update_time_stamp = 0
+            if len(update_time):
+                update_time_array = time.strptime(update_time, "%Y-%m-%d %H:%M")
+                update_time_stamp = int(time.mktime(update_time_array))
+            else:
+                update_time_stamp = 0
 
             result = []
             for i in range(1, self.weibo_num2 + 1):
-                # time_array = time.strptime(self.publish_time[i - 1], "%Y-%m-%d %H:%M")
-                # time_stamp = int(time.mktime(time_array))
-                # if time_stamp < update_time_stamp:
-                #     break
                 result.append({"account_id": self.user_id,
                         "account_name": self.username,
                         "content": self.weibo_content[i - 1],
                         "create_time": self.publish_time[i - 1],
-                        # u"点赞数: " + str(self.up_num[i - 1]) +
-                        # u"	 转发数: " + str(self.retweet_num[i - 1]) +
-                        # u"	 评论数: " + str(self.comment_num[i - 1]) + "\n"
                         "imgs": self.weibo_img[i - 1],
-                        "source": u"微博"
-                        #u"发布工具: " + self.publish_tool[i - 1] + "\n\n"
+                        "source": "weibo"
                         })
-               # result = result + text
             print json.dumps(result)
             file_dir = os.path.split(os.path.realpath(__file__))[
                 0] + os.sep + "weibo"
             if not os.path.isdir(file_dir):
                 os.mkdir(file_dir)
             file_path = file_dir + os.sep + "%s" % self.user_id + "_" + "%s" % self.username + ".json"
-            # f = open(file_path, "wb")
-            # f.write(text.encode(sys.stdout.encoding))
-            # f.close()
-
             with open(file_path, 'w') as f:
                 json.dump(result, f)
-            print u"微博写入文件完毕，保存路径:"
-            print file_path
         except Exception, e:
             print "Error: ", e
             traceback.print_exc()
@@ -324,18 +259,17 @@ class Weibo:
     def start(self, update_time):
         try:
             self.get_username()
-            #self.get_user_info()
             self.get_weibo_info()
             self.write_txt(update_time)
-            print u"信息抓取完毕"
-            print "==========================================================================="
         except Exception, e:
             print "Error: ", e
 
 class Instagram:
     def __init__(self, user_id):
         self.user_id = user_id
+        print user_id
         self.BASE_URL = "https://www.instagram.com/" + self.user_id + "/"
+        print self.BASE_URL
         self.headers = {
             "Origin": "https://www.instagram.com/",
             "Referer": self.BASE_URL,
@@ -357,14 +291,17 @@ class Instagram:
         self.ins_num = 0  # 爬取到的ins数
         self.new_imgs_url = []
         self.create_time = []
-
     def crawl(self, update_time):
+        #click.echo('start')
         try:
             res = requests.get(self.BASE_URL, headers=self.headers)
+            #print "here"
             html = etree.HTML(res.content.decode('utf-8'))
+            #print html
             all_a_tags = html.xpath('//script[@type="text/javascript"]/text()')
 
             for a_tag in all_a_tags:
+                #print "a_tag:" + a_tag
                 if a_tag.strip().startswith('window._sharedData'):
                     data = a_tag.split('= {')[1][:-1]  # 获取json数据块
                     js_data = json.loads('{' + data, encoding='utf-8')
@@ -375,21 +312,35 @@ class Instagram:
                         if self.top_url and self.top_url == edge["node"]["display_url"]:
                             in_top_url_flag = True
                             break
+                        #click.echo(edge["node"]["display_url"])
                         self.new_imgs_url.append(edge["node"]["display_url"])
                         content_candidate = edge["node"]["edge_media_to_caption"]["edges"]
                         if len(content_candidate) > 0:
                             self.contents.append(content_candidate[0]["node"]["text"])
+                            print "content:" + content_candidate[0]["node"]["text"]
                         else:
                             self.contents.append("")
                         self.create_time.append(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(edge["node"]["taken_at_timestamp"])))
+                    #click.echo('ok')
+
             self.write_txt(update_time)
         except Exception as e:
             raise e
 
     def write_txt(self, update_time):
         try:
+            if len(update_time):
+                update_time_array = time.strptime(update_time, "%Y-%m-%d %H:%M")
+                update_time_stamp = int(time.mktime(update_time_array))
+            else:
+                update_time_stamp = 0
+
             result = []
             for i in range(1, len(self.new_imgs_url) + 1):
+                time_array = time.strptime(self.create_time[i - 1], "%Y-%m-%d %H:%M:%S")
+                time_stamp = int(time.mktime(time_array))
+                if time_stamp < update_time_stamp:
+                    break
                 result.append({"account_id": self.account_id,
                         "account_name": self.account_name,
                         "content": self.contents[i - 1],
@@ -403,6 +354,9 @@ class Instagram:
             if not os.path.isdir(file_dir):
                 os.mkdir(file_dir)
             file_path = file_dir + os.sep + "%s" % self.account_id + "_" + "%s" % self.account_name + ".json"
+            # f = open(file_path, "wb")
+            # f.write(text.encode(sys.stdout.encoding))
+            # f.close()
             with open(file_path, 'w') as f:
                 json.dump(result, f)
         except Exception, e:
