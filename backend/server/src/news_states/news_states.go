@@ -27,7 +27,7 @@ type State struct {
 	State_id		int			`xorm:"not null pk autoincr INT(11)" json:"state_id"`
 	Account_name	string		`json:"account_name"`
 	Content			string		`json:"content"`
-	Create_time		time.Time	`json:"create_time"`
+	Create_time		string 		`json:"create_time"`
 	Imgs			string		`json:"imgs"`
 	Source			string		`json:"source"`
 }

@@ -41,6 +41,7 @@ func NewPost(ctx iris.Context) *Post {
 // error
 type post_like struct {
 	Post_save		Post		`json:"post"`
+	User_name 		string 		`json:"user_name"`
 	Is_like			bool		`json:"is_like"`
 }
 
