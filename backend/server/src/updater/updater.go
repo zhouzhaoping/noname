@@ -88,7 +88,7 @@ func StatesUpdater(){
 
 	err := sqltool.StarsuckEngine.Table("info_source").Cols("info_source.star_id","account_id","source").
 		Join("INNER", "star_info","star_info.star_id = info_source.star_id").
-		Where("source=?","weibo").Find(&s_w_list)
+		Where("source=? or source=?","weibo","instagram").Find(&s_w_list)
 	if err != nil {
 		fmt.Println(err, "数据库错误")
 		return
