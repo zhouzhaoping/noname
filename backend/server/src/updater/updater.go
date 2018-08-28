@@ -41,7 +41,7 @@ func NewsUpdater() {
 
 		if err != nil {
 			fmt.Println(err)
-			break
+			continue
 			//log.Fatal(err)
 		}
 		//fmt.Printf("%s", out.String())
@@ -50,7 +50,7 @@ func NewsUpdater() {
 		fmt.Println(jsonStr)
 		news := make([]news_states.News,0)
 		if err := json.Unmarshal([]byte(jsonStr), &news); err == nil {
-			fmt.Println(len(news),news)
+			fmt.Println(len(news))//,news)
 		} else {
 			fmt.Println(err)
 			continue
@@ -87,7 +87,8 @@ func StatesUpdater(){
 	s_w_list := make([]star_id_weiboid, 0)
 
 	err := sqltool.StarsuckEngine.Table("info_source").Cols("info_source.star_id","account_id","source").
-		Join("INNER", "star_info","star_info.star_id = info_source.star_id").Find(&s_w_list)
+		Join("INNER", "star_info","star_info.star_id = info_source.star_id").
+		Where("source=?","weibo").Find(&s_w_list)
 	if err != nil {
 		fmt.Println(err, "数据库错误")
 		return
@@ -107,7 +108,7 @@ func StatesUpdater(){
 
 		if err != nil {
 			fmt.Println(err)
-			break
+			continue
 			//log.Fatal(err)
 		}
 		//fmt.Printf("%s", out.String())
