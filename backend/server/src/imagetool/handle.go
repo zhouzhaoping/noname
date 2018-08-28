@@ -6,16 +6,20 @@ import (
 	"os"
 	"io"
 	"net/http"
+	"github.com/kataras/iris"
+	"path"
 )
 
-func UploadHandler(w http.ResponseWriter, r *http.Request) {
+func UploadHandler(ctx iris.Context) {
 
 	//上传参数为uploadfile
-	r.ParseMultipartForm(32 << 20)
-	file, _, err := r.FormFile("uploadfile")
+	ctx.Request().ParseMultipartForm(32 << 20)
+	file, _, err := ctx.Request().FormFile("uploadfile")
 	if err != nil {
 		log.Println(err)
-		w.Write([]byte("Error:Upload Error."))
+		ctx.JSON(iris.Map{
+			"state": "Error:Upload Error.",
+		})
 		return
 	}
 	defer file.Close()
@@ -25,7 +29,9 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	_, err = file.Read(buff)
 	if err != nil {
 		log.Println(err)
-		w.Write([]byte("Error:Upload Error."))
+		ctx.JSON(iris.Map{
+			"state": "Error:Upload Error.",
+		})
 		return
 	}
 	filetype := http.DetectContentType(buff)
@@ -36,7 +42,9 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	} else if filetype=="image/png" {
 		suffix = "png"
 	} else {
-		w.Write([]byte("Error:Not JPEG OR PNG"))
+		ctx.JSON(iris.Map{
+			"state": "Error:Not JPEG OR PNG",
+		})
 		return
 	}
 
@@ -62,30 +70,47 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	f, err := os.OpenFile(ImageID2Path(imgid,suffix), os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Println(err)
-		w.Write([]byte("Error:Save Error."))
+		ctx.JSON(iris.Map{
+			"state": "Error:Save Error.",
+		})
 		return
 	}
 	defer f.Close()
 	io.Copy(f, file)
-	w.Write([]byte(imgid+"."+suffix))
+
+	ctx.JSON(iris.Map{
+		"state": "success",
+		"data": iris.Map{
+			"imgid":imgid + "." + suffix,
+		},
+	})
 }
 
-func DownloadHandler(w http.ResponseWriter, r *http.Request, imageid string,suffix string) {
+func DownloadHandler(ctx iris.Context) {
 	//vars := mux.Vars(r)
 	//imageid := vars["imgid"]
+
+	imgid := ctx.Params().Get("imgid")
+	suffix := path.Ext(imgid)[1:]
+	imageid := imgid[:len(imgid)-len(suffix)-1]
+
 	fmt.Println(imageid)
 	fmt.Println(suffix)
 	if len([]rune(imageid)) != 16 {
-		w.Write([]byte("Error:ImageID incorrect."))
+		ctx.JSON(iris.Map{
+			"state": "Error:ImageID incorrect.",
+		})
 		return
 	}
 	imgpath := ImageID2Path(imageid,suffix)
 	fmt.Println(imgpath)
 	if !FileExist(imgpath) {
-		w.Write([]byte("Error:Image Not Found."))
+		ctx.JSON(iris.Map{
+			"state": "Error:Image Not Found.",
+		})
 		return
 	}
-	http.ServeFile(w, r, imgpath)
+	http.ServeFile(ctx.ResponseWriter(), ctx.Request(), imgpath)
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {

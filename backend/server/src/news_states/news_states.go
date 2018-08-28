@@ -11,7 +11,7 @@ type News struct{
 	Title			string		`json:"title"`
 	News_url		string		`json:"news_url"`
 	Source			string		`json:"source"`
-	Create_time		time.Time	`json:"create_time"`
+	Create_time		string		`json:"create_time"`
 }
 
 

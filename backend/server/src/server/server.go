@@ -22,7 +22,6 @@ import (
 	"handler"
 	"user"
 	"star"
-	"path"
 	"news_states"
 	"forum"
 	"webtool"
@@ -70,9 +69,9 @@ func main() {
 			// fmt.Println("sum:", sum)
 			//handler.Refresh(0)
 			//handler.UpdateNews()
-			updater.NewsUpdater()
-			//updater.StatesUpdater()
-			time.Sleep(time.Minute * 1)
+			//updater.NewsUpdater()
+			updater.StatesUpdater()
+			time.Sleep(time.Hour * 1)
 			fmt.Println("update...")
 		}
 	}()
@@ -96,18 +95,14 @@ func main() {
 	//app.Get("/image", func(ctx iris.Context) {
 	//	imagetool.HomeHandler(ctx.ResponseWriter(), ctx.Request())
 	//})
+
 	// Method:   POST
 	// Resource: http://localhost:8080/image
-	app.Post("/api/image", func(ctx iris.Context) {
-		imagetool.UploadHandler(ctx.ResponseWriter(), ctx.Request())
-	})
+	app.Post("/api/image", imagetool.UploadHandler)
+
 	// Method:   GET
 	// Resource: http://localhost:8080/image/{imgid}
-	app.Get("/api/image/{imgid:string}", func(ctx iris.Context) {
-		imgid := ctx.Params().Get("imgid")
-		suffix := path.Ext(imgid)[1:]
-		imagetool.DownloadHandler(ctx.ResponseWriter(), ctx.Request(), imgid[:len(imgid)-len(suffix)-1],suffix)
-	})
+	app.Get("/api/image/{imgid:string}", imagetool.DownloadHandler)
 
 	// http://localhost:8080
 	// http://localhost:8080/ping
