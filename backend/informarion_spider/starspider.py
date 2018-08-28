@@ -66,7 +66,7 @@ class StarSpider(object):
 
                     cur_title = info['title']
                     cur_img = info['pic_info'][0]['url']
-                    netease_news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':cur_source})
+                    netease_news_list.append({'title':cur_title, 'news_url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':cur_source})
 
                 if len(netease_news_list) == count:
                     return netease_news_list
@@ -109,7 +109,7 @@ class StarSpider(object):
                     cur_url = info['docurl']
                     cur_img = info['imgurl']
                     netease_news_list.append(
-                        {'title': cur_title, 'url': cur_url, 'img': cur_img, 'create_time': cur_create_time,
+                        {'title': cur_title, 'news_url': cur_url, 'img': cur_img, 'create_time': cur_create_time,
                          'source': '网易娱乐'})
                 if len(netease_news_list) == count:
                     return netease_news_list
@@ -138,7 +138,7 @@ class StarSpider(object):
                     cur_title = info['title']
                     cur_url = info['vurl']
                     cur_img = info['img']
-                    tencent_news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':'腾讯娱乐'})
+                    tencent_news_list.append({'title':cur_title, 'news_url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':'腾讯娱乐'})
 
                 if len(tencent_news_list) == count:
                     return tencent_news_list
@@ -174,7 +174,7 @@ class StarSpider(object):
                         continue
                     cur_img = info['img']['u']
                     cur_url = info['url']
-                    sina_news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':'新浪娱乐'})
+                    sina_news_list.append({'title':cur_title, 'news_url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':'新浪娱乐'})
 
                 if len(sina_news_list) == count:
                     return sina_news_list
@@ -205,7 +205,7 @@ class StarSpider(object):
                     if not cur_img:
                         continue
                     cur_url = info['url']
-                    cn_news_list.append({'title':cur_title, 'url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':'中国新闻网'})
+                    cn_news_list.append({'title':cur_title, 'news_url':cur_url, 'img':cur_img, 'create_time':cur_create_time, 'source':'中国新闻网'})
 
                     if len(cn_news_list) == count:
                         return cn_news_list
@@ -253,6 +253,8 @@ if __name__ == '__main__':
 
     with open(file_name, 'w') as f:
         json.dump(news_list, f)
+
+    print(json.dumps(news_list))
 
 
 

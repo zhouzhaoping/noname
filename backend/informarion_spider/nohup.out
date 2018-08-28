@@ -1,0 +1,13 @@
+INFO: loading config from /etc/shadowsocks/config.json
+2018-08-27 22:10:28 INFO     loading libcrypto from libcrypto.so.10
+2018-08-27 22:10:28 INFO     starting server at 0.0.0.0:8385
+Traceback (most recent call last):
+  File "/usr/bin/ssserver", line 11, in <module>
+    load_entry_point('shadowsocks==2.8.2', 'console_scripts', 'ssserver')()
+  File "/usr/lib/python2.7/site-packages/shadowsocks/server.py", line 68, in main
+    tcp_servers.append(tcprelay.TCPRelay(a_config, dns_resolver, False))
+  File "/usr/lib/python2.7/site-packages/shadowsocks/tcprelay.py", line 582, in __init__
+    server_socket.bind(sa)
+  File "/usr/lib64/python2.7/socket.py", line 224, in meth
+    return getattr(self._sock,name)(*args)
+socket.error: [Errno 98] Address already in use
