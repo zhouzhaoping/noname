@@ -330,7 +330,7 @@ class Weibo:
             #print u"信息抓取完毕"
             #print "==========================================================================="
         except Exception, e:
-            #print "Error: ", e
+            print "Error: ", e
             traceback.print_exc()
 class Instagram:
     def __init__(self, user_id):
@@ -440,10 +440,15 @@ if __name__ == "__main__":
     arg_parser.add_argument('--source', type=str, default='')
     args = arg_parser.parse_args()
     filter = 0  # 值为0表示爬取全部微博（原创微博+转发微博），值为1表示只爬取原创微博
- 
+    
+    #print args.user_id
+    #print args.source
     if args.source == "weibo":
+        #print 1
         wb = Weibo(args.user_id, filter)  # 调用Weibo类，创建微博实例wb
+        #print 2
         wb.start(args.time)  # 爬取微博信息
+        #print 3
     else:
         if args.source == "instagram":
             ins = Instagram(args.user_id)
