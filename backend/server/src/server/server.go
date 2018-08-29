@@ -13,7 +13,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 	"io/ioutil"
 	"strconv"
 
@@ -26,6 +25,7 @@ import (
 	"forum"
 	"webtool"
 	"updater"
+	"time"
 )
 
 func main() {
@@ -36,7 +36,7 @@ func main() {
 	c := make(chan os.Signal)
 	//监听指定信号 ctrl+c kill
 	signal.Notify(c, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGUSR1, syscall.SIGUSR2)
-	go func() {
+ 	go func() {
 		for s := range c {
 			switch s {
 			case syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT:
@@ -44,10 +44,10 @@ func main() {
 				ExitFunc()
 			case syscall.SIGHUP:
 				fmt.Println("sighup", s)
-				case syscall.SIGUSR1:
-				    fmt.Println("usr1", s)
-				case syscall.SIGUSR2:
-				    fmt.Println("usr2", s)
+			case syscall.SIGUSR1:
+				fmt.Println("usr1", s)
+			case syscall.SIGUSR2:
+				fmt.Println("usr2", s)
 			default:
 				fmt.Println("other", s)
 			}
@@ -69,10 +69,12 @@ func main() {
 			// fmt.Println("sum:", sum)
 			//handler.Refresh(0)
 			//handler.UpdateNews()
-			//updater.NewsUpdater()
+
+
+			fmt.Println("update...")
+			updater.NewsUpdater()
 			updater.StatesUpdater()
 			time.Sleep(time.Hour * 1)
-			fmt.Println("update...")
 		}
 	}()
 

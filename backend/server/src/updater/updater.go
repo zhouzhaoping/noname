@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"news_states"
 	"sqltool"
+	"time"
 )
 
 type star_id_neteasyid struct {
@@ -38,6 +39,8 @@ func NewsUpdater() {
 
 		cmd.Stdout = &out
 		err = cmd.Run()
+
+		time.Sleep(time.Minute * 5)
 
 		if err != nil {
 			fmt.Println(err)
@@ -98,7 +101,8 @@ func StatesUpdater(){
 	}
 
 	for _,args:=range(s_w_list){
-		cmd := exec.Command("python", "/root/pickme/backend/informarion_spider/weiboSpider.py", "--user_id \""+args.Account_id+"\"", "--source \""+args.Source+"\"")
+		cmd := exec.Command("python", "/root/pickme/backend/informarion_spider/weiboSpider.py", "--user_id="+args.Account_id, "--source="+args.Source)
+		//cmd := exec.Command("python", "/root/test2.py", "--user_id","\""+args.Account_id+"\"", "--source","\""+args.Source+"\"")
 		//cmd := exec.Command("python", "/root/pickme/backend/informarion_spider/weiboSpider.py","--id=XXX","--filename='/root/pickme/backend/informarion_spider/fuck.json'")
 		//cmd := exec.Command("ls")
 		fmt.Println(cmd)
@@ -106,14 +110,16 @@ func StatesUpdater(){
 
 		cmd.Stdout = &out
 		err = cmd.Run()
+		time.Sleep(time.Minute * 5)
 
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println("wtf",err)
+			fmt.Println(out.String())
 			continue
 			//log.Fatal(err)
 		}
-		fmt.Println("fuck right")
-		//fmt.Printf("%s", out.String())
+
+		fmt.Printf("%s", out.String())
 		jsonStr := out.String()
 		//jsonStr = `[{"account_id": "6349839494", "content": "#\u6211\u4e3a\u4e2d\u56fd\u822a\u5929\u6dfb\u71c3\u6599#\u6562\u4e8e\u505a\u68a6\uff0c\u52c7\u4e8e\u8ffd\u68a6\uff0c\u6bcf\u4e00\u4e2a\u5929\u9a6c\u884c\u7a7a\u90fd\u6709\u53ef\u80fd\u6210\u4e3a\u4e0b\u4e00\u4e2a\u5343\u8f7d\u96be\u9022\uff0c\u6211\u662f\u6613\u70ca\u5343\u73ba\uff0c\u8fd9\u662f\u6211\u7684\u592a\u7a7a\u68a6\u60f3\uff0c\u4f60\u7684\u5462\uff1fTFBOYS-\u6613\u70ca\u5343\u73ba\u7684\u79d2\u62cd\u89c6\u9891 \u200b\u200b", "source": "\u5fae\u535a", "create_time": "2018-08-27 11:30", "imgs": "\u65e0", "account_name": "\u6613\u70ca\u5343\u73baJacksonYee\u5de5\u4f5c\u5ba4"}, {"account_id": "6349839494", "content": "#\u98ce\u534e\u6063\u610f\u4e94\u5e74\u70bd\uff0c\u6613\u70ca\u5343\u73ba\u7834\u7acb\u65f6#\u4e0d\u66fe\u968f\u6ce2\u9010\u6d41\uff0c\u4ece\u672a\u653e\u6162\u811a\u6b65\u3002\u5c11\u5e74@TFBOYS-\u6613\u70ca\u5343\u73ba \u4e07\u822c\u6837\u8c8c\uff0c\u4e00\u822c\u6e29\u67d4\u3002#TFBOYS\u4e94\u5468\u5e74\u5f00\u59cb\u60f3\u8c61# \u8ffd\u5149\u706f\u4e0b\u7684\u821e\u53f0\u738b\u8005\uff0c\u76ee\u5149\u6240\u81f4\u7686\u662f\u4f60\u3002\u5e74\u5e74\u5c81\u5c81\u59cb\u7ec8\u966a\u4f34\uff0c\u5c81\u5c81\u5e74\u5e74\u6e29\u6696\u540c\u884c\u3002 \u200b\u200b", "source": "\u5fae\u535a", "create_time": "2018-08-25 15:30", "imgs": "http://wx1.sinaimg.cn/wap180/006VJhk2ly1fulz6gi8hej32kw3vc7wk.jpg", "account_name": "\u6613\u70ca\u5343\u73baJacksonYee\u5de5\u4f5c\u5ba4"}, {"account_id": "6349839494", "content": "\u90fd\u5230\u5bb6\u4e86\u4e48\uff1f\u4eca\u665a\u542c\u89c1\u4f60\u4eec\u7684\u58f0\u97f3\u4e86\uff0c\u8f9b\u82e6\u5927\u5bb6\uff0c\u65e9\u70b9\u4f11\u606f\u3002 \u200b\u200b", "source": "\u5fae\u535a", "create_time": "2018-08-25 01:43", "imgs": "http://wx2.sinaimg.cn/wap180/d7f7faddly1fulb9opq4vj23vc2kwnpe.jpg", "account_name": "\u6613\u70ca\u5343\u73baJacksonYee\u5de5\u4f5c\u5ba4"}]`
 		fmt.Println(jsonStr)
