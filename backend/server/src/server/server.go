@@ -82,6 +82,7 @@ func main() {
 				updater.StatesUpdater()
 				time.Sleep(time.Hour * 1)
 			}
+        }
 	}()
 
 	var app *iris.Application = iris.New()
