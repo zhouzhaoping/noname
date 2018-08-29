@@ -24,8 +24,8 @@ import (
 	"news_states"
 	"forum"
 	"webtool"
-	"time"
 	"updater"
+	"time"
 )
 
 func main() {
@@ -36,7 +36,6 @@ func main() {
 	c := make(chan os.Signal)
 	//监听指定信号 ctrl+c kill
 	signal.Notify(c, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGUSR1, syscall.SIGUSR2)
-	runUpdateFlag := false
  	go func() {
 		for s := range c {
 			switch s {
@@ -47,12 +46,6 @@ func main() {
 				fmt.Println("sighup", s)
 			case syscall.SIGUSR1:
 				fmt.Println("usr1", s)
-				runUpdateFlag = !runUpdateFlag
-				if runUpdateFlag {
-					fmt.Println("run update")
-				} else {
-					fmt.Println("end update")
-				}
 			case syscall.SIGUSR2:
 				fmt.Println("usr2", s)
 			default:
@@ -76,12 +69,11 @@ func main() {
 			// fmt.Println("sum:", sum)
 			//handler.Refresh(0)
 			//handler.UpdateNews()
-			if runUpdateFlag {
-				fmt.Println("update...")
-				updater.NewsUpdater()
-				updater.StatesUpdater()
-				time.Sleep(time.Hour * 1)
-			}
+
+			fmt.Println("update...")
+			updater.NewsUpdater()
+			updater.StatesUpdater()
+			time.Sleep(time.Hour * 1)
 		}
 	}()
 
