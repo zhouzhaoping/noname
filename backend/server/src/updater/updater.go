@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"news_states"
 	"sqltool"
+	"time"
 )
 
 type star_id_neteasyid struct {
@@ -38,6 +39,8 @@ func NewsUpdater() {
 
 		cmd.Stdout = &out
 		err = cmd.Run()
+
+		time.Sleep(time.Minute * 5)
 
 		if err != nil {
 			fmt.Println(err)
@@ -107,6 +110,7 @@ func StatesUpdater(){
 
 		cmd.Stdout = &out
 		err = cmd.Run()
+		time.Sleep(time.Minute * 5)
 
 		if err != nil {
 			fmt.Println("wtf",err)
