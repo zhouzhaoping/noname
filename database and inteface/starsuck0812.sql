@@ -133,7 +133,7 @@ DROP TABLE IF EXISTS `post_user_relation`;
 CREATE TABLE `post_user_relation` (
   `post_id` int(11) NOT NULL COMMENT '帖子/评论id',
   `user_id` int(11) NOT NULL COMMENT '用户id',
-  `is_like` int(11) NOT NULL COMMENT '用户对该帖子/评论是否点赞，0：点赞，1：未点赞'
+  `is_like` int(11) NOT NULL COMMENT '用户对该帖子/评论是否点赞，1：点赞，-1：未点赞'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='帖子/评论和点赞用户关系表';
 
 -- ----------------------------
