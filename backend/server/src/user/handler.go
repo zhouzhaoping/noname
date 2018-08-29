@@ -233,3 +233,27 @@ func PutUnFollowing(ctx iris.Context) {
 		"state":  "success",
 	})
 }
+
+func GetIsAnonymous(ctx iris.Context) {
+	user_id, _ := ctx.Params().GetInt("user_id")
+	user_find := new(user_info)
+	yes, err := sqltool.StarsuckEngine.ID(user_id).Get(user_find)
+
+	if err != nil{
+		ctx.JSON(iris.Map{
+			"state": "数据库错误",
+		})
+		return
+	}
+	if !yes {
+		ctx.JSON(iris.Map{
+			"state": "查无此人",
+		})
+		return
+	}else {
+		ctx.JSON(iris.Map{
+			"state":  "success",
+			"is_anonymous":user_find.User_name == "",
+		})
+	}
+}

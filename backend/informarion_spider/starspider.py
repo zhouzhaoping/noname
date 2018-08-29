@@ -48,7 +48,10 @@ class StarSpider(object):
         while page < 400:
             url = 'https://star.3g.163.com/star/article/list/{}-10.html?starId={}&callback='.format(page, self.netease_id)
             res = requests.get(url).text
-            infos = json.loads(res)
+            try:
+                infos = json.loads(res)
+            except:
+                continue
             if not infos:
                 continue
             for info in infos['data']:
@@ -91,7 +94,10 @@ class StarSpider(object):
             res = re.sub(pattern, '', res)
             pattern = re.compile('\)$')
             res = re.sub(pattern, '', res)
-            infos = json.loads(res)
+            try:
+                infos = json.loads(res)
+            except:
+                continue
             if not infos:
                 continue
             for info in infos:
@@ -123,7 +129,10 @@ class StarSpider(object):
         for page in range(15):
             url = 'https://pacaio.match.qq.com/irs/rcd?cid=58&token=c232b098ee7611faeffc46409e836360&ext=ent&page={}&expIds=&callback='.format(page)
             res = requests.get(url).text
-            infos = json.loads(res)
+            try:
+                infos = json.loads(res)
+            except:
+                continue
             if not infos:
                 continue
             for info in infos['data']:
@@ -157,7 +166,10 @@ class StarSpider(object):
             res = requests.get(url).text
             if not res:
                 continue
-            infos = json.loads(res)
+            try:
+                infos = json.loads(res)
+            except:
+                continue
             if not infos:
                 continue
             for info in infos['result']['data']:
@@ -190,8 +202,9 @@ class StarSpider(object):
             res = requests.get(url).text.replace('var specialcnsdata = ', '')
             text_pattern = re.compile(';.$')
             res = re.sub(text_pattern, '', res)
-            infos = json.loads(res)
-            if not infos:
+            try:
+                infos = json.loads(res)
+            except:
                 continue
             for info in infos['docs']:
                 cur_create_time = info['pubtime'] + ':00'

@@ -13,7 +13,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 	"io/ioutil"
 	"strconv"
 
@@ -25,6 +24,7 @@ import (
 	"news_states"
 	"forum"
 	"webtool"
+	"time"
 )
 
 func main() {
@@ -35,7 +35,7 @@ func main() {
 	c := make(chan os.Signal)
 	//监听指定信号 ctrl+c kill
 	signal.Notify(c, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGUSR1, syscall.SIGUSR2)
-	go func() {
+ 	go func() {
 		for s := range c {
 			switch s {
 			case syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT:
@@ -43,10 +43,10 @@ func main() {
 				ExitFunc()
 			case syscall.SIGHUP:
 				fmt.Println("sighup", s)
-				case syscall.SIGUSR1:
-				    fmt.Println("usr1", s)
-				case syscall.SIGUSR2:
-				    fmt.Println("usr2", s)
+			case syscall.SIGUSR1:
+				fmt.Println("usr1", s)
+			case syscall.SIGUSR2:
+				fmt.Println("usr2", s)
 			default:
 				fmt.Println("other", s)
 			}
@@ -68,10 +68,12 @@ func main() {
 			// fmt.Println("sum:", sum)
 			//handler.Refresh(0)
 			//handler.UpdateNews()
+
+
+			fmt.Println("update...")
 			//updater.NewsUpdater()
 			//updater.StatesUpdater()
 			time.Sleep(time.Hour * 1)
-			fmt.Println("update...")
 		}
 	}()
 
@@ -125,6 +127,7 @@ func CoreBinder(app *iris.Application){
 	app.Handle("POST","/api/login",user.PostLogin)
 	app.Handle("GET","/api/user/{user_id:int}",user.GetUser)
 	app.Handle("PUT","/api/user/{user_id:int}",user.PutUser)
+	app.Handle("GET","/api/user/{user_id:int}/isanonymous",user.GetIsAnonymous)
 
 	// user_star
 	app.Handle("GET","/api/user/{user_id:int}/following",user.GetFollowing)
