@@ -105,6 +105,8 @@ func DownloadHandler(ctx iris.Context) {
 	}
 	imgpath := ImageID2Path(imageid,suffix)
 	fmt.Println(imgpath)
+
+	// TODO Cache
 	if !FileExist(imgpath) {
 		ctx.JSON(iris.Map{
 			"state": "Error:Image Not Found.",

@@ -25,6 +25,8 @@ import (
 	"forum"
 	"webtool"
 	"time"
+	"github.com/kataras/iris/cache"
+	"updater"
 )
 
 func main() {
@@ -57,8 +59,9 @@ func main() {
 
 	// 创建图片存储参数
 	imagetool.LoadConf()
-	//创建orm引擎
-	//sqltool.XormInit()
+	// 缓存初始化
+	imagetool.CacheInit()
+	// 创建orm引擎
 	sqltool.StarsuckInit()
 
 	go func() {
@@ -71,8 +74,8 @@ func main() {
 
 
 			fmt.Println("update...")
-			//updater.NewsUpdater()
-			//updater.StatesUpdater()
+			updater.NewsUpdater()
+			updater.StatesUpdater()
 			time.Sleep(time.Hour * 1)
 		}
 	}()
@@ -86,6 +89,7 @@ func main() {
 	app.Use(recover.New())
 	app.Use(logger.New())
 
+	app.Use(cache.Handler(2*time.Second))
 	//ServerTestBinder(app)
 	//Binder(app)
 	CoreBinder(app)
@@ -113,6 +117,7 @@ func main() {
 
 	//<-sigTERM
 	//log.Print("killed")
+
 }
 
 func CoreBinder(app *iris.Application){
