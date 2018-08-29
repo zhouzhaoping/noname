@@ -25,6 +25,7 @@ import (
 	"forum"
 	"webtool"
 	"time"
+	"updater"
 	"github.com/kataras/iris/cache"
 	"updater"
 )
