@@ -69,7 +69,7 @@ func main() {
 			// fmt.Println("sum:", sum)
 			//handler.Refresh(0)
 			//handler.UpdateNews()
-			//updater.NewsUpdater()
+			updater.NewsUpdater()
 			updater.StatesUpdater()
 			time.Sleep(time.Hour * 1)
 			fmt.Println("update...")
