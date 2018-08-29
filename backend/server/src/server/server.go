@@ -70,6 +70,7 @@ func main() {
 			//handler.Refresh(0)
 			//handler.UpdateNews()
 
+
 			fmt.Println("update...")
 			updater.NewsUpdater()
 			updater.StatesUpdater()

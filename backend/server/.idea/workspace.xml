@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/server/server.go" line="297" />
-    <bookmark url="file://$PROJECT_DIR$/src/server/server.go" line="128" />
+    <bookmark url="file://$PROJECT_DIR$/src/server/server.go" line="298" />
+    <bookmark url="file://$PROJECT_DIR$/src/server/server.go" line="129" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="331320ae-edd2-4283-aa63-4ba797421b83" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/server.pid" beforeDir="false" afterPath="$PROJECT_DIR$/server.pid" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/1065141156_wu.kris.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/1077144064_fuzhentien.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/1436105296_liyifeng.yifengli.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/1471601490_baijingting.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/1506665539_yangyangfavour.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/1566396037_n30201.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/2034848876_kudaibergenov.dimash.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/2073529_huodan.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/2714741398_liuhaoran_turbo.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/290066761_kikuchanj.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/3673555069_yangmimimi912.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/4033426074_xiaomanaoteng.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/457942973_zhaoliyingofficial.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/462254859_laiguanlin_101.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/5469060153_dlraba63.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/6214213723___4444x____.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/6274208690_karrywang921kw.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/637148837_bingbing_fan.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/6444529053_zhuyilong0416.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/656950754_mr_bymyside.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/6624127250_shenyue97.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/6967292531_cai.xukun.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/7087670451_leowu1226.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/853748602_7_luhan_m.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../informarion_spider/ins/969620004_stronger917.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../informarion_spider/test_weiboSpider.py" beforeDir="false" afterPath="$PROJECT_DIR$/../informarion_spider/test_weiboSpider.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.pid" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/server.go" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -63,8 +89,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/server.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="72" column="12" lean-forward="true" selection-start-line="72" selection-start-column="12" selection-end-line="72" selection-end-column="12" />
+            <state relative-caret-position="418">
+              <caret line="77" column="9" selection-start-line="77" selection-start-column="9" selection-end-line="77" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -359,7 +385,7 @@
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535526135581" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535526214417" />
     <property name="configurable.Global.GOPATH.is.expanded" value="true" />
     <property name="configurable.Module.GOPATH.is.expanded" value="false" />
     <property name="configurable.Project.GOPATH.is.expanded" value="true" />
@@ -480,12 +506,12 @@
       <workItem from="1534145305704" duration="674000" />
       <workItem from="1534146645750" duration="525000" />
       <workItem from="1535011768540" duration="10998000" />
-      <workItem from="1535094817062" duration="123673000" />
+      <workItem from="1535094817062" duration="123763000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="308076000" />
+    <option name="totallyTimeSpent" value="308166000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -882,8 +908,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/server.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="72" column="12" lean-forward="true" selection-start-line="72" selection-start-column="12" selection-end-line="72" selection-end-column="12" />
+        <state relative-caret-position="418">
+          <caret line="77" column="9" selection-start-line="77" selection-start-column="9" selection-end-line="77" selection-end-column="9" />
         </state>
       </provider>
     </entry>
