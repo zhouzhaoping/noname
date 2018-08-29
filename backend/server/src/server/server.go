@@ -25,7 +25,6 @@ import (
 	"forum"
 	"webtool"
 	"time"
-	"github.com/kataras/iris/cache"
 	"updater"
 )
 
@@ -89,7 +88,7 @@ func main() {
 	app.Use(recover.New())
 	app.Use(logger.New())
 
-	app.Use(cache.Handler(2*time.Second))
+	//app.Use(cache.Handler(2*time.Second))
 	//ServerTestBinder(app)
 	//Binder(app)
 	CoreBinder(app)
