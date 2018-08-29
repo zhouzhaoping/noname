@@ -26,6 +26,7 @@ import (
 	"webtool"
 	"time"
 	"updater"
+	"github.com/kataras/iris/cache"
 )
 
 func main() {
@@ -73,8 +74,8 @@ func main() {
 
 
 			fmt.Println("update...")
-			updater.NewsUpdater()
-			updater.StatesUpdater()
+			//updater.NewsUpdater()
+			//updater.StatesUpdater()
 			time.Sleep(time.Hour * 1)
 		}
 	}()
@@ -106,7 +107,7 @@ func main() {
 
 	// Method:   GET
 	// Resource: http://localhost:8080/image/{imgid}
-	app.Get("/api/image/{imgid:string}", imagetool.DownloadHandler)
+	app.Get("/api/image/{imgid:string}", cache.Handler(24*time.Hour),imagetool.DownloadHandler)
 
 	// http://localhost:8080
 	// http://localhost:8080/ping
@@ -140,17 +141,17 @@ func CoreBinder(app *iris.Application){
 
 	// star system
 	app.Handle("GET","/api/star/user/{user_id:int}",star.GetStars)
-	app.Handle("GET","/api/star/{star_id:int}",star.GetStar)
+	app.Handle("GET","/api/star/{star_id:int}",cache.Handler(24*time.Hour),star.GetStar)
 
 	// news and states
 	app.Handle("GET","/api/user/{user_id:int}/news",news_states.GetUserNews)
-	app.Handle("GET","/api/star/{star_id:int}/news",news_states.GetStarNews)
-	app.Handle("GET","/api/star/{star_id:int}/states",news_states.GetStarStates)
+	app.Handle("GET","/api/star/{star_id:int}/news",cache.Handler(30*time.Minute),news_states.GetStarNews)
+	app.Handle("GET","/api/star/{star_id:int}/states",cache.Handler(30*time.Minute),news_states.GetStarStates)
 
 	// TODO
 
 	// forum
-	app.Handle("GET","/api/star/{star_id:int}/head",forum.GetStarHead)
+	app.Handle("GET","/api/star/{star_id:int}/head",cache.Handler(24*time.Hour),forum.GetStarHead)
 	app.Handle("GET","/api/star/{star_id:int}/posts/user/{user_id:int}",forum.GetStarPost)
 	app.Handle("GET","/api/post/{post_id:int}/user/{user_id:int}",forum.GetPost)
 	app.Handle("POST","/api/post",forum.PostNewPost)
