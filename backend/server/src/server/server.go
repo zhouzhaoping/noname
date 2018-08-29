@@ -24,7 +24,6 @@ import (
 	"news_states"
 	"forum"
 	"webtool"
-	"updater"
 	"time"
 )
 
@@ -72,8 +71,8 @@ func main() {
 
 
 			fmt.Println("update...")
-			updater.NewsUpdater()
-			updater.StatesUpdater()
+			//updater.NewsUpdater()
+			//updater.StatesUpdater()
 			time.Sleep(time.Hour * 1)
 		}
 	}()
@@ -128,6 +127,7 @@ func CoreBinder(app *iris.Application){
 	app.Handle("POST","/api/login",user.PostLogin)
 	app.Handle("GET","/api/user/{user_id:int}",user.GetUser)
 	app.Handle("PUT","/api/user/{user_id:int}",user.PutUser)
+	app.Handle("GET","/api/user/{user_id:int}/isanonymous",user.GetIsAnonymous)
 
 	// user_star
 	app.Handle("GET","/api/user/{user_id:int}/following",user.GetFollowing)
