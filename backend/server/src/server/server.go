@@ -25,9 +25,7 @@ import (
 	"forum"
 	"webtool"
 	"time"
-	"updater"
 	"github.com/kataras/iris/cache"
-	"updater"
 )
 
 func main() {
@@ -64,10 +62,10 @@ func main() {
 	imagetool.CacheInit()
 	// 创建orm引擎
 	sqltool.StarsuckInit()
-
+/*
 	go func() {
 		//sum := 0
-		for {
+		//for {
 			//sum++
 			// fmt.Println("sum:", sum)
 			//handler.Refresh(0)
@@ -80,7 +78,7 @@ func main() {
 			time.Sleep(time.Hour * 1)
 		}
 	}()
-
+*/
 	var app *iris.Application = iris.New()
 
 	app.Logger().SetLevel("debug")

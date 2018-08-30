@@ -4,6 +4,7 @@ import (
 	"os"
 	"log"
 	"encoding/json"
+	"fmt"
 )
 
 type Config struct {
@@ -23,4 +24,5 @@ func LoadConf(){
     if err != nil {
         log.Fatalln(err)
     }
+    fmt.Println(conf.Storage)
 }

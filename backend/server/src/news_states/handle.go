@@ -73,7 +73,7 @@ func GetStarStates(ctx iris.Context) {
 
 	var accountnames []string
 	states_find := make([]State, 0)
-	err = sqltool.StarsuckEngine.Table("info_source").Cols("account_name").Where("star_id=? and usage_type=?", id,1).Find(&accountnames)
+	err = sqltool.StarsuckEngine.Table("info_source").Cols("account_name").Where("star_id=? and usage_type=? and source=?", id,1,"weibo").Find(&accountnames)
 	if err != nil {
 		fmt.Println(err)
 		ctx.JSON(iris.Map{
