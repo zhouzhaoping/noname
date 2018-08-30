@@ -76,13 +76,14 @@ func PostLogin(ctx iris.Context){
 			user_find.Suv = user.Suv
 			sqltool.StarsuckEngine.ID(user_find.User_id).Update(user_find)
 		}
-		fmt.Println(ctx.Request().Header)
+
 		// log
 		if user.Suv != ""{
 			thislog := &login_log{
 				user_find.Suv,
 				time.Now(),
 				ctx.RemoteAddr(),
+				ctx.Request().Header.Get("origin"),
 			}
 			sqltool.StarsuckEngine.Insert(thislog)
 		}
