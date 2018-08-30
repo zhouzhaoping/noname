@@ -3,6 +3,7 @@ package forum
 import (
 	"time"
 	"github.com/kataras/iris"
+	"sqltool"
 )
 
 type Post struct {
@@ -38,7 +39,9 @@ func NewPost(ctx iris.Context) *Post {
 	return post
 }
 
-// error
+const LIKE int = 1
+const UNLIKE int = -1
+
 type post_like struct {
 	Post_save		Post		`json:"post"`
 	User_name 		string 		`json:"user_name"`
@@ -48,5 +51,17 @@ type post_like struct {
 type post_user_relation struct {
 	Post_id int `json:"post_id"`
 	User_id int `json:"user_id"`
-	Is_like int `json:"is_like"` //0：点赞，1：未点赞
+	Is_like int `json:"is_like"` //1：点赞，-1：未点赞
+}
+
+func postLikeAdd(post_id int,add int) {
+	post_find := new(Post)
+	sqltool.StarsuckEngine.ID(post_id).Get(post_find)
+	if add == LIKE {
+		post_find.Like_num = post_find.Like_num + 1
+	} else {
+		post_find.Like_num = post_find.Like_num - 1
+	}
+
+	sqltool.StarsuckEngine.ID(post_id).Update(post_find)
 }

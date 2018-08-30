@@ -24,8 +24,9 @@ import (
 	"news_states"
 	"forum"
 	"webtool"
-	"updater"
 	"time"
+	"github.com/kataras/iris/cache"
+	"updater"
 )
 
 func main() {
@@ -58,8 +59,9 @@ func main() {
 
 	// 创建图片存储参数
 	imagetool.LoadConf()
-	//创建orm引擎
-	//sqltool.XormInit()
+	// 缓存初始化
+	imagetool.CacheInit()
+	// 创建orm引擎
 	sqltool.StarsuckInit()
 
 	go func() {
@@ -87,6 +89,7 @@ func main() {
 	app.Use(recover.New())
 	app.Use(logger.New())
 
+	//app.Use(cache.Handler(2*time.Second))
 	//ServerTestBinder(app)
 	//Binder(app)
 	CoreBinder(app)
@@ -104,7 +107,7 @@ func main() {
 
 	// Method:   GET
 	// Resource: http://localhost:8080/image/{imgid}
-	app.Get("/api/image/{imgid:string}", imagetool.DownloadHandler)
+	app.Get("/api/image/{imgid:string}", cache.Handler(2*time.Second),imagetool.DownloadHandler)
 
 	// http://localhost:8080
 	// http://localhost:8080/ping
@@ -114,6 +117,7 @@ func main() {
 
 	//<-sigTERM
 	//log.Print("killed")
+
 }
 
 func CoreBinder(app *iris.Application){
@@ -128,6 +132,7 @@ func CoreBinder(app *iris.Application){
 	app.Handle("POST","/api/login",user.PostLogin)
 	app.Handle("GET","/api/user/{user_id:int}",user.GetUser)
 	app.Handle("PUT","/api/user/{user_id:int}",user.PutUser)
+	app.Handle("GET","/api/user/{user_id:int}/isanonymous",user.GetIsAnonymous)
 
 	// user_star
 	app.Handle("GET","/api/user/{user_id:int}/following",user.GetFollowing)

@@ -1,3 +1,4 @@
 {
-  "Storage":"/srv/www/storage/image"
+  "Storage":"/srv/www/storage/image",
+  "CacheSize":100
 }
