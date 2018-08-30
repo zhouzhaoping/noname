@@ -26,7 +26,7 @@ import (
 	"webtool"
 	"time"
 	"github.com/kataras/iris/cache"
-	"updater"
+	"management"
 )
 
 func main() {
@@ -74,8 +74,8 @@ func main() {
 
 
 			fmt.Println("update...")
-			updater.NewsUpdater()
-			updater.StatesUpdater()
+			//updater.NewsUpdater()
+			//updater.StatesUpdater()
 			time.Sleep(time.Hour * 1)
 		}
 	}()
@@ -107,7 +107,7 @@ func main() {
 
 	// Method:   GET
 	// Resource: http://localhost:8080/image/{imgid}
-	app.Get("/api/image/{imgid:string}", cache.Handler(2*time.Second),imagetool.DownloadHandler)
+	app.Get("/api/image/{imgid:string}", cache.Handler(3*time.Second),imagetool.DownloadHandler)
 
 	// http://localhost:8080
 	// http://localhost:8080/ping
@@ -148,7 +148,7 @@ func CoreBinder(app *iris.Application){
 	app.Handle("GET","/api/star/{star_id:int}/news",news_states.GetStarNews)
 	app.Handle("GET","/api/star/{star_id:int}/states",news_states.GetStarStates)
 
-	// TODO
+
 
 	// forum
 	app.Handle("GET","/api/star/{star_id:int}/head",forum.GetStarHead)
@@ -158,6 +158,11 @@ func CoreBinder(app *iris.Application){
 	app.Handle("POST","/api/post/{post_id:int}",forum.PostReplyPost)
 	app.Handle("PUT","/api/post/{post_id:int}/like",forum.PutPostLike)
 	app.Handle("PUT","/api/post/{post_id:int}/unlike",forum.PutPostUnLike)
+
+
+	// TODO
+	app.Handle("GET","/api/management/uv",management.GetUV)
+	app.Handle("GET","/api/management/ipcount",management.GetIpCount)
 
 	// Method:   GET
 	// Resource: http://localhost:8080/news?user_id=anonymous&star_id=follow

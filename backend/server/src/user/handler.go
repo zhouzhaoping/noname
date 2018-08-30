@@ -76,6 +76,7 @@ func PostLogin(ctx iris.Context){
 			user_find.Suv = user.Suv
 			sqltool.StarsuckEngine.ID(user_find.User_id).Update(user_find)
 		}
+		fmt.Println(ctx.Request().Header.Get("referer"))
 		// log
 		if user.Suv != ""{
 			thislog := &login_log{
