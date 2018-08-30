@@ -82,7 +82,7 @@ func GetStarStates(ctx iris.Context) {
 		return
 	}
 	fmt.Println(accountnames)
-	err = sqltool.StarsuckEngine.In("account_name",accountnames).Desc("create_time").Limit(50).Find(&states_find)
+	err = sqltool.StarsuckEngine.In("account_name",accountnames).Where("imgs !=?","无").Desc("create_time").Limit(50).Find(&states_find)
 	if err != nil {
 		fmt.Println(err)
 		ctx.JSON(iris.Map{
