@@ -18,6 +18,7 @@ type login_log struct {
 	Suv			string		`xorm:"not null VARCHAR(255)" json:"suv"`
 	Login_time	time.Time	`xorm:"not null DATETIME" json:"login_time"`
 	Ip 			string		`xorm:"default null VARCHAR(255)" json:"ip"`
+	Origin		string 		`json:"origin"`
 }
 
 func NewUser_info(ctx iris.Context) *user_info {

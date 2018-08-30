@@ -12,6 +12,11 @@ import time
 import datetime
 import urllib
 
+proxies = {
+        'http': None,
+        'https': None,
+        }
+
 
 class StarSpider(object):
     def __init__(self, name, neteasyid):
@@ -21,7 +26,7 @@ class StarSpider(object):
     def get_netease_starnews(self, count, update_time_stamp):
 
         def get_content(url):
-            r = requests.get(url)
+            r = requests.get(url, proxies=proxies)
             r.encoding = 'utf-8'
             html = r.text
             soup = BeautifulSoup(html, 'html.parser')
@@ -30,7 +35,7 @@ class StarSpider(object):
             return news_title, news_content
 
         def get_news_info(url):
-            r = requests.get(url)
+            r = requests.get(url, proxies=proxies)
             html = r.text
             soup = BeautifulSoup(html, 'html.parser')
             news_infos = soup.select('div.info > span')
@@ -47,7 +52,7 @@ class StarSpider(object):
 
         while page < 400:
             url = 'https://star.3g.163.com/star/article/list/{}-10.html?starId={}&callback='.format(page, self.netease_id)
-            res = requests.get(url).text
+            res = requests.get(url, proxies=proxies).text
             try:
                 infos = json.loads(res)
             except:
@@ -87,7 +92,7 @@ class StarSpider(object):
                 url = 'http://ent.163.com/special/000380VU/newsdata_index.js?callback='
             else:
                 url = 'http://ent.163.com/special/000380VU/newsdata_index_{}.js?callback='.format(str(page+1).zfill(2))
-            res = requests.get(url).text
+            res = requests.get(url, proxies=proxies).text
             if not res:
                 continue
             pattern = re.compile('^data_callback\(')
@@ -128,7 +133,7 @@ class StarSpider(object):
 
         for page in range(15):
             url = 'https://pacaio.match.qq.com/irs/rcd?cid=58&token=c232b098ee7611faeffc46409e836360&ext=ent&page={}&expIds=&callback='.format(page)
-            res = requests.get(url).text
+            res = requests.get(url, proxies=proxies).text
             try:
                 infos = json.loads(res)
             except:
@@ -163,7 +168,7 @@ class StarSpider(object):
             # req = urllib.request.Request(url)
             # req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36')
             # res = urllib.request.urlopen(req).read().decode('utf-8')
-            res = requests.get(url).text
+            res = requests.get(url, proxies=proxies).text
             if not res:
                 continue
             try:
@@ -199,7 +204,7 @@ class StarSpider(object):
 
         for i in range(5):
             url = 'http://channel.chinanews.com/cns/s/channel:yl.shtml?pager={}&pagenum={}'.format(i, 100)
-            res = requests.get(url).text.replace('var specialcnsdata = ', '')
+            res = requests.get(url, proxies=proxies).text.replace('var specialcnsdata = ', '')
             text_pattern = re.compile(';.$')
             res = re.sub(text_pattern, '', res)
             try:
