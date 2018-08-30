@@ -14,7 +14,7 @@ func PostUser(ctx iris.Context) {
 
 	user := NewUser_info(ctx)
 	fmt.Println("in postuser",user)
-	user_find := new(user_info)
+	user_find := new(User_info)
 
 	if user.User_name == "" {
 		ctx.JSON(iris.Map{
@@ -104,7 +104,7 @@ func PostLogin(ctx iris.Context){
 func GetUser(ctx iris.Context) {
 
 	id,_ := ctx.Params().GetInt("user_id")
-	user_find := new(user_info)
+	user_find := new(User_info)
 
 	yes, err := sqltool.StarsuckEngine.ID(id).Get(user_find)
 	//fmt.Println(user_find)
@@ -136,7 +136,7 @@ func PutUser(ctx iris.Context) {
 	user.User_id, _ = ctx.Params().GetInt("user_id")
 	fmt.Println(user)
 
-	user_find := new(user_info)
+	user_find := new(User_info)
 	sqltool.StarsuckEngine.ID(user.User_id).Get(user_find)
 
 	if user.User_name != "" && user.User_name !=user_find.User_name {
@@ -238,7 +238,7 @@ func PutUnFollowing(ctx iris.Context) {
 
 func GetIsAnonymous(ctx iris.Context) {
 	user_id, _ := ctx.Params().GetInt("user_id")
-	user_find := new(user_info)
+	user_find := new(User_info)
 	yes, err := sqltool.StarsuckEngine.ID(user_id).Get(user_find)
 
 	if err != nil{

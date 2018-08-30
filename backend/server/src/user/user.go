@@ -6,7 +6,7 @@ import (
 	"github.com/kataras/iris"
 )
 
-type user_info struct {
+type User_info struct {
 	User_id		int		`xorm:"not null pk autoincr INT(11)" json:"user_id"`
 	User_name	string	`xorm:"default null VARCHAR(255)" json:"user_name"`
 	Password	string	`xorm:"default null VARCHAR(255)" json:"password"`
@@ -21,8 +21,8 @@ type login_log struct {
 	Origin		string 		`json:"origin"`
 }
 
-func NewUser_info(ctx iris.Context) *user_info {
-	user := &user_info{
+func NewUser_info(ctx iris.Context) *User_info {
+	user := &User_info{
 		User_name:ctx.FormValue("user_name"),
 		Password:ctx.FormValue("password"),
 		Img:ctx.FormValue("img"),
@@ -34,8 +34,8 @@ func NewUser_info(ctx iris.Context) *user_info {
 	}
 	return user
 }
-func (user *user_info) checkPassword() (bool, *user_info) {
-	user_find := new(user_info)
+func (user *User_info) checkPassword() (bool, *User_info) {
+	user_find := new(User_info)
 	if user.User_id > 0 {
 		affected, err := sqltool.StarsuckEngine.ID(user.User_id).Get(user_find)
 		if affected && err == nil && user_find.Password == user.Password {

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 	"encoding/json"
+	"user"
 )
 
 func GetStarHead(ctx iris.Context) {
@@ -52,8 +53,10 @@ func GetStarPost(ctx iris.Context) {
 		post_like_find[i].Post_save = v
 		post_like_find[i].Is_like, err = sqltool.StarsuckEngine.Table("post_user_relation").
 			Where("user_id=? and post_id=? and is_like=?",user_id,v.Post_id,LIKE).Exist()
-		yes,err:=sqltool.StarsuckEngine.Table("user_info").ID(v.User_id).Cols("user_name").Get(&post_like_find[i].User_name)
-fmt.Println(yes,err)
+		user_find := new(user.User_info)
+		yes,err:=sqltool.StarsuckEngine.Table("user_info").ID(v.User_id).Cols("user_name").Get(&user_find)
+		post_like_find[i].User_name = user_find.User_name
+		fmt.Println(yes,err)
 		if err != nil {
 			ctx.JSON(iris.Map{
 				"state": "数据库错误",
