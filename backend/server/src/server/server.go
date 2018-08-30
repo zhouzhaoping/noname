@@ -27,6 +27,7 @@ import (
 	"time"
 	"github.com/kataras/iris/cache"
 	"management"
+	"updater"
 )
 
 func main() {
@@ -74,8 +75,8 @@ func main() {
 
 
 			fmt.Println("update...")
-			//updater.NewsUpdater()
-			//updater.StatesUpdater()
+			updater.NewsUpdater()
+			updater.StatesUpdater()
 			time.Sleep(time.Hour * 1)
 		}
 	}()
