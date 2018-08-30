@@ -26,6 +26,7 @@ import (
 	"webtool"
 	"time"
 	"github.com/kataras/iris/cache"
+	"updater"
 )
 
 func main() {
@@ -62,10 +63,10 @@ func main() {
 	imagetool.CacheInit()
 	// 创建orm引擎
 	sqltool.StarsuckInit()
-/*
+
 	go func() {
 		//sum := 0
-		//for {
+		for {
 			//sum++
 			// fmt.Println("sum:", sum)
 			//handler.Refresh(0)
@@ -78,7 +79,7 @@ func main() {
 			time.Sleep(time.Hour * 1)
 		}
 	}()
-*/
+
 	var app *iris.Application = iris.New()
 
 	app.Logger().SetLevel("debug")
@@ -140,17 +141,17 @@ func CoreBinder(app *iris.Application){
 
 	// star system
 	app.Handle("GET","/api/star/user/{user_id:int}",star.GetStars)
-	app.Handle("GET","/api/star/{star_id:int}",cache.Handler(2*time.Second),star.GetStar)
+	app.Handle("GET","/api/star/{star_id:int}",star.GetStar)
 
 	// news and states
 	app.Handle("GET","/api/user/{user_id:int}/news",news_states.GetUserNews)
-	app.Handle("GET","/api/star/{star_id:int}/news",cache.Handler(2*time.Second),news_states.GetStarNews)
-	app.Handle("GET","/api/star/{star_id:int}/states",cache.Handler(2*time.Second),news_states.GetStarStates)
+	app.Handle("GET","/api/star/{star_id:int}/news",news_states.GetStarNews)
+	app.Handle("GET","/api/star/{star_id:int}/states",news_states.GetStarStates)
 
 	// TODO
 
 	// forum
-	app.Handle("GET","/api/star/{star_id:int}/head",cache.Handler(2*time.Second),forum.GetStarHead)
+	app.Handle("GET","/api/star/{star_id:int}/head",forum.GetStarHead)
 	app.Handle("GET","/api/star/{star_id:int}/posts/user/{user_id:int}",forum.GetStarPost)
 	app.Handle("GET","/api/post/{post_id:int}/user/{user_id:int}",forum.GetPost)
 	app.Handle("POST","/api/post",forum.PostNewPost)
