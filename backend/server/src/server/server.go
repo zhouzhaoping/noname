@@ -25,7 +25,6 @@ import (
 	"forum"
 	"webtool"
 	"time"
-	"github.com/kataras/iris/cache"
 	"management"
 	"updater"
 )
@@ -108,7 +107,7 @@ func main() {
 
 	// Method:   GET
 	// Resource: http://localhost:8080/image/{imgid}
-	app.Get("/api/image/{imgid:string}", cache.Handler(3*time.Second),imagetool.DownloadHandler)
+	app.Get("/api/image/{imgid:string}",imagetool.DownloadHandler)
 
 	// http://localhost:8080
 	// http://localhost:8080/ping
